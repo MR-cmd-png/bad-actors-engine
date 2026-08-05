@@ -15,7 +15,7 @@ class Entity(Base):
     name : Mapped[User] = mapped_column(comment="Entity Name")
     email : Mapped[User] = mapped_column(comment="Entity Email")
     phone : Mapped[User] = mapped_column(comment="Entity Phone")
-    events : Mapped[Event]= relationship(back_populates="entity")
+    events : Mapped["Event"]= relationship(back_populates="entity")
     rule_hits = relationship("RuleHit", back_populates="entity")
     score = relationship("Score", back_populates="entity", uselist=False)
 class Event(Base):
