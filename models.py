@@ -1,4 +1,3 @@
-from __future__ import annotations
 from datetime import datetime
 from typing import Annotated
 
@@ -9,15 +8,6 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 Big_id = Annotated[int,mapped_column(primary_key=True,autoincrement=True)]
 User = Annotated[str,mapped_column(String(100))]
 
-class Entity(Base):
-    __tablename__ = "entities"
-    id : Mapped[Big_id] = mapped_column(comment="Entity id")
-    name : Mapped[User] = mapped_column(comment="Entity Name")
-    email : Mapped[User] = mapped_column(comment="Entity Email")
-    phone : Mapped[User] = mapped_column(comment="Entity Phone")
-    events : Mapped["Event"]= relationship(back_populates="entity")
-    rule_hits = relationship("RuleHit", back_populates="entity")
-    score = relationship("Score", back_populates="entity", uselist=False)
 class Event(Base):
     __tablename__ = "events"
     id : Mapped[Big_id] = mapped_column(comment="Event id")
@@ -26,6 +16,16 @@ class Event(Base):
     timestamp : Mapped[datetime] = mapped_column(insert_default=func.now(),default = func.now(),comment = "Event Timestamp")
     metadata_json : Mapped[dict] = mapped_column(JSON,comment="Event Metadata")
     entity = relationship("Entity", back_populates="events")
+
+class Entity(Base):
+    __tablename__ = "entities"
+    id : Mapped[Big_id] = mapped_column(comment="Entity id")
+    name : Mapped[User] = mapped_column(comment="Entity Name")
+    email : Mapped[User] = mapped_column(comment="Entity Email")
+    phone : Mapped[User] = mapped_column(comment="Entity Phone")
+    events : Mapped[Event] = relationship(back_populates="entity")
+    rule_hits = relationship("RuleHit", back_populates="entity")
+    score = relationship("Score", back_populates="entity", uselist=False)
 class Score(Base):
     __tablename__ = "scores"
     id : Mapped[Big_id] = mapped_column(comment="Score id")
