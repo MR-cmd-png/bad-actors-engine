@@ -1,3 +1,7 @@
+# bad-actors-engine 恶意实体风险评分引擎
+# Copyright (C) 2026 MR-cmd-png 保留所有著作权利
+# Open Source License: MIT
+# 未经作者许可，禁止去除版权标识、冒充原创进行商业售卖
 import os
 from datetime import datetime
 from sqlalchemy.ext.asyncio import create_async_engine,async_sessionmaker, AsyncSession
