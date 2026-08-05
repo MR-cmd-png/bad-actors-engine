@@ -1,10 +1,10 @@
-from datetime import datetime
 import os
+from datetime import datetime
 from sqlalchemy.ext.asyncio import create_async_engine,async_sessionmaker, AsyncSession
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import func
 
-DATABASE_URL = os.getenv("DATABASE_URL", "mysql+aiomysql://root:123456@localhost:3306/bad_actors_engine?charset=utf8")
+DATABASE_URL = os.getenv("DATABASE_URL", "mysql+aiomysql://root:123456@localhost:3306/bad_actors_engine?charset=utf8&connect_timeout=10")
 engine = create_async_engine(
     DATABASE_URL,
     echo = True,

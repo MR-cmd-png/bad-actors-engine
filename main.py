@@ -58,9 +58,13 @@ class EntityBatchCreate(BaseModel):
 # ===================== Startup (create tables) =====================
 @app.on_event("startup")
 async def startup():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    print("Database tables initialized")
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        print("Database tables initialized")
+    except Exception as e:
+        print(f"Warning: Database connection failed: {e}")
+        print("App will start but database operations may not work")
 @app.patch("/rule/{rule_id}/toggle", summary="Enable/Disable Rule")
 async def toggle_rule(rule_id: str, data: RuleToggle, db: AsyncSession = Depends(get_db)):
     stmt = select(models.Rule).where(models.Rule.rule_id == rule_id)
