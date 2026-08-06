@@ -5,18 +5,24 @@ import Button from '../components/Button'
 import Input from '../components/Input'
 import Badge from '../components/Badge'
 import Modal from '../components/Modal'
-import { Shield, Plus, ToggleLeft, ToggleRight, Eye, Tag, Pencil } from 'lucide-react'
+import { Shield, Plus, ToggleLeft, ToggleRight, Eye, Tag, Pencil, Check } from 'lucide-react'
 import { motion } from 'framer-motion'
+
+const EVENT_TYPES = ['Property Damage', 'Overdue and Unpaid']
 
 export default function Rules() {
   const [rules, setRules] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [togglingId, setTogglingId] = useState<string | null>(null)
-  const [form, setForm] = useState({ rule_id: '', condition: '', score: '', event_types: '' })
+  const [form, setForm] = useState({ rule_id: '', condition: '', score: '', event_types: [] as string[] })
   const [message, setMessage] = useState('')
-  const [detailRule, setDetailRule] = useState<any>(null)   // rule opened in detail modal
-  const [editRule, setEditRule] = useState<any>(null)       // rule opened in edit modal
-  const [editForm, setEditForm] = useState({ condition: '', score: '', event_types: '' })
+  const [detailRule, setDetailRule] = useState<any>(null)
+  const [editRule, setEditRule] = useState<any>(null)
+  const [editForm, setEditForm] = useState({ condition: '', score: '', event_types: [] as string[] })
+
+  const toggleEventType = (list: string[], type: string): string[] => {
+    return list.includes(type) ? list.filter((t) => t !== type) : [...list, type]
+  }
 
   const fetchRules = async () => {
     try {
@@ -41,21 +47,17 @@ export default function Rules() {
     }
     setLoading(true)
     try {
-      const eventTypes = form.event_types
-        .split(/[,，、;；\s]+/)
-        .map((s) => s.trim())
-        .filter(Boolean)
       await createRule({
         rule_id: form.rule_id,
         definition: {
           condition: form.condition,
           score: scoreNum,
-          event_types: eventTypes,
+          event_types: form.event_types,
         },
         active: true,
       })
       setMessage('✅ Rule created successfully!')
-      setForm({ rule_id: '', condition: '', score: '', event_types: '' })
+      setForm({ rule_id: '', condition: '', score: '', event_types: [] })
       fetchRules()
     } catch (e: any) {
       setMessage('❌ ' + e.message)
@@ -65,17 +67,15 @@ export default function Rules() {
     }
   }
 
-  // ★ Open edit modal: populate with existing data
   const openEdit = (rule: any) => {
     setEditRule(rule)
     setEditForm({
       condition: rule.definition?.condition || '',
       score: String(rule.definition?.score ?? ''),
-      event_types: (rule.definition?.event_types || []).join(', '),
+      event_types: [...(rule.definition?.event_types || [])],
     })
   }
 
-  // ★ Save edit
   const handleUpdate = async () => {
     const scoreNum = Number(editForm.score)
     if (!editForm.condition || !Number.isInteger(scoreNum) || scoreNum < 1 || scoreNum > 100) {
@@ -83,14 +83,10 @@ export default function Rules() {
       return
     }
     try {
-      const eventTypes = editForm.event_types
-        .split(/[,，、;；\s]+/)
-        .map((s) => s.trim())
-        .filter(Boolean)
       await updateRule(editRule.rule_id, {
         condition: editForm.condition,
         score: scoreNum,
-        event_types: eventTypes,
+        event_types: editForm.event_types,
       })
       setMessage('✅ Rule updated successfully!')
       setEditRule(null)
@@ -102,7 +98,6 @@ export default function Rules() {
     }
   }
 
-  // ★ Core: click toggle switch to enable/disable
   const handleToggle = async (rule: any) => {
     setTogglingId(rule.rule_id)
     try {
@@ -147,9 +142,31 @@ export default function Rules() {
             <Input label="Match Condition" placeholder="Rule Category"
               value={form.condition}
               onChange={(e) => setForm({ ...form, condition: e.target.value })} />
-            <Input label="Associated Event Types (comma-separated, optional)" placeholder="Property Damage, Overdue and Unpaid..."
-              value={form.event_types}
-              onChange={(e) => setForm({ ...form, event_types: e.target.value })} />
+
+            <div className="space-y-1.5">
+              <label className="block text-sm font-medium text-text-secondary">Associated Event Types</label>
+              <div className="flex flex-wrap gap-2">
+                {EVENT_TYPES.map((t) => {
+                  const selected = form.event_types.includes(t)
+                  return (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setForm({ ...form, event_types: toggleEventType(form.event_types, t) })}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border transition-all duration-200 ${
+                        selected
+                          ? 'bg-primary/15 text-primary-light border-primary/40'
+                          : 'bg-bg-dark text-text-secondary border-border hover:border-primary/30'
+                      }`}
+                    >
+                      {selected && <Check size={14} />}
+                      {t}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
             <Input label="Hit Score" placeholder="An integer between 1 and 100" type="number"
               value={form.score}
               onChange={(e) => setForm({ ...form, score: e.target.value })} />
@@ -196,7 +213,6 @@ export default function Rules() {
                         <p className="text-xs text-text-secondary mt-0.5">
                           Condition: {rule.definition?.condition}
                         </p>
-                        {/* External preview: show first 2 event types + remaining count */}
                         {(rule.definition?.event_types || []).length > 0 && (
                           <div className="mt-1.5 flex flex-wrap gap-1">
                             {rule.definition.event_types.slice(0, 2).map((t: string) => (
@@ -219,7 +235,6 @@ export default function Rules() {
                         +{rule.definition?.score}
                       </span>
 
-                      {/* View details: click to see all event types */}
                       <button
                         onClick={() => setDetailRule(rule)}
                         title="View all associated event types"
@@ -228,7 +243,6 @@ export default function Rules() {
                         <Eye size={24} />
                       </button>
 
-                      {/* Edit rule */}
                       <button
                         onClick={() => openEdit(rule)}
                         title="Edit rule"
@@ -237,7 +251,6 @@ export default function Rules() {
                         <Pencil size={20} />
                       </button>
 
-                      {/* Toggle switch */}
                       <button
                         onClick={() => handleToggle(rule)}
                         disabled={togglingId === rule.rule_id}
@@ -253,7 +266,6 @@ export default function Rules() {
                     </div>
                   </div>
 
-                  {/* Status text */}
                   <div className="mt-2 text-right">
                     <Badge variant={rule.active ? 'low' : 'default'}>
                       {rule.active ? 'Active' : 'Inactive'}
@@ -322,9 +334,31 @@ export default function Rules() {
           <Input label="Match Condition" placeholder="Rule Category"
             value={editForm.condition}
             onChange={(e) => setEditForm({ ...editForm, condition: e.target.value })} />
-          <Input label="Associated Event Types (comma-separated, optional)" placeholder="Property Damage, Overdue and Unpaid..."
-            value={editForm.event_types}
-            onChange={(e) => setEditForm({ ...editForm, event_types: e.target.value })} />
+
+          <div className="space-y-1.5">
+            <label className="block text-sm font-medium text-text-secondary">Associated Event Types</label>
+            <div className="flex flex-wrap gap-2">
+              {EVENT_TYPES.map((t) => {
+                const selected = editForm.event_types.includes(t)
+                return (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => setEditForm({ ...editForm, event_types: toggleEventType(editForm.event_types, t) })}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border transition-all duration-200 ${
+                      selected
+                        ? 'bg-primary/15 text-primary-light border-primary/40'
+                        : 'bg-bg-dark text-text-secondary border-border hover:border-primary/30'
+                    }`}
+                  >
+                    {selected && <Check size={14} />}
+                    {t}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
           <Input label="Hit Score" placeholder="An integer between 1 and 100" type="number"
             value={editForm.score}
             onChange={(e) => setEditForm({ ...editForm, score: e.target.value })} />
