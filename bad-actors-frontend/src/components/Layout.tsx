@@ -68,7 +68,7 @@ export default function Layout() {
             Back to Landing
           </button>
           <div className="text-xs text-text-secondary text-center">
-            MVP v1.0 • 2026
+            MVP v1.1 • 2026
           </div>
         </div>
       </aside>
