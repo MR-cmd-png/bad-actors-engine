@@ -8,18 +8,25 @@ import Modal from '../components/Modal'
 import { Shield, Plus, ToggleLeft, ToggleRight, Eye, Tag, Pencil, Check } from 'lucide-react'
 import { motion } from 'framer-motion'
 
-const EVENT_TYPES = ['Property Damage', 'Overdue and Unpaid']
+const EVENT_TYPES = [
+  'Property Damage',
+  'Tort Involving Network and Data Property',
+  'Tort Involving Creditors\' Rights and Interest-Based Property',
+  'Overdue and Unpaid',
+  'Misrepresentation and False Disclosure',
+  'Breach of Trust and Breach of Contract',
+]
 
 const CONDITIONS = [
   {
     value: 'property tort',
     label: 'Property Tort',
-    event_types: ['Property Damage'],
+    event_types: ['Property Damage', 'Tort Involving Network and Data Property', 'Tort Involving Creditors\' Rights and Interest-Based Property'],
   },
   {
     value: 'conduct in violation of the principle of good faith',
     label: 'Conduct in Violation of Good Faith',
-    event_types: ['Overdue and Unpaid'],
+    event_types: ['Overdue and Unpaid', 'Misrepresentation and False Disclosure', 'Breach of Trust and Breach of Contract'],
   },
   {
     value: 'email_domain in disposable_list',

@@ -6,7 +6,14 @@ import Input from '../components/Input'
 import { Zap } from 'lucide-react'
 import { motion } from 'framer-motion'
 
-const EVENT_TYPES = ['Property Damage', 'Overdue and Unpaid']
+const EVENT_TYPES = [
+  'Property Damage',
+  'Tort Involving Network and Data Property',
+  'Tort Involving Creditors\' Rights and Interest-Based Property',
+  'Overdue and Unpaid',
+  'Misrepresentation and False Disclosure',
+  'Breach of Trust and Breach of Contract',
+]
 
 export default function Events() {
   const [form, setForm] = useState({ entity_id: '', type: '', metadata: '' })

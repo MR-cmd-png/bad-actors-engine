@@ -382,17 +382,19 @@ async def calc_entity_risk_score(entity_id: int, db: AsyncSession = Depends(get_
             if email_suffix in disposable_suffix:
                 hit_flag = True
         elif cond_norm == "property tort":
+            property_tort_types = ["Property Damage", "Tort Involving Network and Data Property", "Tort Involving Creditors' Rights and Interest-Based Property"]
             event_list = (
                 await db.execute(select(models.Event).where(models.Event.entity_id == entity_id))).scalars().all()
             for ev in event_list:
-                if ev.type == "Property Damage":
+                if ev.type in property_tort_types:
                     hit_flag = True
                     break
         elif cond_norm == "conduct in violation of the principle of good faith":
+            good_faith_types = ["Overdue and Unpaid", "Misrepresentation and False Disclosure", "Breach of Trust and Breach of Contract"]
             event_list = (
                 await db.execute(select(models.Event).where(models.Event.entity_id == entity_id))).scalars().all()
             for ev in event_list:
-                if ev.type == "Overdue and Unpaid":
+                if ev.type in good_faith_types:
                     hit_flag = True
                     break
 
