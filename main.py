@@ -341,7 +341,7 @@ async def update_rule(rule_id: str, data: RuleUpdate, db: AsyncSession = Depends
     return {"code": 0, "data": rule}
 
 
-@app.delete("/rule/{rule_id}", summary="Delete Rule")
+@app.post("/rule/{rule_id}/delete", summary="Delete Rule")
 async def delete_rule(rule_id: str, db: AsyncSession = Depends(get_db)):
     rule = (await db.execute(select(models.Rule).where(models.Rule.rule_id == rule_id))).scalar_one_or_none()
     if not rule:

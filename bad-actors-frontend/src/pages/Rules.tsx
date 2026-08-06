@@ -5,7 +5,7 @@ import Button from '../components/Button'
 import Input from '../components/Input'
 import Badge from '../components/Badge'
 import Modal from '../components/Modal'
-import { Shield, Plus, ToggleLeft, ToggleRight, Eye, Tag, Pencil, Check, Trash2 } from 'lucide-react'
+import { Shield, Plus, ToggleLeft, ToggleRight, Eye, Tag, Pencil, Check, Trash2, AlertTriangle } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const EVENT_TYPES = [
@@ -49,6 +49,7 @@ export default function Rules() {
   const [detailRule, setDetailRule] = useState<any>(null)
   const [editRule, setEditRule] = useState<any>(null)
   const [editForm, setEditForm] = useState({ condition: '', score: '', event_types: [] as string[] })
+  const [deleteTarget, setDeleteTarget] = useState<any>(null)
 
   const toggleEventType = (list: string[], type: string): string[] => {
     return list.includes(type) ? list.filter((t) => t !== type) : [...list, type]
@@ -160,11 +161,16 @@ export default function Rules() {
     }
   }
 
-  const handleDelete = async (rule: any) => {
-    if (!confirm(`Delete rule "${rule.rule_id}"? This action cannot be undone.`)) return
+  const handleDelete = (rule: any) => {
+    setDeleteTarget(rule)
+  }
+
+  const confirmDelete = async () => {
+    if (!deleteTarget) return
     try {
-      await deleteRule(rule.rule_id)
+      await deleteRule(deleteTarget.rule_id)
       setMessage('✅ Rule deleted successfully!')
+      setDeleteTarget(null)
       fetchRules()
     } catch (e: any) {
       setMessage('❌ ' + e.message)
@@ -482,6 +488,55 @@ export default function Rules() {
           <Button onClick={handleUpdate} className="w-full">
             Save Changes
           </Button>
+        </div>
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        title="Delete Rule"
+      >
+        <div className="space-y-5">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center flex-shrink-0">
+              <AlertTriangle size={24} className="text-red-400" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-text-primary">Are you sure?</h4>
+              <p className="text-sm text-text-secondary mt-1">
+                You are about to delete rule <span className="font-mono font-semibold text-red-400">{deleteTarget?.rule_id}</span>. This action cannot be undone.
+              </p>
+            </div>
+          </div>
+
+          {deleteTarget && (
+            <div className="bg-bg-dark rounded-lg p-3 border border-border">
+              <p className="text-xs text-text-secondary mb-1">Condition</p>
+              <p className="text-sm font-mono text-text-primary break-all">{deleteTarget.definition?.condition}</p>
+              <div className="mt-2 flex items-center gap-4">
+                <span className="text-xs text-text-secondary">Score: <span className="text-amber-400 font-bold">+{deleteTarget.definition?.score}</span></span>
+                <span className="text-xs text-text-secondary">Status: <span className={deleteTarget.active ? 'text-emerald-400' : 'text-text-secondary'}>{deleteTarget.active ? 'Active' : 'Inactive'}</span></span>
+              </div>
+            </div>
+          )}
+
+          <div className="flex gap-3">
+            <Button
+              onClick={() => setDeleteTarget(null)}
+              className="flex-1"
+              variant="ghost"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={confirmDelete}
+              className="flex-1"
+              variant="danger"
+            >
+              Delete
+            </Button>
+          </div>
         </div>
       </Modal>
     </div>
