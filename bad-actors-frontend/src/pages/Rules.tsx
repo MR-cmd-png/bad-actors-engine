@@ -10,6 +10,29 @@ import { motion } from 'framer-motion'
 
 const EVENT_TYPES = ['Property Damage', 'Overdue and Unpaid']
 
+const CONDITIONS = [
+  {
+    value: 'property tort',
+    label: 'Property Tort',
+    event_types: ['Property Damage'],
+  },
+  {
+    value: 'conduct in violation of the principle of good faith',
+    label: 'Conduct in Violation of Good Faith',
+    event_types: ['Overdue and Unpaid'],
+  },
+  {
+    value: 'email_domain in disposable_list',
+    label: 'Email Domain in Disposable List',
+    event_types: [],
+  },
+]
+
+function getEventTypesForCondition(condition: string): string[] {
+  const cond = CONDITIONS.find((c) => c.value === condition)
+  return cond ? cond.event_types : EVENT_TYPES
+}
+
 export default function Rules() {
   const [rules, setRules] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
@@ -22,6 +45,24 @@ export default function Rules() {
 
   const toggleEventType = (list: string[], type: string): string[] => {
     return list.includes(type) ? list.filter((t) => t !== type) : [...list, type]
+  }
+
+  const handleConditionChange = (condition: string) => {
+    const allowed = getEventTypesForCondition(condition)
+    setForm((prev) => ({
+      ...prev,
+      condition,
+      event_types: prev.event_types.filter((t) => allowed.includes(t)),
+    }))
+  }
+
+  const handleEditConditionChange = (condition: string) => {
+    const allowed = getEventTypesForCondition(condition)
+    setEditForm((prev) => ({
+      ...prev,
+      condition,
+      event_types: prev.event_types.filter((t) => allowed.includes(t)),
+    }))
   }
 
   const fetchRules = async () => {
@@ -114,6 +155,9 @@ export default function Rules() {
 
   const activeCount = rules.filter((r) => r.active).length
 
+  const currentEventTypes = getEventTypesForCondition(form.condition)
+  const editEventTypes = getEventTypesForCondition(editForm.condition)
+
   return (
     <div className="space-y-6">
       <div>
@@ -139,20 +183,17 @@ export default function Rules() {
             <Input label="Rule ID" placeholder="An integer of 1 or above"
               value={form.rule_id}
               onChange={(e) => setForm({ ...form, rule_id: e.target.value })} />
-            <Input label="Match Condition" placeholder="Rule Category"
-              value={form.condition}
-              onChange={(e) => setForm({ ...form, condition: e.target.value })} />
 
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-text-secondary">Associated Event Types</label>
+              <label className="block text-sm font-medium text-text-secondary">Match Condition</label>
               <div className="flex flex-wrap gap-2">
-                {EVENT_TYPES.map((t) => {
-                  const selected = form.event_types.includes(t)
+                {CONDITIONS.map((c) => {
+                  const selected = form.condition === c.value
                   return (
                     <button
-                      key={t}
+                      key={c.value}
                       type="button"
-                      onClick={() => setForm({ ...form, event_types: toggleEventType(form.event_types, t) })}
+                      onClick={() => handleConditionChange(c.value)}
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border transition-all duration-200 ${
                         selected
                           ? 'bg-primary/15 text-primary-light border-primary/40'
@@ -160,12 +201,38 @@ export default function Rules() {
                       }`}
                     >
                       {selected && <Check size={14} />}
-                      {t}
+                      {c.label}
                     </button>
                   )
                 })}
               </div>
             </div>
+
+            {currentEventTypes.length > 0 && (
+              <div className="space-y-1.5">
+                <label className="block text-sm font-medium text-text-secondary">Associated Event Types</label>
+                <div className="flex flex-wrap gap-2">
+                  {currentEventTypes.map((t) => {
+                    const selected = form.event_types.includes(t)
+                    return (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setForm({ ...form, event_types: toggleEventType(form.event_types, t) })}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border transition-all duration-200 ${
+                          selected
+                            ? 'bg-primary/15 text-primary-light border-primary/40'
+                            : 'bg-bg-dark text-text-secondary border-border hover:border-primary/30'
+                        }`}
+                      >
+                        {selected && <Check size={14} />}
+                        {t}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
 
             <Input label="Hit Score" placeholder="An integer between 1 and 100" type="number"
               value={form.score}
@@ -331,20 +398,16 @@ export default function Rules() {
         title={`Edit Rule · ${editRule?.rule_id || ''}`}
       >
         <div className="space-y-4">
-          <Input label="Match Condition" placeholder="Rule Category"
-            value={editForm.condition}
-            onChange={(e) => setEditForm({ ...editForm, condition: e.target.value })} />
-
           <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-text-secondary">Associated Event Types</label>
+            <label className="block text-sm font-medium text-text-secondary">Match Condition</label>
             <div className="flex flex-wrap gap-2">
-              {EVENT_TYPES.map((t) => {
-                const selected = editForm.event_types.includes(t)
+              {CONDITIONS.map((c) => {
+                const selected = editForm.condition === c.value
                 return (
                   <button
-                    key={t}
+                    key={c.value}
                     type="button"
-                    onClick={() => setEditForm({ ...editForm, event_types: toggleEventType(editForm.event_types, t) })}
+                    onClick={() => handleEditConditionChange(c.value)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border transition-all duration-200 ${
                       selected
                         ? 'bg-primary/15 text-primary-light border-primary/40'
@@ -352,12 +415,38 @@ export default function Rules() {
                     }`}
                   >
                     {selected && <Check size={14} />}
-                    {t}
+                    {c.label}
                   </button>
                 )
               })}
             </div>
           </div>
+
+          {editEventTypes.length > 0 && (
+            <div className="space-y-1.5">
+              <label className="block text-sm font-medium text-text-secondary">Associated Event Types</label>
+              <div className="flex flex-wrap gap-2">
+                {editEventTypes.map((t) => {
+                  const selected = editForm.event_types.includes(t)
+                  return (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setEditForm({ ...editForm, event_types: toggleEventType(editForm.event_types, t) })}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border transition-all duration-200 ${
+                        selected
+                          ? 'bg-primary/15 text-primary-light border-primary/40'
+                          : 'bg-bg-dark text-text-secondary border-border hover:border-primary/30'
+                      }`}
+                    >
+                      {selected && <Check size={14} />}
+                      {t}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
 
           <Input label="Hit Score" placeholder="An integer between 1 and 100" type="number"
             value={editForm.score}
