@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { createRule, listActiveRules, toggleRule, updateRule } from '../api'
+import { createRule, listActiveRules, toggleRule, updateRule, deleteRule } from '../api'
 import Card from '../components/Card'
 import Button from '../components/Button'
 import Input from '../components/Input'
 import Badge from '../components/Badge'
 import Modal from '../components/Modal'
-import { Shield, Plus, ToggleLeft, ToggleRight, Eye, Tag, Pencil, Check } from 'lucide-react'
+import { Shield, Plus, ToggleLeft, ToggleRight, Eye, Tag, Pencil, Check, Trash2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const EVENT_TYPES = [
@@ -156,6 +156,19 @@ export default function Rules() {
       setMessage('❌ ' + e.message)
     } finally {
       setTogglingId(null)
+      setTimeout(() => setMessage(''), 3000)
+    }
+  }
+
+  const handleDelete = async (rule: any) => {
+    if (!confirm(`Delete rule "${rule.rule_id}"? This action cannot be undone.`)) return
+    try {
+      await deleteRule(rule.rule_id)
+      setMessage('✅ Rule deleted successfully!')
+      fetchRules()
+    } catch (e: any) {
+      setMessage('❌ ' + e.message)
+    } finally {
       setTimeout(() => setMessage(''), 3000)
     }
   }
@@ -336,6 +349,14 @@ export default function Rules() {
                         }`}
                       >
                         {rule.active ? <ToggleRight size={28} /> : <ToggleLeft size={28} />}
+                      </button>
+
+                      <button
+                        onClick={() => handleDelete(rule)}
+                        title="Delete rule"
+                        className="p-1 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95 text-text-secondary hover:text-red-400 hover:bg-red-500/10"
+                      >
+                        <Trash2 size={20} />
                       </button>
                     </div>
                   </div>

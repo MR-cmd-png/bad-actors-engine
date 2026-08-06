@@ -58,6 +58,9 @@ export const updateRule = (
 export const listActiveRules = () =>
   apiClient.get('/rule/list')
 
+export const deleteRule = (ruleId: string) =>
+  apiClient.delete(`/rule/${encodeURIComponent(ruleId)}`)
+
 // ======================== Score ========================
 export const calcEntityScore = (entityId: number) =>
   apiClient.post(`/entity/${entityId}/calc_score`)

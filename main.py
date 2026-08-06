@@ -341,6 +341,16 @@ async def update_rule(rule_id: str, data: RuleUpdate, db: AsyncSession = Depends
     return {"code": 0, "data": rule}
 
 
+@app.delete("/rule/{rule_id}", summary="Delete Rule")
+async def delete_rule(rule_id: str, db: AsyncSession = Depends(get_db)):
+    rule = (await db.execute(select(models.Rule).where(models.Rule.rule_id == rule_id))).scalar_one_or_none()
+    if not rule:
+        raise HTTPException(status_code=404, detail="Rule not found")
+    await db.delete(rule)
+    await db.commit()
+    return {"code": 0, "message": "Rule deleted successfully"}
+
+
 # ===================== 4. Core: Rule Scoring + Generate RuleHits + Update Scores =====================
 # Business logic: after event trigger, auto-run rules, record hits, update risk score & level
 @app.post("/entity/{entity_id}/calc_score", summary="Manually Trigger Entity Risk Scoring")
