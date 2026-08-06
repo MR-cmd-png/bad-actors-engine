@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   LayoutDashboard,
@@ -6,10 +6,11 @@ import {
   Zap,
   Shield,
   Activity,
+  ArrowLeft,
 } from 'lucide-react'
 
 const navItems = [
-  { path: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { path: '/entities', label: 'Entities', icon: Users },
   { path: '/events', label: 'Events', icon: Zap },
   { path: '/rules', label: 'Rules', icon: Shield },
@@ -17,12 +18,17 @@ const navItems = [
 ]
 
 export default function Layout() {
+  const navigate = useNavigate()
+
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
       <aside className="w-64 bg-bg-card border-r border-border flex flex-col shrink-0">
         {/* Logo */}
-        <div className="h-16 flex items-center gap-3 px-6 border-b border-border">
+        <button
+          onClick={() => navigate('/')}
+          className="h-16 flex items-center gap-3 px-6 border-b border-border hover:bg-bg-card-hover transition-colors text-left"
+        >
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center">
             <Shield size={18} className="text-white" />
           </div>
@@ -30,7 +36,7 @@ export default function Layout() {
             <h1 className="text-sm font-bold text-text-primary">Bad Actor</h1>
             <p className="text-[10px] text-text-secondary">Detection Engine</p>
           </div>
-        </div>
+        </button>
 
         {/* Nav */}
         <nav className="flex-1 py-4 px-3 space-y-1">
@@ -53,7 +59,14 @@ export default function Layout() {
         </nav>
 
         {/* Footer */}
-        <div className="p-4 border-t border-border">
+        <div className="p-4 border-t border-border space-y-2">
+          <button
+            onClick={() => navigate('/')}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs text-text-secondary hover:text-primary-light hover:bg-primary/10 transition-colors"
+          >
+            <ArrowLeft size={14} />
+            Back to Landing
+          </button>
           <div className="text-xs text-text-secondary text-center">
             MVP v1.0 • 2026
           </div>

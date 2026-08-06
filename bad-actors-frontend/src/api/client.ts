@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-  baseURL: '/api',
+  baseURL: 'https://bad-actors-engine-production.up.railway.app',
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
 })

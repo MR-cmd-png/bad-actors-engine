@@ -385,7 +385,7 @@ async def calc_entity_risk_score(entity_id: int, db: AsyncSession = Depends(get_
             event_list = (
                 await db.execute(select(models.Event).where(models.Event.entity_id == entity_id))).scalars().all()
             for ev in event_list:
-                if ev.type == "Property Damage":
+                if ev.type == "Property_Damage":
                     hit_flag = True
                     break
         elif cond_norm == "conduct in violation of the principle of good faith":
