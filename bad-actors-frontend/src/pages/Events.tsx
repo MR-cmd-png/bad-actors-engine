@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback } from 'react'
-import { createEvent, listEvents, type EventListParams } from '../api'
+import { useState, useEffect } from 'react'
+import { createEvent, listEvents } from '../api'
 import Card from '../components/Card'
 import Button from '../components/Button'
 import Input from '../components/Input'
-import { Zap, RotateCcw, ChevronLeft, ChevronRight, Calendar, Filter } from 'lucide-react'
+import { Zap, ChevronLeft, ChevronRight, Calendar, Plus } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const EVENT_TYPES = [
@@ -24,24 +24,21 @@ export default function Events() {
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
   const [pageSize] = useState(20)
+  const [searchKeyword, setSearchKeyword] = useState('')
 
-  const [filters, setFilters] = useState<EventListParams>({})
-  const [showFilters, setShowFilters] = useState(true)
-  const [filterDraft, setFilterDraft] = useState<EventListParams>({})
-
-  const fetchEvents = useCallback(async (p = page, f = filters) => {
+  const fetchEvents = async () => {
     try {
-      const res: any = await listEvents({ ...f, page: p, page_size: pageSize })
+      const res: any = await listEvents({ page, page_size: pageSize, keyword: searchKeyword || undefined })
       setEvents(res.data || [])
       setTotal(res.total || 0)
     } catch (e) {
       console.error('Failed to fetch events', e)
     }
-  }, [page, pageSize, filters])
+  }
 
   useEffect(() => {
-    fetchEvents(page, filters)
-  }, [page, filters])
+    fetchEvents()
+  }, [page])
 
   const handleCreate = async () => {
     if (!form.entity_id || !form.type) {
@@ -60,7 +57,7 @@ export default function Events() {
       setMessage('✅ Event created successfully!')
       setForm({ entity_id: '', type: '', metadata: '' })
       setPage(1)
-      fetchEvents(1, filters)
+      fetchEvents()
     } catch (e: any) {
       setMessage('❌ ' + e.message)
     } finally {
@@ -69,15 +66,9 @@ export default function Events() {
     }
   }
 
-  const applyFilters = () => {
-    setFilters(filterDraft)
+  const handleSearch = () => {
     setPage(1)
-  }
-
-  const resetFilters = () => {
-    setFilterDraft({})
-    setFilters({})
-    setPage(1)
+    fetchEvents()
   }
 
   const totalPages = Math.ceil(total / pageSize) || 1
@@ -153,7 +144,7 @@ export default function Events() {
             </div>
 
             <Button onClick={handleCreate} loading={loading}>
-              <Zap size={16} /> Submit Event
+              <Plus size={16} /> Submit Event
             </Button>
           </div>
         </Card>
@@ -161,106 +152,35 @@ export default function Events() {
         <Card delay={0.2}>
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <Filter size={18} className="text-purple-400" />
               <h3 className="font-semibold">📋 Event History</h3>
               <span className="text-xs text-text-secondary bg-bg-dark px-2 py-0.5 rounded-full">
                 {total} records
               </span>
             </div>
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${
-                showFilters
-                  ? 'bg-primary/15 border-primary/40 text-primary-light'
-                  : 'bg-bg-dark border-border text-text-secondary hover:border-primary/30'
-              }`}
-            >
-              {showFilters ? 'Hide Filters' : 'Show Filters'}
-            </button>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Search events..."
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                className="px-3 py-1.5 bg-bg-dark border border-border rounded-lg text-sm focus:outline-none focus:border-primary w-40"
+              />
+              <button
+                onClick={handleSearch}
+                className="px-3 py-1.5 bg-primary text-white text-sm rounded-lg font-medium hover:bg-primary/80 transition-colors"
+              >
+                Search
+              </button>
+            </div>
           </div>
 
-          {showFilters && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              className="mb-4 p-3 bg-bg-dark rounded-lg border border-border space-y-3"
-            >
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs text-text-secondary mb-1">Entity ID</label>
-                  <input
-                    type="number"
-                    placeholder="Filter by entity"
-                    value={filterDraft.entity_id ?? ''}
-                    onChange={(e) => setFilterDraft({ ...filterDraft, entity_id: e.target.value ? Number(e.target.value) : undefined })}
-                    className="w-full px-3 py-2 bg-bg-card border border-border rounded-lg text-sm focus:outline-none focus:border-primary"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs text-text-secondary mb-1">Event Type</label>
-                  <select
-                    value={filterDraft.type ?? ''}
-                    onChange={(e) => setFilterDraft({ ...filterDraft, type: e.target.value || undefined })}
-                    className="w-full px-3 py-2 bg-bg-card border border-border rounded-lg text-sm focus:outline-none focus:border-primary"
-                  >
-                    <option value="">All Types</option>
-                    {EVENT_TYPES.map((t) => (
-                      <option key={t} value={t}>{t}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs text-text-secondary mb-1">From Date</label>
-                  <input
-                    type="date"
-                    value={filterDraft.date_from ?? ''}
-                    onChange={(e) => setFilterDraft({ ...filterDraft, date_from: e.target.value || undefined })}
-                    className="w-full px-3 py-2 bg-bg-card border border-border rounded-lg text-sm focus:outline-none focus:border-primary"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs text-text-secondary mb-1">To Date</label>
-                  <input
-                    type="date"
-                    value={filterDraft.date_to ?? ''}
-                    onChange={(e) => setFilterDraft({ ...filterDraft, date_to: e.target.value || undefined })}
-                    className="w-full px-3 py-2 bg-bg-card border border-border rounded-lg text-sm focus:outline-none focus:border-primary"
-                  />
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-xs text-text-secondary mb-1">Keyword</label>
-                  <input
-                    type="text"
-                    placeholder="Search type or metadata"
-                    value={filterDraft.keyword ?? ''}
-                    onChange={(e) => setFilterDraft({ ...filterDraft, keyword: e.target.value || undefined })}
-                    className="w-full px-3 py-2 bg-bg-card border border-border rounded-lg text-sm focus:outline-none focus:border-primary"
-                  />
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={applyFilters}
-                  className="flex-1 px-3 py-2 bg-primary text-white text-sm rounded-lg font-medium hover:bg-primary/80 transition-colors"
-                >
-                  Apply Filters
-                </button>
-                <button
-                  onClick={resetFilters}
-                  className="px-3 py-2 bg-bg-card border border-border text-text-secondary text-sm rounded-lg hover:border-primary/30 transition-colors flex items-center gap-1"
-                >
-                  <RotateCcw size={14} /> Reset
-                </button>
-              </div>
-            </motion.div>
-          )}
-
-          <div className="space-y-2 max-h-[520px] overflow-auto">
+          <div className="space-y-2 max-h-[560px] overflow-auto">
             {events.length === 0 ? (
               <div className="text-center py-12 text-text-secondary">
                 <Zap size={48} className="mx-auto mb-3 opacity-30" />
                 <p>No event records</p>
-                <p className="text-xs mt-1">Create events or adjust filters</p>
+                <p className="text-xs mt-1">Create events to see them here</p>
               </div>
             ) : (
               events.map((ev) => (
