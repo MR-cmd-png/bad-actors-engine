@@ -292,6 +292,55 @@ async def create_event(data: EventCreate, db: AsyncSession = Depends(get_db)):
     return {"code": 0, "data": event}
 
 
+@app.get("/events", summary="Event List - Search/Filter/Sort/Pagination")
+async def list_events(
+    page: int = 1,
+    page_size: int = 20,
+    entity_id: Optional[int] = None,
+    type: Optional[str] = None,
+    date_from: Optional[str] = None,
+    date_to: Optional[str] = None,
+    keyword: str = "",
+    db: AsyncSession = Depends(get_db),
+):
+    stmt = select(models.Event)
+
+    if entity_id is not None:
+        stmt = stmt.where(models.Event.entity_id == entity_id)
+
+    if type:
+        stmt = stmt.where(models.Event.type == type)
+
+    if date_from:
+        stmt = stmt.where(models.Event.timestamp >= date_from)
+
+    if date_to:
+        stmt = stmt.where(models.Event.timestamp <= date_to + " 23:59:59")
+
+    if keyword:
+        like = f"%{keyword}%"
+        stmt = stmt.where(or_(
+            models.Event.type.like(like),
+            models.Event.metadata_json.cast(db.bind.dialect.text_type).like(like),
+        ))
+
+    total = (await db.execute(
+        select(func.count()).select_from(stmt.subquery())
+    )).scalar() or 0
+
+    stmt = stmt.order_by(models.Event.timestamp.desc())
+    stmt = stmt.offset((page - 1) * page_size).limit(page_size)
+    rows = (await db.execute(stmt)).scalars().all()
+
+    return {
+        "code": 0,
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "data": rows,
+    }
+
+
 # ===================== 3. Rule Management =====================
 @app.post("/rule/create", summary="Create Scoring Rule")
 async def create_rule(data: RuleCreate, db: AsyncSession = Depends(get_db)):

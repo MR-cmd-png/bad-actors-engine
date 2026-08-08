@@ -35,6 +35,19 @@ export interface EventCreate {
 export const createEvent = (data: EventCreate) =>
   apiClient.post('/event/create', data)
 
+export interface EventListParams {
+  page?: number
+  page_size?: number
+  entity_id?: number
+  type?: string
+  date_from?: string
+  date_to?: string
+  keyword?: string
+}
+
+export const listEvents = (params: EventListParams) =>
+  apiClient.get('/events', { params })
+
 // ======================== Rule ========================
 export interface RuleCreate {
   rule_id: string
