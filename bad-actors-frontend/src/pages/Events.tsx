@@ -26,7 +26,7 @@ export default function Events() {
   const [pageSize] = useState(20)
 
   const [filters, setFilters] = useState<EventListParams>({})
-  const [showFilters, setShowFilters] = useState(false)
+  const [showFilters, setShowFilters] = useState(true)
   const [filterDraft, setFilterDraft] = useState<EventListParams>({})
 
   const fetchEvents = useCallback(async (p = page, f = filters) => {
