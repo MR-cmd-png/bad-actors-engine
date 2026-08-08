@@ -315,14 +315,13 @@ async def list_events(
         stmt = stmt.where(models.Event.timestamp >= date_from)
 
     if date_to:
-        stmt = stmt.where(models.Event.timestamp <= date_to + " 23:59:59")
+        from datetime import datetime, timedelta
+        dt = datetime.strptime(date_to, "%Y-%m-%d") + timedelta(days=1)
+        stmt = stmt.where(models.Event.timestamp < dt)
 
     if keyword:
         like = f"%{keyword}%"
-        stmt = stmt.where(or_(
-            models.Event.type.like(like),
-            models.Event.metadata_json.cast(db.bind.dialect.text_type).like(like),
-        ))
+        stmt = stmt.where(models.Event.type.like(like))
 
     total = (await db.execute(
         select(func.count()).select_from(stmt.subquery())
