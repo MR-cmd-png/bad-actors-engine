@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 import apiClient from './client'
 
 export interface User {
@@ -15,6 +15,7 @@ interface AuthContextType {
   logout: () => void
   loading: boolean
   error: string | null
+  clearError: () => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -84,8 +85,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     delete apiClient.defaults.headers.common['Authorization']
   }
 
+  const clearError = () => {
+    setError(null)
+  }
+
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, loading, error }}>
+    <AuthContext.Provider value={{ user, token, login, register, logout, loading, error, clearError }}>
       {children}
     </AuthContext.Provider>
   )

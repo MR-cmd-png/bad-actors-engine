@@ -17,17 +17,6 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }
 
-function AdminRoute({ children }: { children: React.ReactNode }) {
-  const { token, user } = useAuth()
-  if (!token || !user) {
-    return <Navigate to="/login" replace />
-  }
-  if (user.role !== 'admin') {
-    return <Navigate to="/dashboard" replace />
-  }
-  return <>{children}</>
-}
-
 export default function App() {
   return (
     <AuthProvider>

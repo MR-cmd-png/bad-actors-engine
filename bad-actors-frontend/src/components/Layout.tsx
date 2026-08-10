@@ -10,8 +10,6 @@ import {
   LogOut,
   UserCircle,
   Crown,
-  Eye,
-  EyeOff,
 } from 'lucide-react'
 import { useAuth } from '../api/auth'
 

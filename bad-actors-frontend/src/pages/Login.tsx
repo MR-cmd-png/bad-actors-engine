@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { Shield, Eye, EyeOff, Loader2 } from 'lucide-react'
 
 export default function Login() {
-  const { login, register, loading, error } = useAuth()
+  const { login, register, loading, error, clearError } = useAuth()
   const navigate = useNavigate()
   const [mode, setMode] = useState<'login' | 'register'>('login')
   const [username, setUsername] = useState('')
@@ -141,7 +141,7 @@ export default function Login() {
               <>
                 Don't have an account?{' '}
                 <button
-                  onClick={() => { setMode('register'); setError(null) }}
+                  onClick={() => { setMode('register'); clearError() }}
                   className="text-primary-light hover:text-primary transition-colors font-medium"
                 >
                   Register
@@ -151,7 +151,7 @@ export default function Login() {
               <>
                 Already have an account?{' '}
                 <button
-                  onClick={() => { setMode('login'); setError(null) }}
+                  onClick={() => { setMode('login'); clearError() }}
                   className="text-primary-light hover:text-primary transition-colors font-medium"
                 >
                   Sign In
