@@ -70,10 +70,15 @@ async def startup():
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
         print("Database tables initialized")
+    except Exception as e:
+        print(f"Error creating database tables: {e}")
+        print("App will start but database operations may not work")
+    try:
         await _seed_default_user()
     except Exception as e:
-        print(f"Warning: Database connection failed: {e}")
-        print("App will start but database operations may not work")
+        print(f"Error seeding default admin user: {e}")
+        import traceback
+        traceback.print_exc()
 
 
 async def _seed_default_user():

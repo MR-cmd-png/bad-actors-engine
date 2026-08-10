@@ -1,0 +1,925 @@
+2026-08-10T04:02:54.206369169Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1353, in invoke
+2026-08-10T04:02:54.206386188Z [err]      return ctx.invoke(self.callback, **ctx.params)
+2026-08-10T04:02:54.206395848Z [err]             ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:54.206403073Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 907, in invoke
+2026-08-10T04:02:54.206412293Z [err]      return callback(*args, **kwargs)
+2026-08-10T04:02:54.206422126Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 440, in main
+2026-08-10T04:02:54.206434276Z [err]      run(
+2026-08-10T04:02:54.206442875Z [err]  Traceback (most recent call last):
+2026-08-10T04:02:54.206445884Z [err]      ~~~^
+2026-08-10T04:02:54.206450194Z [err]    File "/app/.venv/bin/uvicorn", line 6, in <module>
+2026-08-10T04:02:54.206456948Z [err]      sys.exit(main())
+2026-08-10T04:02:54.206459036Z [err]          app,
+2026-08-10T04:02:54.206464726Z [err]               ~~~~^^
+2026-08-10T04:02:54.206471548Z [err]          ^^^^
+2026-08-10T04:02:54.206471731Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1569, in __call__
+2026-08-10T04:02:54.206478148Z [err]      return self.main(*args, **kwargs)
+2026-08-10T04:02:54.206483295Z [err]      ...<48 lines>...
+2026-08-10T04:02:54.206485353Z [err]             ~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:54.206491726Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1490, in main
+2026-08-10T04:02:54.206496916Z [err]          reset_contextvars=reset_contextvars,
+2026-08-10T04:02:54.206497873Z [err]      rv = self.invoke(ctx)
+2026-08-10T04:02:54.206507150Z [err]          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:54.206514619Z [err]      )
+2026-08-10T04:02:54.206523324Z [err]      ^
+2026-08-10T04:02:54.206529849Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 609, in run
+2026-08-10T04:02:54.207181993Z [err]      import models,time
+2026-08-10T04:02:54.207191376Z [err]    File "/app/models.py", line 23, in <module>
+2026-08-10T04:02:54.207196754Z [err]      class Event(Base):
+2026-08-10T04:02:54.207202008Z [err]      ...<6 lines>...
+2026-08-10T04:02:54.207207183Z [err]          entity = relationship("Entity", back_populates="events")
+2026-08-10T04:02:54.207234618Z [err]      config.load_app()
+2026-08-10T04:02:54.207241954Z [err]      ~~~~~~~~~~~~~~~^^
+2026-08-10T04:02:54.207250377Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 428, in load_app
+2026-08-10T04:02:54.207256831Z [err]      return import_from_string(self.app)
+2026-08-10T04:02:54.207268743Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+2026-08-10T04:02:54.207273510Z [err]      module = importlib.import_module(module_str)
+2026-08-10T04:02:54.207307088Z [err]    File "/mise/installs/python/3.13.14/lib/python3.13/importlib/__init__.py", line 88, in import_module
+2026-08-10T04:02:54.207314774Z [err]      return _bootstrap._gcd_import(name[level:], package, level)
+2026-08-10T04:02:54.207320634Z [err]             ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:54.207326099Z [err]    File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
+2026-08-10T04:02:54.207331546Z [err]    File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+2026-08-10T04:02:54.207337398Z [err]    File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+2026-08-10T04:02:54.207343017Z [err]    File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+2026-08-10T04:02:54.207348963Z [err]    File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+2026-08-10T04:02:54.207354552Z [err]    File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+2026-08-10T04:02:54.207360281Z [err]    File "/app/main.py", line 16, in <module>
+2026-08-10T04:02:54.208852519Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_api.py", line 849, in __init_subclass__
+2026-08-10T04:02:54.208865256Z [err]      _as_declarative(cls._sa_registry, cls, cls.__dict__)
+2026-08-10T04:02:54.208874411Z [err]      ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:54.208881283Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 245, in _as_declarative
+2026-08-10T04:02:54.208888300Z [err]      return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+2026-08-10T04:02:54.208895446Z [err]             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:54.208902314Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 326, in setup_mapping
+2026-08-10T04:02:54.208907086Z [err]      return _ClassScanMapperConfig(
+2026-08-10T04:02:54.208912405Z [err]          registry, cls_, dict_, table, mapper_kw
+2026-08-10T04:02:54.208917887Z [err]      )
+2026-08-10T04:02:54.208922901Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 573, in __init__
+2026-08-10T04:02:54.208926980Z [err]      self._extract_mappable_attributes()
+2026-08-10T04:02:54.208931575Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+2026-08-10T04:02:54.208935467Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 1567, in _extract_mappable_attributes
+2026-08-10T04:02:54.208939744Z [err]      value.declarative_scan(
+2026-08-10T04:02:54.208943971Z [err]      ~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:02:54.208950111Z [err]          self,
+2026-08-10T04:02:54.208956145Z [err]          ^^^^^
+2026-08-10T04:02:54.208961640Z [err]      ...<7 lines>...
+2026-08-10T04:02:54.208967323Z [err]          is_dataclass,
+2026-08-10T04:02:54.208973975Z [err]          ^^^^^^^^^^^^^
+2026-08-10T04:02:54.208980071Z [err]      )
+2026-08-10T04:02:54.210227576Z [err]      ^
+2026-08-10T04:02:54.210236746Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 722, in declarative_scan
+2026-08-10T04:02:54.210241491Z [err]      self._init_column_for_annotation(
+2026-08-10T04:02:54.210246431Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:02:54.210254156Z [err]          cls,
+2026-08-10T04:02:54.210259217Z [err]          ^^^^
+2026-08-10T04:02:54.210264059Z [err]      ...<4 lines>...
+2026-08-10T04:02:54.210268540Z [err]          originating_module,
+2026-08-10T04:02:54.210273379Z [err]          ^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:54.210277603Z [err]      )
+2026-08-10T04:02:54.210287199Z [err]      ^
+2026-08-10T04:02:54.210293523Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 919, in _init_column_for_annotation
+2026-08-10T04:02:54.210299022Z [err]      raise orm_exc.MappedAnnotationError(
+2026-08-10T04:02:54.210305541Z [err]      ...<5 lines>...
+2026-08-10T04:02:54.210311171Z [err]      )
+2026-08-10T04:02:54.210316623Z [err]  sqlalchemy.orm.exc.MappedAnnotationError: Could not locate SQLAlchemy Core type when resolving for Python type indicated by '<class 'models.User'>' inside the Mapped[] annotation for the 'type' attribute; the type object is not resolvable by the registry
+2026-08-10T04:02:54.214552546Z [inf]  Starting Container
+2026-08-10T04:02:55.754609469Z [err]  Traceback (most recent call last):
+2026-08-10T04:02:55.754614462Z [err]    File "/app/.venv/bin/uvicorn", line 6, in <module>
+2026-08-10T04:02:55.754615544Z [err]      ^
+2026-08-10T04:02:55.754620492Z [err]      sys.exit(main())
+2026-08-10T04:02:55.754625030Z [err]               ~~~~^^
+2026-08-10T04:02:55.754631704Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 609, in run
+2026-08-10T04:02:55.754632102Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1569, in __call__
+2026-08-10T04:02:55.754637655Z [err]      return self.main(*args, **kwargs)
+2026-08-10T04:02:55.754641791Z [err]             ~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:55.754645169Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1490, in main
+2026-08-10T04:02:55.754650232Z [err]      rv = self.invoke(ctx)
+2026-08-10T04:02:55.754653925Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1353, in invoke
+2026-08-10T04:02:55.754657483Z [err]      return ctx.invoke(self.callback, **ctx.params)
+2026-08-10T04:02:55.754660936Z [err]             ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:55.754665478Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 907, in invoke
+2026-08-10T04:02:55.754669209Z [err]      return callback(*args, **kwargs)
+2026-08-10T04:02:55.754672473Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 440, in main
+2026-08-10T04:02:55.754675942Z [err]      run(
+2026-08-10T04:02:55.754679636Z [err]      ~~~^
+2026-08-10T04:02:55.754682962Z [err]          app,
+2026-08-10T04:02:55.754686878Z [err]          ^^^^
+2026-08-10T04:02:55.754699036Z [err]      ...<48 lines>...
+2026-08-10T04:02:55.754702995Z [err]          reset_contextvars=reset_contextvars,
+2026-08-10T04:02:55.754706682Z [err]          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:55.754710698Z [err]      )
+2026-08-10T04:02:55.755801574Z [err]      config.load_app()
+2026-08-10T04:02:55.755812190Z [err]      ~~~~~~~~~~~~~~~^^
+2026-08-10T04:02:55.756049490Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 428, in load_app
+2026-08-10T04:02:55.756060442Z [err]      return import_from_string(self.app)
+2026-08-10T04:02:55.756068807Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+2026-08-10T04:02:55.756076555Z [err]      module = importlib.import_module(module_str)
+2026-08-10T04:02:55.756084272Z [err]    File "/mise/installs/python/3.13.14/lib/python3.13/importlib/__init__.py", line 88, in import_module
+2026-08-10T04:02:55.756092251Z [err]      return _bootstrap._gcd_import(name[level:], package, level)
+2026-08-10T04:02:55.756099656Z [err]             ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:55.756108277Z [err]    File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
+2026-08-10T04:02:55.756116099Z [err]    File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+2026-08-10T04:02:55.756123750Z [err]    File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+2026-08-10T04:02:55.756131560Z [err]    File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+2026-08-10T04:02:55.756139786Z [err]    File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+2026-08-10T04:02:55.756147600Z [err]    File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+2026-08-10T04:02:55.756156709Z [err]    File "/app/main.py", line 16, in <module>
+2026-08-10T04:02:55.756164264Z [err]      import models,time
+2026-08-10T04:02:55.756171922Z [err]    File "/app/models.py", line 23, in <module>
+2026-08-10T04:02:55.756179678Z [err]      class Event(Base):
+2026-08-10T04:02:55.756187068Z [err]      ...<6 lines>...
+2026-08-10T04:02:55.756195041Z [err]          entity = relationship("Entity", back_populates="events")
+2026-08-10T04:02:55.756882225Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_api.py", line 849, in __init_subclass__
+2026-08-10T04:02:55.756891136Z [err]      _as_declarative(cls._sa_registry, cls, cls.__dict__)
+2026-08-10T04:02:55.756896439Z [err]      ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:55.756901277Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 245, in _as_declarative
+2026-08-10T04:02:55.756905887Z [err]      return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+2026-08-10T04:02:55.756911199Z [err]             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:55.756916161Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 326, in setup_mapping
+2026-08-10T04:02:55.756921291Z [err]      return _ClassScanMapperConfig(
+2026-08-10T04:02:55.756926424Z [err]          registry, cls_, dict_, table, mapper_kw
+2026-08-10T04:02:55.756931762Z [err]      )
+2026-08-10T04:02:55.756936189Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 573, in __init__
+2026-08-10T04:02:55.756942089Z [err]      self._extract_mappable_attributes()
+2026-08-10T04:02:55.756947211Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+2026-08-10T04:02:55.756952730Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 1567, in _extract_mappable_attributes
+2026-08-10T04:02:55.756957484Z [err]      value.declarative_scan(
+2026-08-10T04:02:55.756962239Z [err]      ~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:02:55.756967005Z [err]          self,
+2026-08-10T04:02:55.756976800Z [err]          ^^^^^
+2026-08-10T04:02:55.756981921Z [err]      ...<7 lines>...
+2026-08-10T04:02:55.756986280Z [err]          is_dataclass,
+2026-08-10T04:02:55.756991205Z [err]          ^^^^^^^^^^^^^
+2026-08-10T04:02:55.756995645Z [err]      )
+2026-08-10T04:02:55.757996504Z [err]      ^
+2026-08-10T04:02:55.758004462Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 722, in declarative_scan
+2026-08-10T04:02:55.758010406Z [err]      self._init_column_for_annotation(
+2026-08-10T04:02:55.758015579Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:02:55.758021035Z [err]          cls,
+2026-08-10T04:02:55.758026853Z [err]          ^^^^
+2026-08-10T04:02:55.758033903Z [err]      ...<4 lines>...
+2026-08-10T04:02:55.758039184Z [err]          originating_module,
+2026-08-10T04:02:55.758044071Z [err]          ^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:55.758050159Z [err]      )
+2026-08-10T04:02:55.758055303Z [err]      ^
+2026-08-10T04:02:55.758061149Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 919, in _init_column_for_annotation
+2026-08-10T04:02:55.758065115Z [err]      raise orm_exc.MappedAnnotationError(
+2026-08-10T04:02:55.758069336Z [err]      ...<5 lines>...
+2026-08-10T04:02:55.758073922Z [err]      )
+2026-08-10T04:02:55.758077744Z [err]  sqlalchemy.orm.exc.MappedAnnotationError: Could not locate SQLAlchemy Core type when resolving for Python type indicated by '<class 'models.User'>' inside the Mapped[] annotation for the 'type' attribute; the type object is not resolvable by the registry
+2026-08-10T04:02:57.390716272Z [err]  Traceback (most recent call last):
+2026-08-10T04:02:57.396778261Z [err]    File "/app/.venv/bin/uvicorn", line 6, in <module>
+2026-08-10T04:02:57.396786603Z [err]      sys.exit(main())
+2026-08-10T04:02:57.396791603Z [err]               ~~~~^^
+2026-08-10T04:02:57.396796574Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1569, in __call__
+2026-08-10T04:02:57.396801418Z [err]      return self.main(*args, **kwargs)
+2026-08-10T04:02:57.396806201Z [err]             ~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:57.396812861Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1490, in main
+2026-08-10T04:02:57.396817690Z [err]      rv = self.invoke(ctx)
+2026-08-10T04:02:57.396821894Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1353, in invoke
+2026-08-10T04:02:57.396825712Z [err]      return ctx.invoke(self.callback, **ctx.params)
+2026-08-10T04:02:57.396829606Z [err]             ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:57.396833700Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 907, in invoke
+2026-08-10T04:02:57.396837480Z [err]      return callback(*args, **kwargs)
+2026-08-10T04:02:57.396840972Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 440, in main
+2026-08-10T04:02:57.396844678Z [err]      run(
+2026-08-10T04:02:57.396848239Z [err]      ~~~^
+2026-08-10T04:02:57.396852914Z [err]          app,
+2026-08-10T04:02:57.396857297Z [err]          ^^^^
+2026-08-10T04:02:57.396862977Z [err]      ...<48 lines>...
+2026-08-10T04:02:57.396867032Z [err]          reset_contextvars=reset_contextvars,
+2026-08-10T04:02:57.396870507Z [err]          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:57.396874787Z [err]      )
+2026-08-10T04:02:57.396878871Z [err]      ^
+2026-08-10T04:02:57.396882425Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 609, in run
+2026-08-10T04:02:57.397855624Z [err]      config.load_app()
+2026-08-10T04:02:57.397864089Z [err]      ~~~~~~~~~~~~~~~^^
+2026-08-10T04:02:57.397869507Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 428, in load_app
+2026-08-10T04:02:57.397880915Z [err]      return import_from_string(self.app)
+2026-08-10T04:02:57.397885767Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+2026-08-10T04:02:57.397890304Z [err]      module = importlib.import_module(module_str)
+2026-08-10T04:02:57.397895190Z [err]    File "/mise/installs/python/3.13.14/lib/python3.13/importlib/__init__.py", line 88, in import_module
+2026-08-10T04:02:57.397899430Z [err]      return _bootstrap._gcd_import(name[level:], package, level)
+2026-08-10T04:02:57.397903531Z [err]             ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:57.397907353Z [err]    File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
+2026-08-10T04:02:57.397911166Z [err]    File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+2026-08-10T04:02:57.397914628Z [err]    File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+2026-08-10T04:02:57.397918115Z [err]    File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+2026-08-10T04:02:57.397921750Z [err]    File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+2026-08-10T04:02:57.397925544Z [err]    File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+2026-08-10T04:02:57.397930148Z [err]    File "/app/main.py", line 16, in <module>
+2026-08-10T04:02:57.397934150Z [err]      import models,time
+2026-08-10T04:02:57.397938729Z [err]    File "/app/models.py", line 23, in <module>
+2026-08-10T04:02:57.397942557Z [err]      class Event(Base):
+2026-08-10T04:02:57.397946122Z [err]      ...<6 lines>...
+2026-08-10T04:02:57.397949874Z [err]          entity = relationship("Entity", back_populates="events")
+2026-08-10T04:02:57.399140205Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_api.py", line 849, in __init_subclass__
+2026-08-10T04:02:57.399151172Z [err]      _as_declarative(cls._sa_registry, cls, cls.__dict__)
+2026-08-10T04:02:57.399158190Z [err]      ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:57.399164335Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 245, in _as_declarative
+2026-08-10T04:02:57.399170086Z [err]      return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+2026-08-10T04:02:57.399176354Z [err]             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:57.399191171Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 326, in setup_mapping
+2026-08-10T04:02:57.399197960Z [err]      return _ClassScanMapperConfig(
+2026-08-10T04:02:57.399203755Z [err]          registry, cls_, dict_, table, mapper_kw
+2026-08-10T04:02:57.399209604Z [err]      )
+2026-08-10T04:02:57.399214979Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 573, in __init__
+2026-08-10T04:02:57.399221051Z [err]      self._extract_mappable_attributes()
+2026-08-10T04:02:57.399226548Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+2026-08-10T04:02:57.399232372Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 1567, in _extract_mappable_attributes
+2026-08-10T04:02:57.399237674Z [err]      value.declarative_scan(
+2026-08-10T04:02:57.399243755Z [err]      ~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:02:57.399249641Z [err]          self,
+2026-08-10T04:02:57.399256168Z [err]          ^^^^^
+2026-08-10T04:02:57.399261215Z [err]      ...<7 lines>...
+2026-08-10T04:02:57.399266940Z [err]          is_dataclass,
+2026-08-10T04:02:57.399272179Z [err]          ^^^^^^^^^^^^^
+2026-08-10T04:02:57.399316345Z [err]      )
+2026-08-10T04:02:57.400278174Z [err]      ^
+2026-08-10T04:02:57.400287003Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 722, in declarative_scan
+2026-08-10T04:02:57.400292355Z [err]      self._init_column_for_annotation(
+2026-08-10T04:02:57.400297392Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:02:57.400303268Z [err]          cls,
+2026-08-10T04:02:57.400308687Z [err]          ^^^^
+2026-08-10T04:02:57.400314032Z [err]      ...<4 lines>...
+2026-08-10T04:02:57.400319179Z [err]          originating_module,
+2026-08-10T04:02:57.400322800Z [err]          ^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:57.400326683Z [err]      )
+2026-08-10T04:02:57.400330972Z [err]      ^
+2026-08-10T04:02:57.400334808Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 919, in _init_column_for_annotation
+2026-08-10T04:02:57.400338567Z [err]      raise orm_exc.MappedAnnotationError(
+2026-08-10T04:02:57.400342526Z [err]      ...<5 lines>...
+2026-08-10T04:02:57.400346358Z [err]      )
+2026-08-10T04:02:57.400350643Z [err]  sqlalchemy.orm.exc.MappedAnnotationError: Could not locate SQLAlchemy Core type when resolving for Python type indicated by '<class 'models.User'>' inside the Mapped[] annotation for the 'type' attribute; the type object is not resolvable by the registry
+2026-08-10T04:02:58.964440513Z [err]  Traceback (most recent call last):
+2026-08-10T04:02:58.966210503Z [err]    File "/app/.venv/bin/uvicorn", line 6, in <module>
+2026-08-10T04:02:58.966218888Z [err]      sys.exit(main())
+2026-08-10T04:02:58.966226608Z [err]               ~~~~^^
+2026-08-10T04:02:58.966231272Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1569, in __call__
+2026-08-10T04:02:58.966235060Z [err]      return self.main(*args, **kwargs)
+2026-08-10T04:02:58.966238843Z [err]             ~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:58.966243396Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1490, in main
+2026-08-10T04:02:58.966247738Z [err]      rv = self.invoke(ctx)
+2026-08-10T04:02:58.966252510Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1353, in invoke
+2026-08-10T04:02:58.966256940Z [err]      return ctx.invoke(self.callback, **ctx.params)
+2026-08-10T04:02:58.966260727Z [err]             ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:58.966264560Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 907, in invoke
+2026-08-10T04:02:58.966268710Z [err]      return callback(*args, **kwargs)
+2026-08-10T04:02:58.966273519Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 440, in main
+2026-08-10T04:02:58.966277222Z [err]      run(
+2026-08-10T04:02:58.966280659Z [err]      ~~~^
+2026-08-10T04:02:58.966284460Z [err]          app,
+2026-08-10T04:02:58.966288391Z [err]          ^^^^
+2026-08-10T04:02:58.966293612Z [err]      ...<48 lines>...
+2026-08-10T04:02:58.966297831Z [err]          reset_contextvars=reset_contextvars,
+2026-08-10T04:02:58.966302303Z [err]          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:58.966306281Z [err]      )
+2026-08-10T04:02:58.966312395Z [err]      ^
+2026-08-10T04:02:58.966316831Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 609, in run
+2026-08-10T04:02:58.967509750Z [err]      import models,time
+2026-08-10T04:02:58.967513149Z [err]      config.load_app()
+2026-08-10T04:02:58.967517562Z [err]    File "/app/models.py", line 23, in <module>
+2026-08-10T04:02:58.967523102Z [err]      ~~~~~~~~~~~~~~~^^
+2026-08-10T04:02:58.967525731Z [err]      class Event(Base):
+2026-08-10T04:02:58.967532395Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 428, in load_app
+2026-08-10T04:02:58.967533685Z [err]      ...<6 lines>...
+2026-08-10T04:02:58.967539783Z [err]      return import_from_string(self.app)
+2026-08-10T04:02:58.967540828Z [err]          entity = relationship("Entity", back_populates="events")
+2026-08-10T04:02:58.967545378Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+2026-08-10T04:02:58.967548962Z [err]      module = importlib.import_module(module_str)
+2026-08-10T04:02:58.967552813Z [err]    File "/mise/installs/python/3.13.14/lib/python3.13/importlib/__init__.py", line 88, in import_module
+2026-08-10T04:02:58.967556366Z [err]      return _bootstrap._gcd_import(name[level:], package, level)
+2026-08-10T04:02:58.967559931Z [err]             ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:58.967563414Z [err]    File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
+2026-08-10T04:02:58.967566940Z [err]    File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+2026-08-10T04:02:58.967570767Z [err]    File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+2026-08-10T04:02:58.967574529Z [err]    File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+2026-08-10T04:02:58.967577858Z [err]    File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+2026-08-10T04:02:58.967581821Z [err]    File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+2026-08-10T04:02:58.967585134Z [err]    File "/app/main.py", line 16, in <module>
+2026-08-10T04:02:58.969068684Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_api.py", line 849, in __init_subclass__
+2026-08-10T04:02:58.969078948Z [err]      _as_declarative(cls._sa_registry, cls, cls.__dict__)
+2026-08-10T04:02:58.969088816Z [err]      ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:58.969095284Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 245, in _as_declarative
+2026-08-10T04:02:58.969101791Z [err]      return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+2026-08-10T04:02:58.969107376Z [err]             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:58.969112716Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 326, in setup_mapping
+2026-08-10T04:02:58.969117496Z [err]      return _ClassScanMapperConfig(
+2026-08-10T04:02:58.969122959Z [err]          registry, cls_, dict_, table, mapper_kw
+2026-08-10T04:02:58.969129234Z [err]      )
+2026-08-10T04:02:58.969134279Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 573, in __init__
+2026-08-10T04:02:58.969138879Z [err]      self._extract_mappable_attributes()
+2026-08-10T04:02:58.969143651Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+2026-08-10T04:02:58.969149036Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 1567, in _extract_mappable_attributes
+2026-08-10T04:02:58.969154248Z [err]      value.declarative_scan(
+2026-08-10T04:02:58.969159273Z [err]      ~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:02:58.969164653Z [err]          self,
+2026-08-10T04:02:58.969170068Z [err]          ^^^^^
+2026-08-10T04:02:58.969174940Z [err]      ...<7 lines>...
+2026-08-10T04:02:58.969180019Z [err]          is_dataclass,
+2026-08-10T04:02:58.969184822Z [err]          ^^^^^^^^^^^^^
+2026-08-10T04:02:58.969189861Z [err]      )
+2026-08-10T04:02:58.970281137Z [err]      ^
+2026-08-10T04:02:58.970290123Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 722, in declarative_scan
+2026-08-10T04:02:58.970295739Z [err]      self._init_column_for_annotation(
+2026-08-10T04:02:58.970300992Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:02:58.970305903Z [err]          cls,
+2026-08-10T04:02:58.970310926Z [err]          ^^^^
+2026-08-10T04:02:58.970315522Z [err]      ...<4 lines>...
+2026-08-10T04:02:58.970320172Z [err]          originating_module,
+2026-08-10T04:02:58.970325634Z [err]          ^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:02:58.970330558Z [err]      )
+2026-08-10T04:02:58.970335280Z [err]      ^
+2026-08-10T04:02:58.970340013Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 919, in _init_column_for_annotation
+2026-08-10T04:02:58.970344866Z [err]      raise orm_exc.MappedAnnotationError(
+2026-08-10T04:02:58.970349408Z [err]      ...<5 lines>...
+2026-08-10T04:02:58.970359591Z [err]      )
+2026-08-10T04:02:58.970364757Z [err]  sqlalchemy.orm.exc.MappedAnnotationError: Could not locate SQLAlchemy Core type when resolving for Python type indicated by '<class 'models.User'>' inside the Mapped[] annotation for the 'type' attribute; the type object is not resolvable by the registry
+2026-08-10T04:03:00.680483454Z [err]  Traceback (most recent call last):
+2026-08-10T04:03:00.687037209Z [err]          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:00.687047878Z [err]      )
+2026-08-10T04:03:00.687050784Z [err]    File "/app/.venv/bin/uvicorn", line 6, in <module>
+2026-08-10T04:03:00.687054773Z [err]      ^
+2026-08-10T04:03:00.687061350Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 609, in run
+2026-08-10T04:03:00.687064234Z [err]      sys.exit(main())
+2026-08-10T04:03:00.687070040Z [err]               ~~~~^^
+2026-08-10T04:03:00.687075149Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1569, in __call__
+2026-08-10T04:03:00.687080170Z [err]      return self.main(*args, **kwargs)
+2026-08-10T04:03:00.687085359Z [err]             ~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:00.687090229Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1490, in main
+2026-08-10T04:03:00.687095219Z [err]      rv = self.invoke(ctx)
+2026-08-10T04:03:00.687100147Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1353, in invoke
+2026-08-10T04:03:00.687105447Z [err]      return ctx.invoke(self.callback, **ctx.params)
+2026-08-10T04:03:00.687110494Z [err]             ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:00.687115530Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 907, in invoke
+2026-08-10T04:03:00.687120361Z [err]      return callback(*args, **kwargs)
+2026-08-10T04:03:00.687124925Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 440, in main
+2026-08-10T04:03:00.687129969Z [err]      run(
+2026-08-10T04:03:00.687134077Z [err]      ~~~^
+2026-08-10T04:03:00.687138956Z [err]          app,
+2026-08-10T04:03:00.687143174Z [err]          ^^^^
+2026-08-10T04:03:00.687150980Z [err]      ...<48 lines>...
+2026-08-10T04:03:00.687155571Z [err]          reset_contextvars=reset_contextvars,
+2026-08-10T04:03:00.688604370Z [err]      config.load_app()
+2026-08-10T04:03:00.688613491Z [err]      ~~~~~~~~~~~~~~~^^
+2026-08-10T04:03:00.688618576Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 428, in load_app
+2026-08-10T04:03:00.688623144Z [err]      return import_from_string(self.app)
+2026-08-10T04:03:00.688627374Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+2026-08-10T04:03:00.688631767Z [err]      module = importlib.import_module(module_str)
+2026-08-10T04:03:00.688636640Z [err]    File "/mise/installs/python/3.13.14/lib/python3.13/importlib/__init__.py", line 88, in import_module
+2026-08-10T04:03:00.688641867Z [err]      return _bootstrap._gcd_import(name[level:], package, level)
+2026-08-10T04:03:00.688645776Z [err]             ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:00.688650658Z [err]    File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
+2026-08-10T04:03:00.688655983Z [err]    File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+2026-08-10T04:03:00.688660404Z [err]    File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+2026-08-10T04:03:00.688665198Z [err]    File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+2026-08-10T04:03:00.688668956Z [err]    File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+2026-08-10T04:03:00.688672684Z [err]    File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+2026-08-10T04:03:00.688677872Z [err]    File "/app/main.py", line 16, in <module>
+2026-08-10T04:03:00.688681786Z [err]      import models,time
+2026-08-10T04:03:00.688686617Z [err]    File "/app/models.py", line 23, in <module>
+2026-08-10T04:03:00.688690991Z [err]      class Event(Base):
+2026-08-10T04:03:00.688694882Z [err]      ...<6 lines>...
+2026-08-10T04:03:00.688698456Z [err]          entity = relationship("Entity", back_populates="events")
+2026-08-10T04:03:00.690106235Z [err]          is_dataclass,
+2026-08-10T04:03:00.690117157Z [err]          ^^^^^^^^^^^^^
+2026-08-10T04:03:00.690120624Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_api.py", line 849, in __init_subclass__
+2026-08-10T04:03:00.690125827Z [err]      )
+2026-08-10T04:03:00.690132238Z [err]      _as_declarative(cls._sa_registry, cls, cls.__dict__)
+2026-08-10T04:03:00.690138144Z [err]      ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:00.690144029Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 245, in _as_declarative
+2026-08-10T04:03:00.690150107Z [err]      return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+2026-08-10T04:03:00.690155201Z [err]             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:00.690162123Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 326, in setup_mapping
+2026-08-10T04:03:00.690166263Z [err]      return _ClassScanMapperConfig(
+2026-08-10T04:03:00.690170436Z [err]          registry, cls_, dict_, table, mapper_kw
+2026-08-10T04:03:00.690174098Z [err]      )
+2026-08-10T04:03:00.690177922Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 573, in __init__
+2026-08-10T04:03:00.690181896Z [err]      self._extract_mappable_attributes()
+2026-08-10T04:03:00.690185789Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+2026-08-10T04:03:00.690189472Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 1567, in _extract_mappable_attributes
+2026-08-10T04:03:00.690193572Z [err]      value.declarative_scan(
+2026-08-10T04:03:00.690197090Z [err]      ~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:03:00.690200615Z [err]          self,
+2026-08-10T04:03:00.690204690Z [err]          ^^^^^
+2026-08-10T04:03:00.690208833Z [err]      ...<7 lines>...
+2026-08-10T04:03:00.691458718Z [err]      ^
+2026-08-10T04:03:00.691466171Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 722, in declarative_scan
+2026-08-10T04:03:00.691472558Z [err]      self._init_column_for_annotation(
+2026-08-10T04:03:00.691478602Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:03:00.691484150Z [err]          cls,
+2026-08-10T04:03:00.691490206Z [err]          ^^^^
+2026-08-10T04:03:00.691496733Z [err]      ...<4 lines>...
+2026-08-10T04:03:00.691502243Z [err]          originating_module,
+2026-08-10T04:03:00.691506878Z [err]          ^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:00.691512608Z [err]      )
+2026-08-10T04:03:00.691518441Z [err]      ^
+2026-08-10T04:03:00.691523836Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 919, in _init_column_for_annotation
+2026-08-10T04:03:00.691528646Z [err]      raise orm_exc.MappedAnnotationError(
+2026-08-10T04:03:00.691533444Z [err]      ...<5 lines>...
+2026-08-10T04:03:00.691538451Z [err]      )
+2026-08-10T04:03:00.691543651Z [err]  sqlalchemy.orm.exc.MappedAnnotationError: Could not locate SQLAlchemy Core type when resolving for Python type indicated by '<class 'models.User'>' inside the Mapped[] annotation for the 'type' attribute; the type object is not resolvable by the registry
+2026-08-10T04:03:02.405620371Z [err]  Traceback (most recent call last):
+2026-08-10T04:03:02.407320611Z [err]    File "/app/.venv/bin/uvicorn", line 6, in <module>
+2026-08-10T04:03:02.407329431Z [err]      sys.exit(main())
+2026-08-10T04:03:02.407335918Z [err]               ~~~~^^
+2026-08-10T04:03:02.407338224Z [err]          reset_contextvars=reset_contextvars,
+2026-08-10T04:03:02.407342353Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1569, in __call__
+2026-08-10T04:03:02.407347994Z [err]      return self.main(*args, **kwargs)
+2026-08-10T04:03:02.407350904Z [err]          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:02.407354311Z [err]             ~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:02.407358012Z [err]      )
+2026-08-10T04:03:02.407360977Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1490, in main
+2026-08-10T04:03:02.407366603Z [err]      ^
+2026-08-10T04:03:02.407368497Z [err]      rv = self.invoke(ctx)
+2026-08-10T04:03:02.407375056Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 609, in run
+2026-08-10T04:03:02.407375853Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1353, in invoke
+2026-08-10T04:03:02.407381153Z [err]      return ctx.invoke(self.callback, **ctx.params)
+2026-08-10T04:03:02.407384624Z [err]             ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:02.407388577Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 907, in invoke
+2026-08-10T04:03:02.407392285Z [err]      return callback(*args, **kwargs)
+2026-08-10T04:03:02.407395902Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 440, in main
+2026-08-10T04:03:02.407399905Z [err]      run(
+2026-08-10T04:03:02.407403443Z [err]      ~~~^
+2026-08-10T04:03:02.407407234Z [err]          app,
+2026-08-10T04:03:02.407410882Z [err]          ^^^^
+2026-08-10T04:03:02.407415062Z [err]      ...<48 lines>...
+2026-08-10T04:03:02.408664231Z [err]      config.load_app()
+2026-08-10T04:03:02.408671729Z [err]      ~~~~~~~~~~~~~~~^^
+2026-08-10T04:03:02.408677938Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 428, in load_app
+2026-08-10T04:03:02.408682191Z [err]      return import_from_string(self.app)
+2026-08-10T04:03:02.408686576Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+2026-08-10T04:03:02.408692373Z [err]      module = importlib.import_module(module_str)
+2026-08-10T04:03:02.408696925Z [err]    File "/mise/installs/python/3.13.14/lib/python3.13/importlib/__init__.py", line 88, in import_module
+2026-08-10T04:03:02.408701307Z [err]      return _bootstrap._gcd_import(name[level:], package, level)
+2026-08-10T04:03:02.408705156Z [err]             ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:02.408709917Z [err]    File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
+2026-08-10T04:03:02.408714527Z [err]    File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+2026-08-10T04:03:02.408718445Z [err]    File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+2026-08-10T04:03:02.408722971Z [err]    File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+2026-08-10T04:03:02.408727354Z [err]    File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+2026-08-10T04:03:02.408731611Z [err]    File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+2026-08-10T04:03:02.408735354Z [err]    File "/app/main.py", line 16, in <module>
+2026-08-10T04:03:02.408739646Z [err]      import models,time
+2026-08-10T04:03:02.408744542Z [err]    File "/app/models.py", line 23, in <module>
+2026-08-10T04:03:02.408748529Z [err]      class Event(Base):
+2026-08-10T04:03:02.408753013Z [err]      ...<6 lines>...
+2026-08-10T04:03:02.408757368Z [err]          entity = relationship("Entity", back_populates="events")
+2026-08-10T04:03:02.410133728Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_api.py", line 849, in __init_subclass__
+2026-08-10T04:03:02.410140422Z [err]      _as_declarative(cls._sa_registry, cls, cls.__dict__)
+2026-08-10T04:03:02.410147081Z [err]      ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:02.410151857Z [err]      )
+2026-08-10T04:03:02.410154470Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 245, in _as_declarative
+2026-08-10T04:03:02.410160865Z [err]      return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+2026-08-10T04:03:02.410165093Z [err]             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:02.410168878Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 326, in setup_mapping
+2026-08-10T04:03:02.410172801Z [err]      return _ClassScanMapperConfig(
+2026-08-10T04:03:02.410177139Z [err]          registry, cls_, dict_, table, mapper_kw
+2026-08-10T04:03:02.410181280Z [err]      )
+2026-08-10T04:03:02.410185394Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 573, in __init__
+2026-08-10T04:03:02.410190146Z [err]      self._extract_mappable_attributes()
+2026-08-10T04:03:02.410199688Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+2026-08-10T04:03:02.410204136Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 1567, in _extract_mappable_attributes
+2026-08-10T04:03:02.410208066Z [err]      value.declarative_scan(
+2026-08-10T04:03:02.410211951Z [err]      ~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:03:02.410215753Z [err]          self,
+2026-08-10T04:03:02.410219880Z [err]          ^^^^^
+2026-08-10T04:03:02.410224026Z [err]      ...<7 lines>...
+2026-08-10T04:03:02.410228186Z [err]          is_dataclass,
+2026-08-10T04:03:02.410235285Z [err]          ^^^^^^^^^^^^^
+2026-08-10T04:03:02.411252649Z [err]      ^
+2026-08-10T04:03:02.411256655Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 722, in declarative_scan
+2026-08-10T04:03:02.411260722Z [err]      self._init_column_for_annotation(
+2026-08-10T04:03:02.411265415Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:03:02.411269584Z [err]          cls,
+2026-08-10T04:03:02.411272769Z [err]          ^^^^
+2026-08-10T04:03:02.411276387Z [err]      ...<4 lines>...
+2026-08-10T04:03:02.411316795Z [err]          originating_module,
+2026-08-10T04:03:02.411320815Z [err]          ^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:02.411325313Z [err]      )
+2026-08-10T04:03:02.411329860Z [err]      ^
+2026-08-10T04:03:02.411335057Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 919, in _init_column_for_annotation
+2026-08-10T04:03:02.411339858Z [err]      raise orm_exc.MappedAnnotationError(
+2026-08-10T04:03:02.411344372Z [err]      ...<5 lines>...
+2026-08-10T04:03:02.411348205Z [err]      )
+2026-08-10T04:03:02.411351429Z [err]  sqlalchemy.orm.exc.MappedAnnotationError: Could not locate SQLAlchemy Core type when resolving for Python type indicated by '<class 'models.User'>' inside the Mapped[] annotation for the 'type' attribute; the type object is not resolvable by the registry
+2026-08-10T04:03:04.367451321Z [err]      ~~~^
+2026-08-10T04:03:04.367462168Z [err]          app,
+2026-08-10T04:03:04.367467167Z [err]          ^^^^
+2026-08-10T04:03:04.367471702Z [err]      ...<48 lines>...
+2026-08-10T04:03:04.367476124Z [err]          reset_contextvars=reset_contextvars,
+2026-08-10T04:03:04.367481402Z [err]          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:04.367486716Z [err]      )
+2026-08-10T04:03:04.367491018Z [err]      ^
+2026-08-10T04:03:04.367495622Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 609, in run
+2026-08-10T04:03:04.367569172Z [err]  Traceback (most recent call last):
+2026-08-10T04:03:04.367574118Z [err]    File "/app/.venv/bin/uvicorn", line 6, in <module>
+2026-08-10T04:03:04.367578624Z [err]      sys.exit(main())
+2026-08-10T04:03:04.367583134Z [err]               ~~~~^^
+2026-08-10T04:03:04.367588073Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1569, in __call__
+2026-08-10T04:03:04.367593010Z [err]      return self.main(*args, **kwargs)
+2026-08-10T04:03:04.367597364Z [err]             ~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:04.367602233Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1490, in main
+2026-08-10T04:03:04.367607143Z [err]      rv = self.invoke(ctx)
+2026-08-10T04:03:04.367612213Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1353, in invoke
+2026-08-10T04:03:04.367616527Z [err]      return ctx.invoke(self.callback, **ctx.params)
+2026-08-10T04:03:04.367621264Z [err]             ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:04.367626087Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 907, in invoke
+2026-08-10T04:03:04.367630311Z [err]      return callback(*args, **kwargs)
+2026-08-10T04:03:04.367634617Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 440, in main
+2026-08-10T04:03:04.367639125Z [err]      run(
+2026-08-10T04:03:04.368725571Z [err]      class Event(Base):
+2026-08-10T04:03:04.368735335Z [err]      ...<6 lines>...
+2026-08-10T04:03:04.368741983Z [err]          entity = relationship("Entity", back_populates="events")
+2026-08-10T04:03:04.368747425Z [err]      config.load_app()
+2026-08-10T04:03:04.368751691Z [err]      ~~~~~~~~~~~~~~~^^
+2026-08-10T04:03:04.368755533Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 428, in load_app
+2026-08-10T04:03:04.368759585Z [err]      return import_from_string(self.app)
+2026-08-10T04:03:04.368763360Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+2026-08-10T04:03:04.368767435Z [err]      module = importlib.import_module(module_str)
+2026-08-10T04:03:04.368770916Z [err]    File "/mise/installs/python/3.13.14/lib/python3.13/importlib/__init__.py", line 88, in import_module
+2026-08-10T04:03:04.368774853Z [err]      return _bootstrap._gcd_import(name[level:], package, level)
+2026-08-10T04:03:04.368778513Z [err]             ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:04.368782135Z [err]    File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
+2026-08-10T04:03:04.368785804Z [err]    File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+2026-08-10T04:03:04.368789670Z [err]    File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+2026-08-10T04:03:04.368793460Z [err]    File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+2026-08-10T04:03:04.368796794Z [err]    File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+2026-08-10T04:03:04.368800473Z [err]    File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+2026-08-10T04:03:04.368804038Z [err]    File "/app/main.py", line 16, in <module>
+2026-08-10T04:03:04.368809345Z [err]      import models,time
+2026-08-10T04:03:04.368813307Z [err]    File "/app/models.py", line 23, in <module>
+2026-08-10T04:03:04.369974056Z [err]          ^^^^^
+2026-08-10T04:03:04.369979157Z [err]      ...<7 lines>...
+2026-08-10T04:03:04.369984101Z [err]          is_dataclass,
+2026-08-10T04:03:04.369988123Z [err]          ^^^^^^^^^^^^^
+2026-08-10T04:03:04.369993015Z [err]      )
+2026-08-10T04:03:04.370005025Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_api.py", line 849, in __init_subclass__
+2026-08-10T04:03:04.370009956Z [err]      _as_declarative(cls._sa_registry, cls, cls.__dict__)
+2026-08-10T04:03:04.370014995Z [err]      ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:04.370016083Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 573, in __init__
+2026-08-10T04:03:04.370020128Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 245, in _as_declarative
+2026-08-10T04:03:04.370024703Z [err]      return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+2026-08-10T04:03:04.370031160Z [err]             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:04.370032560Z [err]      self._extract_mappable_attributes()
+2026-08-10T04:03:04.370038431Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 326, in setup_mapping
+2026-08-10T04:03:04.370041606Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+2026-08-10T04:03:04.370045479Z [err]      return _ClassScanMapperConfig(
+2026-08-10T04:03:04.370051358Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 1567, in _extract_mappable_attributes
+2026-08-10T04:03:04.370054775Z [err]          registry, cls_, dict_, table, mapper_kw
+2026-08-10T04:03:04.370060063Z [err]      value.declarative_scan(
+2026-08-10T04:03:04.370062694Z [err]      )
+2026-08-10T04:03:04.370069814Z [err]      ~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:03:04.370074199Z [err]          self,
+2026-08-10T04:03:04.371146385Z [err]      ^
+2026-08-10T04:03:04.371150971Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 722, in declarative_scan
+2026-08-10T04:03:04.371155405Z [err]      self._init_column_for_annotation(
+2026-08-10T04:03:04.371159583Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:03:04.371164801Z [err]          cls,
+2026-08-10T04:03:04.371169404Z [err]          ^^^^
+2026-08-10T04:03:04.371173753Z [err]      ...<4 lines>...
+2026-08-10T04:03:04.371178252Z [err]          originating_module,
+2026-08-10T04:03:04.371182841Z [err]          ^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:04.371186801Z [err]      )
+2026-08-10T04:03:04.371190745Z [err]      ^
+2026-08-10T04:03:04.371195075Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 919, in _init_column_for_annotation
+2026-08-10T04:03:04.371199150Z [err]      raise orm_exc.MappedAnnotationError(
+2026-08-10T04:03:04.371203820Z [err]      ...<5 lines>...
+2026-08-10T04:03:04.371208630Z [err]      )
+2026-08-10T04:03:04.371212730Z [err]  sqlalchemy.orm.exc.MappedAnnotationError: Could not locate SQLAlchemy Core type when resolving for Python type indicated by '<class 'models.User'>' inside the Mapped[] annotation for the 'type' attribute; the type object is not resolvable by the registry
+2026-08-10T04:03:05.960030612Z [err]  Traceback (most recent call last):
+2026-08-10T04:03:05.960036424Z [err]    File "/app/.venv/bin/uvicorn", line 6, in <module>
+2026-08-10T04:03:05.960041140Z [err]      sys.exit(main())
+2026-08-10T04:03:05.960047126Z [err]               ~~~~^^
+2026-08-10T04:03:05.960052516Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1569, in __call__
+2026-08-10T04:03:05.960057217Z [err]      return self.main(*args, **kwargs)
+2026-08-10T04:03:05.960061384Z [err]             ~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:05.960066082Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1490, in main
+2026-08-10T04:03:05.960072222Z [err]      rv = self.invoke(ctx)
+2026-08-10T04:03:05.960076257Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1353, in invoke
+2026-08-10T04:03:05.960080002Z [err]      return ctx.invoke(self.callback, **ctx.params)
+2026-08-10T04:03:05.960084670Z [err]             ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:05.960089586Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 907, in invoke
+2026-08-10T04:03:05.960093559Z [err]      return callback(*args, **kwargs)
+2026-08-10T04:03:05.960097379Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 440, in main
+2026-08-10T04:03:05.960101593Z [err]      run(
+2026-08-10T04:03:05.960106451Z [err]      ~~~^
+2026-08-10T04:03:05.960110584Z [err]          app,
+2026-08-10T04:03:05.960114340Z [err]          ^^^^
+2026-08-10T04:03:05.960118375Z [err]      ...<48 lines>...
+2026-08-10T04:03:05.960122240Z [err]          reset_contextvars=reset_contextvars,
+2026-08-10T04:03:05.960126088Z [err]          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:05.960130222Z [err]      )
+2026-08-10T04:03:05.960135323Z [err]      ^
+2026-08-10T04:03:05.960139327Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 609, in run
+2026-08-10T04:03:05.961421743Z [err]      import models,time
+2026-08-10T04:03:05.961435226Z [err]    File "/app/models.py", line 23, in <module>
+2026-08-10T04:03:05.961436501Z [err]      config.load_app()
+2026-08-10T04:03:05.961442443Z [err]      class Event(Base):
+2026-08-10T04:03:05.961445406Z [err]      ~~~~~~~~~~~~~~~^^
+2026-08-10T04:03:05.961450195Z [err]      ...<6 lines>...
+2026-08-10T04:03:05.961453584Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 428, in load_app
+2026-08-10T04:03:05.961456959Z [err]          entity = relationship("Entity", back_populates="events")
+2026-08-10T04:03:05.961460550Z [err]      return import_from_string(self.app)
+2026-08-10T04:03:05.961464664Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+2026-08-10T04:03:05.961470082Z [err]      module = importlib.import_module(module_str)
+2026-08-10T04:03:05.961474266Z [err]    File "/mise/installs/python/3.13.14/lib/python3.13/importlib/__init__.py", line 88, in import_module
+2026-08-10T04:03:05.961478415Z [err]      return _bootstrap._gcd_import(name[level:], package, level)
+2026-08-10T04:03:05.961483071Z [err]             ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:05.961488660Z [err]    File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
+2026-08-10T04:03:05.961493913Z [err]    File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+2026-08-10T04:03:05.961499164Z [err]    File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+2026-08-10T04:03:05.961503747Z [err]    File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+2026-08-10T04:03:05.961509252Z [err]    File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+2026-08-10T04:03:05.961516023Z [err]    File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+2026-08-10T04:03:05.961521649Z [err]    File "/app/main.py", line 16, in <module>
+2026-08-10T04:03:05.963063680Z [err]      ...<7 lines>...
+2026-08-10T04:03:05.963073423Z [err]          is_dataclass,
+2026-08-10T04:03:05.963079755Z [err]          ^^^^^^^^^^^^^
+2026-08-10T04:03:05.963087763Z [err]      )
+2026-08-10T04:03:05.963090144Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_api.py", line 849, in __init_subclass__
+2026-08-10T04:03:05.963099680Z [err]      _as_declarative(cls._sa_registry, cls, cls.__dict__)
+2026-08-10T04:03:05.963104665Z [err]      ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:05.963109020Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 245, in _as_declarative
+2026-08-10T04:03:05.963113754Z [err]      return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+2026-08-10T04:03:05.963119275Z [err]             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:05.963124279Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 326, in setup_mapping
+2026-08-10T04:03:05.963128504Z [err]      return _ClassScanMapperConfig(
+2026-08-10T04:03:05.963133291Z [err]          registry, cls_, dict_, table, mapper_kw
+2026-08-10T04:03:05.963137977Z [err]      )
+2026-08-10T04:03:05.963143564Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 573, in __init__
+2026-08-10T04:03:05.963148736Z [err]      self._extract_mappable_attributes()
+2026-08-10T04:03:05.963153174Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+2026-08-10T04:03:05.963159816Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 1567, in _extract_mappable_attributes
+2026-08-10T04:03:05.963164622Z [err]      value.declarative_scan(
+2026-08-10T04:03:05.963169347Z [err]      ~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:03:05.963173856Z [err]          self,
+2026-08-10T04:03:05.963178447Z [err]          ^^^^^
+2026-08-10T04:03:05.964517105Z [err]      )
+2026-08-10T04:03:05.964520413Z [err]      ^
+2026-08-10T04:03:05.964528470Z [err]  sqlalchemy.orm.exc.MappedAnnotationError: Could not locate SQLAlchemy Core type when resolving for Python type indicated by '<class 'models.User'>' inside the Mapped[] annotation for the 'type' attribute; the type object is not resolvable by the registry
+2026-08-10T04:03:05.964558067Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 722, in declarative_scan
+2026-08-10T04:03:05.964563725Z [err]      self._init_column_for_annotation(
+2026-08-10T04:03:05.964568772Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:03:05.964573398Z [err]          cls,
+2026-08-10T04:03:05.964578164Z [err]          ^^^^
+2026-08-10T04:03:05.964583606Z [err]      ...<4 lines>...
+2026-08-10T04:03:05.964588799Z [err]          originating_module,
+2026-08-10T04:03:05.964595553Z [err]          ^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:05.964600042Z [err]      )
+2026-08-10T04:03:05.964605738Z [err]      ^
+2026-08-10T04:03:05.964612382Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 919, in _init_column_for_annotation
+2026-08-10T04:03:05.964617649Z [err]      raise orm_exc.MappedAnnotationError(
+2026-08-10T04:03:05.964622183Z [err]      ...<5 lines>...
+2026-08-10T04:03:07.676424995Z [err]      ...<48 lines>...
+2026-08-10T04:03:07.676435259Z [err]          reset_contextvars=reset_contextvars,
+2026-08-10T04:03:07.676442660Z [err]          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:07.676449326Z [err]      )
+2026-08-10T04:03:07.676455161Z [err]      ^
+2026-08-10T04:03:07.676463704Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 609, in run
+2026-08-10T04:03:07.676479995Z [err]  Traceback (most recent call last):
+2026-08-10T04:03:07.676485203Z [err]    File "/app/.venv/bin/uvicorn", line 6, in <module>
+2026-08-10T04:03:07.676491953Z [err]      sys.exit(main())
+2026-08-10T04:03:07.676497388Z [err]               ~~~~^^
+2026-08-10T04:03:07.676502372Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1569, in __call__
+2026-08-10T04:03:07.676507008Z [err]      return self.main(*args, **kwargs)
+2026-08-10T04:03:07.676511759Z [err]             ~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:07.676516865Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1490, in main
+2026-08-10T04:03:07.676522878Z [err]      rv = self.invoke(ctx)
+2026-08-10T04:03:07.676528266Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1353, in invoke
+2026-08-10T04:03:07.676532591Z [err]      return ctx.invoke(self.callback, **ctx.params)
+2026-08-10T04:03:07.676536868Z [err]             ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:07.676541521Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 907, in invoke
+2026-08-10T04:03:07.676545851Z [err]      return callback(*args, **kwargs)
+2026-08-10T04:03:07.676550402Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 440, in main
+2026-08-10T04:03:07.676557335Z [err]      run(
+2026-08-10T04:03:07.676561776Z [err]      ~~~^
+2026-08-10T04:03:07.676566706Z [err]          app,
+2026-08-10T04:03:07.676571197Z [err]          ^^^^
+2026-08-10T04:03:07.678110998Z [err]      config.load_app()
+2026-08-10T04:03:07.678117231Z [err]      ~~~~~~~~~~~~~~~^^
+2026-08-10T04:03:07.678121691Z [err]      class Event(Base):
+2026-08-10T04:03:07.678123043Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 428, in load_app
+2026-08-10T04:03:07.678128498Z [err]      return import_from_string(self.app)
+2026-08-10T04:03:07.678129626Z [err]      ...<6 lines>...
+2026-08-10T04:03:07.678134767Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+2026-08-10T04:03:07.678137198Z [err]          entity = relationship("Entity", back_populates="events")
+2026-08-10T04:03:07.678141044Z [err]      module = importlib.import_module(module_str)
+2026-08-10T04:03:07.678147270Z [err]      return _bootstrap._gcd_import(name[level:], package, level)
+2026-08-10T04:03:07.678148546Z [err]    File "/mise/installs/python/3.13.14/lib/python3.13/importlib/__init__.py", line 88, in import_module
+2026-08-10T04:03:07.678161383Z [err]             ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:07.678168035Z [err]    File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
+2026-08-10T04:03:07.678173514Z [err]    File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+2026-08-10T04:03:07.678179043Z [err]    File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+2026-08-10T04:03:07.678186284Z [err]    File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+2026-08-10T04:03:07.678191443Z [err]    File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+2026-08-10T04:03:07.678197351Z [err]    File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+2026-08-10T04:03:07.678203180Z [err]    File "/app/main.py", line 16, in <module>
+2026-08-10T04:03:07.678209605Z [err]      import models,time
+2026-08-10T04:03:07.678215718Z [err]    File "/app/models.py", line 23, in <module>
+2026-08-10T04:03:07.679792507Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_api.py", line 849, in __init_subclass__
+2026-08-10T04:03:07.679797903Z [err]      _as_declarative(cls._sa_registry, cls, cls.__dict__)
+2026-08-10T04:03:07.679801869Z [err]      ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:07.679806642Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 245, in _as_declarative
+2026-08-10T04:03:07.679812537Z [err]      return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+2026-08-10T04:03:07.679817848Z [err]             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:07.679822866Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 326, in setup_mapping
+2026-08-10T04:03:07.679828031Z [err]      return _ClassScanMapperConfig(
+2026-08-10T04:03:07.679833770Z [err]          registry, cls_, dict_, table, mapper_kw
+2026-08-10T04:03:07.679839047Z [err]      )
+2026-08-10T04:03:07.679844436Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 573, in __init__
+2026-08-10T04:03:07.679848911Z [err]      self._extract_mappable_attributes()
+2026-08-10T04:03:07.679853768Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+2026-08-10T04:03:07.679858138Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 1567, in _extract_mappable_attributes
+2026-08-10T04:03:07.679863377Z [err]      value.declarative_scan(
+2026-08-10T04:03:07.679868250Z [err]      ~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:03:07.679872727Z [err]          self,
+2026-08-10T04:03:07.679877056Z [err]          ^^^^^
+2026-08-10T04:03:07.679881453Z [err]      ...<7 lines>...
+2026-08-10T04:03:07.679885954Z [err]          is_dataclass,
+2026-08-10T04:03:07.679889948Z [err]          ^^^^^^^^^^^^^
+2026-08-10T04:03:07.679894829Z [err]      )
+2026-08-10T04:03:07.681395707Z [err]      ^
+2026-08-10T04:03:07.681402111Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 722, in declarative_scan
+2026-08-10T04:03:07.681406064Z [err]      self._init_column_for_annotation(
+2026-08-10T04:03:07.681410458Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:03:07.681415108Z [err]          cls,
+2026-08-10T04:03:07.681419648Z [err]          ^^^^
+2026-08-10T04:03:07.681425110Z [err]      ...<4 lines>...
+2026-08-10T04:03:07.681429857Z [err]          originating_module,
+2026-08-10T04:03:07.681434341Z [err]          ^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:07.681438850Z [err]      )
+2026-08-10T04:03:07.681442687Z [err]      ^
+2026-08-10T04:03:07.681446882Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 919, in _init_column_for_annotation
+2026-08-10T04:03:07.681453804Z [err]      raise orm_exc.MappedAnnotationError(
+2026-08-10T04:03:07.681457910Z [err]      ...<5 lines>...
+2026-08-10T04:03:07.681461916Z [err]      )
+2026-08-10T04:03:07.681466214Z [err]  sqlalchemy.orm.exc.MappedAnnotationError: Could not locate SQLAlchemy Core type when resolving for Python type indicated by '<class 'models.User'>' inside the Mapped[] annotation for the 'type' attribute; the type object is not resolvable by the registry
+2026-08-10T04:03:09.515078996Z [err]  Traceback (most recent call last):
+2026-08-10T04:03:09.515083440Z [err]    File "/app/.venv/bin/uvicorn", line 6, in <module>
+2026-08-10T04:03:09.515089037Z [err]      sys.exit(main())
+2026-08-10T04:03:09.515094390Z [err]               ~~~~^^
+2026-08-10T04:03:09.515099356Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1569, in __call__
+2026-08-10T04:03:09.515103445Z [err]      return self.main(*args, **kwargs)
+2026-08-10T04:03:09.515107696Z [err]             ~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:09.515111283Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1490, in main
+2026-08-10T04:03:09.515115119Z [err]      rv = self.invoke(ctx)
+2026-08-10T04:03:09.515119123Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1353, in invoke
+2026-08-10T04:03:09.515123157Z [err]      return ctx.invoke(self.callback, **ctx.params)
+2026-08-10T04:03:09.515126989Z [err]             ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:09.515130515Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 907, in invoke
+2026-08-10T04:03:09.515134179Z [err]      return callback(*args, **kwargs)
+2026-08-10T04:03:09.515137832Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 440, in main
+2026-08-10T04:03:09.515141436Z [err]      run(
+2026-08-10T04:03:09.515144880Z [err]      ~~~^
+2026-08-10T04:03:09.515148408Z [err]          app,
+2026-08-10T04:03:09.515152581Z [err]          ^^^^
+2026-08-10T04:03:09.515157384Z [err]      ...<48 lines>...
+2026-08-10T04:03:09.515162116Z [err]          reset_contextvars=reset_contextvars,
+2026-08-10T04:03:09.515166008Z [err]          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:09.515169696Z [err]      )
+2026-08-10T04:03:09.515174173Z [err]      ^
+2026-08-10T04:03:09.515177384Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 609, in run
+2026-08-10T04:03:09.516368562Z [err]      config.load_app()
+2026-08-10T04:03:09.516372098Z [err]          entity = relationship("Entity", back_populates="events")
+2026-08-10T04:03:09.516376611Z [err]      ~~~~~~~~~~~~~~~^^
+2026-08-10T04:03:09.516380780Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 428, in load_app
+2026-08-10T04:03:09.516384327Z [err]      return import_from_string(self.app)
+2026-08-10T04:03:09.516387554Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+2026-08-10T04:03:09.516391941Z [err]      module = importlib.import_module(module_str)
+2026-08-10T04:03:09.516395640Z [err]    File "/mise/installs/python/3.13.14/lib/python3.13/importlib/__init__.py", line 88, in import_module
+2026-08-10T04:03:09.516398686Z [err]      return _bootstrap._gcd_import(name[level:], package, level)
+2026-08-10T04:03:09.516402443Z [err]             ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:09.516406032Z [err]    File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
+2026-08-10T04:03:09.516410038Z [err]    File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+2026-08-10T04:03:09.516413704Z [err]    File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+2026-08-10T04:03:09.516416948Z [err]    File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+2026-08-10T04:03:09.516420259Z [err]    File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+2026-08-10T04:03:09.516423541Z [err]    File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+2026-08-10T04:03:09.516427489Z [err]    File "/app/main.py", line 16, in <module>
+2026-08-10T04:03:09.516431723Z [err]      import models,time
+2026-08-10T04:03:09.516436360Z [err]    File "/app/models.py", line 23, in <module>
+2026-08-10T04:03:09.516442628Z [err]      class Event(Base):
+2026-08-10T04:03:09.516447296Z [err]      ...<6 lines>...
+2026-08-10T04:03:09.518071878Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_api.py", line 849, in __init_subclass__
+2026-08-10T04:03:09.518073305Z [err]          ^^^^^^^^^^^^^
+2026-08-10T04:03:09.518083363Z [err]      )
+2026-08-10T04:03:09.518084334Z [err]      _as_declarative(cls._sa_registry, cls, cls.__dict__)
+2026-08-10T04:03:09.518087555Z [err]      ~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:03:09.518095524Z [err]      ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:09.518100350Z [err]          self,
+2026-08-10T04:03:09.518104775Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 245, in _as_declarative
+2026-08-10T04:03:09.518105103Z [err]      self._extract_mappable_attributes()
+2026-08-10T04:03:09.518112755Z [err]          ^^^^^
+2026-08-10T04:03:09.518113874Z [err]      return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+2026-08-10T04:03:09.518118203Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+2026-08-10T04:03:09.518123068Z [err]             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:09.518125071Z [err]      ...<7 lines>...
+2026-08-10T04:03:09.518127998Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 1567, in _extract_mappable_attributes
+2026-08-10T04:03:09.518132416Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 326, in setup_mapping
+2026-08-10T04:03:09.518137727Z [err]          is_dataclass,
+2026-08-10T04:03:09.518137868Z [err]      value.declarative_scan(
+2026-08-10T04:03:09.518142323Z [err]      return _ClassScanMapperConfig(
+2026-08-10T04:03:09.518146991Z [err]          registry, cls_, dict_, table, mapper_kw
+2026-08-10T04:03:09.518151061Z [err]      )
+2026-08-10T04:03:09.518155291Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 573, in __init__
+2026-08-10T04:03:09.519559355Z [err]      )
+2026-08-10T04:03:09.519565175Z [err]  sqlalchemy.orm.exc.MappedAnnotationError: Could not locate SQLAlchemy Core type when resolving for Python type indicated by '<class 'models.User'>' inside the Mapped[] annotation for the 'type' attribute; the type object is not resolvable by the registry
+2026-08-10T04:03:09.519586862Z [err]      ^
+2026-08-10T04:03:09.519594551Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 722, in declarative_scan
+2026-08-10T04:03:09.519599011Z [err]      self._init_column_for_annotation(
+2026-08-10T04:03:09.519604986Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:03:09.519609431Z [err]          cls,
+2026-08-10T04:03:09.519615667Z [err]          ^^^^
+2026-08-10T04:03:09.519619995Z [err]      ...<4 lines>...
+2026-08-10T04:03:09.519624343Z [err]          originating_module,
+2026-08-10T04:03:09.519627822Z [err]          ^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:09.519631271Z [err]      )
+2026-08-10T04:03:09.519634550Z [err]      ^
+2026-08-10T04:03:09.519638009Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 919, in _init_column_for_annotation
+2026-08-10T04:03:09.519641350Z [err]      raise orm_exc.MappedAnnotationError(
+2026-08-10T04:03:09.519644586Z [err]      ...<5 lines>...
+2026-08-10T04:03:11.391418804Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 609, in run
+2026-08-10T04:03:11.391438862Z [err]      rv = self.invoke(ctx)
+2026-08-10T04:03:11.391451853Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1353, in invoke
+2026-08-10T04:03:11.391455782Z [err]  Traceback (most recent call last):
+2026-08-10T04:03:11.391459685Z [err]      return ctx.invoke(self.callback, **ctx.params)
+2026-08-10T04:03:11.391462128Z [err]    File "/app/.venv/bin/uvicorn", line 6, in <module>
+2026-08-10T04:03:11.391468455Z [err]             ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:11.391469920Z [err]      sys.exit(main())
+2026-08-10T04:03:11.391477167Z [err]               ~~~~^^
+2026-08-10T04:03:11.391479444Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 907, in invoke
+2026-08-10T04:03:11.391483899Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1569, in __call__
+2026-08-10T04:03:11.391488090Z [err]      return callback(*args, **kwargs)
+2026-08-10T04:03:11.391490687Z [err]      return self.main(*args, **kwargs)
+2026-08-10T04:03:11.391497130Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 440, in main
+2026-08-10T04:03:11.391497464Z [err]             ~~~~~~~~~^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:11.391504497Z [err]    File "/app/.venv/lib/python3.13/site-packages/click/core.py", line 1490, in main
+2026-08-10T04:03:11.391504907Z [err]      run(
+2026-08-10T04:03:11.391510315Z [err]      ~~~^
+2026-08-10T04:03:11.391515057Z [err]          app,
+2026-08-10T04:03:11.391519492Z [err]          ^^^^
+2026-08-10T04:03:11.391523590Z [err]      ...<48 lines>...
+2026-08-10T04:03:11.391527435Z [err]          reset_contextvars=reset_contextvars,
+2026-08-10T04:03:11.391531531Z [err]          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:11.391536705Z [err]      )
+2026-08-10T04:03:11.391540516Z [err]      ^
+2026-08-10T04:03:11.392763184Z [err]      class Event(Base):
+2026-08-10T04:03:11.392774446Z [err]      ...<6 lines>...
+2026-08-10T04:03:11.392780907Z [err]          entity = relationship("Entity", back_populates="events")
+2026-08-10T04:03:11.392791349Z [err]      config.load_app()
+2026-08-10T04:03:11.392795864Z [err]      ~~~~~~~~~~~~~~~^^
+2026-08-10T04:03:11.392799477Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 428, in load_app
+2026-08-10T04:03:11.392803245Z [err]      return import_from_string(self.app)
+2026-08-10T04:03:11.392806591Z [err]    File "/app/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+2026-08-10T04:03:11.392810131Z [err]      module = importlib.import_module(module_str)
+2026-08-10T04:03:11.392813585Z [err]    File "/mise/installs/python/3.13.14/lib/python3.13/importlib/__init__.py", line 88, in import_module
+2026-08-10T04:03:11.392816991Z [err]      return _bootstrap._gcd_import(name[level:], package, level)
+2026-08-10T04:03:11.392820693Z [err]             ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:11.392824730Z [err]    File "<frozen importlib._bootstrap>", line 1395, in _gcd_import
+2026-08-10T04:03:11.392828454Z [err]    File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+2026-08-10T04:03:11.392831826Z [err]    File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+2026-08-10T04:03:11.392835147Z [err]    File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+2026-08-10T04:03:11.392838510Z [err]    File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+2026-08-10T04:03:11.392842106Z [err]    File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+2026-08-10T04:03:11.392845876Z [err]    File "/app/main.py", line 16, in <module>
+2026-08-10T04:03:11.392849806Z [err]      import models,time
+2026-08-10T04:03:11.392853590Z [err]    File "/app/models.py", line 23, in <module>
+2026-08-10T04:03:11.394143905Z [err]          is_dataclass,
+2026-08-10T04:03:11.394152337Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_api.py", line 849, in __init_subclass__
+2026-08-10T04:03:11.394155130Z [err]          ^^^^^^^^^^^^^
+2026-08-10T04:03:11.394162915Z [err]      _as_declarative(cls._sa_registry, cls, cls.__dict__)
+2026-08-10T04:03:11.394165371Z [err]      )
+2026-08-10T04:03:11.394169769Z [err]      ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:11.394173062Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 245, in _as_declarative
+2026-08-10T04:03:11.394176547Z [err]      return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+2026-08-10T04:03:11.394180885Z [err]             ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:11.394184579Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 326, in setup_mapping
+2026-08-10T04:03:11.394188516Z [err]      return _ClassScanMapperConfig(
+2026-08-10T04:03:11.394191768Z [err]          registry, cls_, dict_, table, mapper_kw
+2026-08-10T04:03:11.394195078Z [err]      )
+2026-08-10T04:03:11.394198450Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 573, in __init__
+2026-08-10T04:03:11.394201997Z [err]      self._extract_mappable_attributes()
+2026-08-10T04:03:11.394205676Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+2026-08-10T04:03:11.394208887Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/decl_base.py", line 1567, in _extract_mappable_attributes
+2026-08-10T04:03:11.394213639Z [err]      value.declarative_scan(
+2026-08-10T04:03:11.394216974Z [err]      ~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:03:11.394220565Z [err]          self,
+2026-08-10T04:03:11.394225404Z [err]          ^^^^^
+2026-08-10T04:03:11.394229305Z [err]      ...<7 lines>...
+2026-08-10T04:03:11.395421896Z [err]      ^
+2026-08-10T04:03:11.395432697Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 722, in declarative_scan
+2026-08-10T04:03:11.395434531Z [err]      ...<5 lines>...
+2026-08-10T04:03:11.395439901Z [err]      self._init_column_for_annotation(
+2026-08-10T04:03:11.395447278Z [err]      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+2026-08-10T04:03:11.395450427Z [err]      )
+2026-08-10T04:03:11.395454639Z [err]          cls,
+2026-08-10T04:03:11.395461957Z [err]  sqlalchemy.orm.exc.MappedAnnotationError: Could not locate SQLAlchemy Core type when resolving for Python type indicated by '<class 'models.User'>' inside the Mapped[] annotation for the 'type' attribute; the type object is not resolvable by the registry
+2026-08-10T04:03:11.395462882Z [err]          ^^^^
+2026-08-10T04:03:11.395470210Z [err]      ...<4 lines>...
+2026-08-10T04:03:11.395473889Z [err]          originating_module,
+2026-08-10T04:03:11.395477367Z [err]          ^^^^^^^^^^^^^^^^^^^
+2026-08-10T04:03:11.395481309Z [err]      )
+2026-08-10T04:03:11.395484889Z [err]      ^
+2026-08-10T04:03:11.395489191Z [err]    File "/app/.venv/lib/python3.13/site-packages/sqlalchemy/orm/properties.py", line 919, in _init_column_for_annotation
+2026-08-10T04:03:11.395493801Z [err]      raise orm_exc.MappedAnnotationError(
