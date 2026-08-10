@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 from pathlib import Path
-from database import get_db, Base, engine
+from database import get_db, Base, engine, Async_Session
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func,delete,or_
 from fastapi.staticfiles import StaticFiles
@@ -78,9 +78,9 @@ async def startup():
 
 async def _seed_default_user():
     async with Async_Session() as db:
-        from sqlalchemy import select
         result = await db.execute(select(models.User).where(models.User.username == "admin"))
-        if not result.scalar_one_or_none():
+        user = result.scalar_one_or_none()
+        if not user:
             admin = models.User(
                 username="admin",
                 password_hash=hash_password("admin123"),
@@ -90,6 +90,12 @@ async def _seed_default_user():
             db.add(admin)
             await db.commit()
             print("Default admin user created (username: admin, password: admin123)")
+        elif not verify_password("admin123", user.password_hash):
+            user.password_hash = hash_password("admin123")
+            user.is_active = True
+            user.role = "admin"
+            await db.commit()
+            print("Admin password reset successful")
 
 
 # ===================== Auth Models =====================
