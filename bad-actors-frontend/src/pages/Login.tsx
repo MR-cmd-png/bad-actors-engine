@@ -5,22 +5,16 @@ import { motion } from 'framer-motion'
 import { Shield, Eye, EyeOff, Loader2 } from 'lucide-react'
 
 export default function Login() {
-  const { login, register, loading, error, clearError } = useAuth()
+  const { login, loading, error } = useAuth()
   const navigate = useNavigate()
-  const [mode, setMode] = useState<'login' | 'register'>('login')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [role, setRole] = useState('user')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      if (mode === 'login') {
-        await login(username, password)
-      } else {
-        await register(username, password, role)
-      }
+      await login(username, password)
       navigate('/dashboard')
     } catch {
     }
@@ -45,7 +39,7 @@ export default function Login() {
             </div>
             <h1 className="text-2xl font-bold text-text-primary">Bad Actor Detection Engine</h1>
             <p className="text-sm text-text-secondary mt-1">
-              {mode === 'login' ? 'Sign in to your account' : 'Create a new account'}
+              Sign in to your account
             </p>
           </div>
 
@@ -93,36 +87,6 @@ export default function Login() {
               </div>
             </div>
 
-            {mode === 'register' && (
-              <div>
-                <label className="block text-sm font-medium text-text-secondary mb-1.5">Role</label>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setRole('user')}
-                    className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium border transition-all ${
-                      role === 'user'
-                        ? 'bg-primary/15 text-primary-light border-primary/40'
-                        : 'bg-bg-dark text-text-secondary border-border hover:border-primary/30'
-                    }`}
-                  >
-                    User
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setRole('admin')}
-                    className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium border transition-all ${
-                      role === 'admin'
-                        ? 'bg-primary/15 text-primary-light border-primary/40'
-                        : 'bg-bg-dark text-text-secondary border-border hover:border-primary/30'
-                    }`}
-                  >
-                    Admin
-                  </button>
-                </div>
-              </div>
-            )}
-
             <button
               type="submit"
               disabled={loading}
@@ -131,42 +95,10 @@ export default function Login() {
               {loading ? (
                 <Loader2 size={20} className="animate-spin" />
               ) : (
-                mode === 'login' ? 'Sign In' : 'Create Account'
+                'Sign In'
               )}
             </button>
           </form>
-
-          <div className="mt-6 text-center text-sm text-text-secondary">
-            {mode === 'login' ? (
-              <>
-                Don't have an account?{' '}
-                <button
-                  onClick={() => { setMode('register'); clearError() }}
-                  className="text-primary-light hover:text-primary transition-colors font-medium"
-                >
-                  Register
-                </button>
-              </>
-            ) : (
-              <>
-                Already have an account?{' '}
-                <button
-                  onClick={() => { setMode('login'); clearError() }}
-                  className="text-primary-light hover:text-primary transition-colors font-medium"
-                >
-                  Sign In
-                </button>
-              </>
-            )}
-          </div>
-
-          {mode === 'login' && (
-            <div className="mt-6 pt-6 border-t border-border">
-              <p className="text-xs text-text-secondary text-center">
-                Default admin account: <span className="text-text-primary font-mono">admin</span> / <span className="text-text-primary font-mono">admin123</span>
-              </p>
-            </div>
-          )}
         </div>
 
         <div className="mt-4 text-center">
