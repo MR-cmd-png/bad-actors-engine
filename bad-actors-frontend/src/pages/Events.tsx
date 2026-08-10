@@ -3,6 +3,7 @@ import { createEvent, listEvents } from '../api'
 import Card from '../components/Card'
 import Button from '../components/Button'
 import Input from '../components/Input'
+import { useAuth } from '../api/auth'
 import { Zap, ChevronLeft, ChevronRight, Calendar, Plus } from 'lucide-react'
 import { motion } from 'framer-motion'
 
@@ -16,6 +17,9 @@ const EVENT_TYPES = [
 ]
 
 export default function Events() {
+  const { user } = useAuth()
+  const isAdmin = user?.role === 'admin'
+
   const [form, setForm] = useState({ entity_id: '', type: '', metadata: '' })
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
@@ -86,7 +90,7 @@ export default function Events() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Events</h1>
-        <p className="text-sm text-text-secondary mt-1">Record entity behavior events</p>
+        <p className="text-sm text-text-secondary mt-1">{isAdmin ? 'Record entity behavior events' : 'View entity behavior events'}</p>
       </div>
 
       {message && (
@@ -99,7 +103,9 @@ export default function Events() {
         </motion.div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 ${!isAdmin ? 'lg:grid-cols-1' : ''}`}>
+        {/* New Behavior Event - Admin Only */}
+        {isAdmin && (
         <Card delay={0.1}>
           <div className="flex items-center gap-2 mb-4">
             <Zap size={18} className="text-amber-400" />
@@ -148,8 +154,9 @@ export default function Events() {
             </Button>
           </div>
         </Card>
+        )}
 
-        <Card delay={0.2}>
+        <Card delay={isAdmin ? 0.2 : 0.1}>
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <h3 className="font-semibold">📋 Event History</h3>

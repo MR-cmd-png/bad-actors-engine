@@ -3,7 +3,7 @@
 # Open Source License: MIT
 # 未经作者许可，禁止去除版权标识、冒充原创进行商业售卖
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 from datetime import datetime
@@ -14,6 +14,10 @@ from sqlalchemy import select, func,delete,or_
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 import models,time
+from auth import (
+    hash_password, verify_password, create_access_token,
+    get_current_user, get_current_user_optional, require_admin
+)
 
 app = FastAPI(title="Bad Actor Detection Engine MVP")
 app.add_middleware(
@@ -66,11 +70,116 @@ async def startup():
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
         print("Database tables initialized")
+        await _seed_default_user()
     except Exception as e:
         print(f"Warning: Database connection failed: {e}")
         print("App will start but database operations may not work")
+
+
+async def _seed_default_user():
+    async with Async_Session() as db:
+        from sqlalchemy import select
+        result = await db.execute(select(models.User).where(models.User.username == "admin"))
+        if not result.scalar_one_or_none():
+            admin = models.User(
+                username="admin",
+                password_hash=hash_password("admin123"),
+                role="admin",
+                is_active=True
+            )
+            db.add(admin)
+            await db.commit()
+            print("Default admin user created (username: admin, password: admin123)")
+
+
+# ===================== Auth Models =====================
+class UserRegister(BaseModel):
+    username: str
+    password: str
+    role: str = "user"
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: Dict[str, Any]
+
+
+# ===================== Auth Endpoints =====================
+@app.post("/auth/register", summary="Register new user")
+async def register_user(data: UserRegister, db: AsyncSession = Depends(get_db)):
+    if data.role not in ("user", "admin"):
+        raise HTTPException(status_code=400, detail="Role must be 'user' or 'admin'")
+    if len(data.username) < 3:
+        raise HTTPException(status_code=400, detail="Username must be at least 3 characters")
+    if len(data.password) < 6:
+        raise HTTPException(status_code=400, detail="Password must be at least 6 characters")
+
+    exist = (await db.execute(select(models.User).where(models.User.username == data.username))).scalar_one_or_none()
+    if exist:
+        raise HTTPException(status_code=400, detail="Username already exists")
+
+    user = models.User(
+        username=data.username,
+        password_hash=hash_password(data.password),
+        role=data.role,
+        is_active=True
+    )
+    db.add(user)
+    await db.commit()
+    await db.refresh(user)
+    token = create_access_token(data={"sub": user.username, "role": user.role})
+    return {
+        "code": 0,
+        "data": TokenResponse(
+            access_token=token,
+            user={"id": user.id, "username": user.username, "role": user.role}
+        )
+    }
+
+
+@app.post("/auth/login", summary="Login and get JWT token")
+async def login_user(data: UserLogin, db: AsyncSession = Depends(get_db)):
+    stmt = select(models.User).where(models.User.username == data.username)
+    user = (await db.execute(stmt)).scalar_one_or_none()
+    if not user or not verify_password(data.password, user.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username or password"
+        )
+    if not user.is_active:
+        raise HTTPException(status_code=400, detail="Account is disabled")
+
+    token = create_access_token(data={"sub": user.username, "role": user.role})
+    return {
+        "code": 0,
+        "data": TokenResponse(
+            access_token=token,
+            user={"id": user.id, "username": user.username, "role": user.role}
+        )
+    }
+
+
+@app.get("/auth/me", summary="Get current user info")
+async def get_me(current_user: models.User = Depends(get_current_user)):
+    return {
+        "code": 0,
+        "data": {
+            "id": current_user.id,
+            "username": current_user.username,
+            "role": current_user.role,
+        }
+    }
+
+
+@app.post("/auth/logout", summary="Logout (client-side clear)")
+async def logout():
+    return {"code": 0, "message": "Logout successful"}
 @app.patch("/rule/{rule_id}/toggle", summary="Enable/Disable Rule")
-async def toggle_rule(rule_id: str, data: RuleToggle, db: AsyncSession = Depends(get_db)):
+async def toggle_rule(rule_id: str, data: RuleToggle, db: AsyncSession = Depends(get_db), _: models.User = Depends(require_admin)):
     stmt = select(models.Rule).where(models.Rule.rule_id == rule_id)
     rule = (await db.execute(stmt)).scalar_one_or_none()
     if not rule:
@@ -84,7 +193,7 @@ async def toggle_rule(rule_id: str, data: RuleToggle, db: AsyncSession = Depends
 # ===================== 1. Entity Operations =====================
 # Create entity
 @app.post("/entity/create", summary="Create Entity")
-async def create_entity(data: EntityCreate, db: AsyncSession = Depends(get_db)):
+async def create_entity(data: EntityCreate, db: AsyncSession = Depends(get_db), _: models.User = Depends(require_admin)):
     entity = models.Entity(name=data.name, email=data.email, phone=data.phone)
     db.add(entity)
     await db.commit()
@@ -92,8 +201,9 @@ async def create_entity(data: EntityCreate, db: AsyncSession = Depends(get_db)):
     return {"code": 0, "data": entity}
 @app.post("/risk/batch-calculate", summary="Recalculate All Entity Risk Scores")
 async def batch_calculate_risk(
-    only_with_events: bool = True,   # skip empty entities without events by default
+    only_with_events: bool = True,
     db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
 ):
     started = time.time()
 
@@ -144,7 +254,7 @@ async def batch_calculate_risk(
         },
     }
 @app.post("/entities/batch", summary="Batch Import Entities")
-async def batch_create_entities(payload: EntityBatchCreate, db: AsyncSession = Depends(get_db)):
+async def batch_create_entities(payload: EntityBatchCreate, db: AsyncSession = Depends(get_db), _: models.User = Depends(require_admin)):
     if not payload.entities:
         raise HTTPException(status_code=400, detail="Import data is empty")
     if len(payload.entities) > 2000:
@@ -187,9 +297,10 @@ async def list_entities(
     page: int = 1,
     page_size: int = 10,
     keyword: str = "",        # fuzzy search name/email/phone
-    risk_level: str = "",     # "" all | Low | Medium | High | Unscored
-    order_by: str = "created_desc",  # created_desc | score_desc | score_asc
+    risk_level: str = "",
+    order_by: str = "created_desc",
     db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(get_current_user),
 ):
     # LEFT JOIN scores so unscored entities can also be queried
     stmt = select(models.Entity, models.Score).outerjoin(
@@ -248,7 +359,7 @@ async def list_entities(
     }
 # Query single entity (with associated events, score, rule hits)
 @app.get("/entity/{entity_id}", summary="Query Entity Full Profile")
-async def get_entity_detail(entity_id: int, db: AsyncSession = Depends(get_db)):
+async def get_entity_detail(entity_id: int, db: AsyncSession = Depends(get_db), _: models.User = Depends(get_current_user)):
     stmt = select(models.Entity).where(models.Entity.id == entity_id)
     res = await db.execute(stmt)
     entity = res.scalar_one_or_none()
@@ -275,7 +386,7 @@ async def get_entity_detail(entity_id: int, db: AsyncSession = Depends(get_db)):
 
 # ===================== 2. Event Operations =====================
 @app.post("/event/create", summary="Create Behavior Event")
-async def create_event(data: EventCreate, db: AsyncSession = Depends(get_db)):
+async def create_event(data: EventCreate, db: AsyncSession = Depends(get_db), _: models.User = Depends(require_admin)):
     # Verify entity exists
     entity_exist = await db.get(models.Entity, data.entity_id)
     if not entity_exist:
@@ -302,6 +413,7 @@ async def list_events(
     date_to: Optional[str] = None,
     keyword: str = "",
     db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(get_current_user),
 ):
     stmt = select(models.Event)
 
@@ -342,7 +454,7 @@ async def list_events(
 
 # ===================== 3. Rule Management =====================
 @app.post("/rule/create", summary="Create Scoring Rule")
-async def create_rule(data: RuleCreate, db: AsyncSession = Depends(get_db)):
+async def create_rule(data: RuleCreate, db: AsyncSession = Depends(get_db), _: models.User = Depends(require_admin)):
     # Verify rule_id is unique
     exist = await db.execute(select(models.Rule).where(models.Rule.rule_id == data.rule_id))
     if exist.scalar_one_or_none():
@@ -360,7 +472,7 @@ async def create_rule(data: RuleCreate, db: AsyncSession = Depends(get_db)):
 
 
 @app.get("/rule/list", summary="List All Rules")
-async def list_active_rule(db: AsyncSession = Depends(get_db)):
+async def list_active_rule(db: AsyncSession = Depends(get_db), _: models.User = Depends(get_current_user)):
     stmt = select(models.Rule).order_by(models.Rule.id)
     rules = (await db.execute(stmt)).scalars().all()
     return {"code": 0, "data": rules}
@@ -373,7 +485,7 @@ class RuleUpdate(BaseModel):
 
 
 @app.put("/rule/{rule_id}", summary="Edit Rule (Definition/Status)")
-async def update_rule(rule_id: str, data: RuleUpdate, db: AsyncSession = Depends(get_db)):
+async def update_rule(rule_id: str, data: RuleUpdate, db: AsyncSession = Depends(get_db), _: models.User = Depends(require_admin)):
     stmt = select(models.Rule).where(models.Rule.rule_id == rule_id)
     rule = (await db.execute(stmt)).scalar_one_or_none()
     if not rule:
@@ -390,7 +502,7 @@ async def update_rule(rule_id: str, data: RuleUpdate, db: AsyncSession = Depends
 
 
 @app.post("/rule/{rule_id}/delete", summary="Delete Rule")
-async def delete_rule(rule_id: str, db: AsyncSession = Depends(get_db)):
+async def delete_rule(rule_id: str, db: AsyncSession = Depends(get_db), _: models.User = Depends(require_admin)):
     rule = (await db.execute(select(models.Rule).where(models.Rule.rule_id == rule_id))).scalar_one_or_none()
     if not rule:
         raise HTTPException(status_code=404, detail="Rule not found")
@@ -402,7 +514,7 @@ async def delete_rule(rule_id: str, db: AsyncSession = Depends(get_db)):
 # ===================== 4. Core: Rule Scoring + Generate RuleHits + Update Scores =====================
 # Business logic: after event trigger, auto-run rules, record hits, update risk score & level
 @app.post("/entity/{entity_id}/calc_score", summary="Manually Trigger Entity Risk Scoring")
-async def calc_entity_risk_score(entity_id: int, db: AsyncSession = Depends(get_db)):
+async def calc_entity_risk_score(entity_id: int, db: AsyncSession = Depends(get_db), _: models.User = Depends(require_admin)):
     # 1. Get entity basic info
     entity = await db.get(models.Entity, entity_id)
     if not entity:
@@ -504,7 +616,7 @@ async def calc_entity_risk_score(entity_id: int, db: AsyncSession = Depends(get_
 
 # ===================== 5. Dashboard Query: High Risk Entity List =====================
 @app.get("/dashboard/high_risk", summary="Dashboard - High Risk Entity List")
-async def get_high_risk_entity(db: AsyncSession = Depends(get_db)):
+async def get_high_risk_entity(db: AsyncSession = Depends(get_db), _: models.User = Depends(get_current_user)):
     stmt = (
         select(models.Entity, models.Score)
         .join(models.Score, models.Entity.id == models.Score.entity_id)

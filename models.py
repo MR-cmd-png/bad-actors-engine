@@ -12,6 +12,14 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 Big_id = Annotated[int,mapped_column(primary_key=True,autoincrement=True)]
 User = Annotated[str,mapped_column(String(100))]
 
+class User(Base):
+    __tablename__ = "users"
+    id: Mapped[Big_id] = mapped_column(comment="User id")
+    username: Mapped[str] = mapped_column(String(50), unique=True, index=True, comment="Username")
+    password_hash: Mapped[str] = mapped_column(String(255), comment="Hashed password")
+    role: Mapped[str] = mapped_column(String(20), default="user", comment="Role: admin or user")
+    is_active: Mapped[bool] = mapped_column(default=True, comment="Whether user is active")
+
 class Event(Base):
     __tablename__ = "events"
     id : Mapped[Big_id] = mapped_column(comment="Event id")

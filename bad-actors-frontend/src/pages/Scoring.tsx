@@ -4,13 +4,17 @@ import Card from '../components/Card'
 import Button from '../components/Button'
 import Input from '../components/Input'
 import Badge from '../components/Badge'
-import { Activity, RefreshCw, Zap, CheckCircle, AlertTriangle, Trophy } from 'lucide-react'
+import { useAuth } from '../api/auth'
+import { Activity, RefreshCw, Zap, CheckCircle, AlertTriangle, Trophy, Lock } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
 } from 'recharts'
 
 export default function Scoring() {
+  const { user } = useAuth()
+  const isAdmin = user?.role === 'admin'
+
   const [entityId, setEntityId] = useState('')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<any>(null)
@@ -78,6 +82,23 @@ export default function Scoring() {
         <p className="text-sm text-text-secondary mt-1">Manually trigger entity risk scoring engine</p>
       </div>
 
+      {!isAdmin && (
+        <Card>
+          <div className="flex items-center gap-4 py-2">
+            <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+              <Lock size={20} className="text-amber-400" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-text-primary">Admin Privileges Required</h3>
+              <p className="text-sm text-text-secondary mt-1">
+                This feature requires administrator access. Please contact your system administrator if you need scoring recalculations.
+              </p>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {isAdmin && (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Input: single entity calculation */}
         <Card delay={0.1}>
@@ -119,7 +140,10 @@ export default function Scoring() {
           </Button>
         </Card>
       </div>
+      )}
 
+      {isAdmin && (
+      <>
       {/* Calculating */}
       {batchLoading && (
         <Card delay={0}>
@@ -339,6 +363,8 @@ export default function Scoring() {
           </motion.div>
         )}
       </AnimatePresence>
+      </>
+      )}
     </div>
   )
 }

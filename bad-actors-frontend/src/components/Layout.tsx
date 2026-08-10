@@ -7,9 +7,23 @@ import {
   Shield,
   Activity,
   ArrowLeft,
+  LogOut,
+  UserCircle,
+  Crown,
+  Eye,
+  EyeOff,
 } from 'lucide-react'
+import { useAuth } from '../api/auth'
 
-const navItems = [
+const adminNavItems = [
+  { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { path: '/entities', label: 'Entities', icon: Users },
+  { path: '/events', label: 'Events', icon: Zap },
+  { path: '/rules', label: 'Rules', icon: Shield },
+  { path: '/scoring', label: 'Risk Scoring', icon: Activity },
+]
+
+const userNavItems = [
   { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { path: '/entities', label: 'Entities', icon: Users },
   { path: '/events', label: 'Events', icon: Zap },
@@ -19,6 +33,14 @@ const navItems = [
 
 export default function Layout() {
   const navigate = useNavigate()
+  const { user, logout } = useAuth()
+
+  const navItems = user?.role === 'admin' ? adminNavItems : userNavItems
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -58,8 +80,39 @@ export default function Layout() {
           ))}
         </nav>
 
+        {/* User Info */}
+        {user && (
+          <div className="px-4 py-3 border-t border-border">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center">
+                <UserCircle size={20} className="text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-text-primary truncate">{user.username}</p>
+                <div className="flex items-center gap-1">
+                  {user.role === 'admin' ? (
+                    <Crown size={12} className="text-amber-400" />
+                  ) : (
+                    <div className="w-2 h-2 rounded-full bg-cyan-400" />
+                  )}
+                  <span className={`text-xs ${user.role === 'admin' ? 'text-amber-400' : 'text-cyan-400'}`}>
+                    {user.role === 'admin' ? 'Administrator' : 'Viewer'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Footer */}
         <div className="p-4 border-t border-border space-y-2">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm text-text-secondary hover:text-red-400 hover:bg-red-400/10 transition-colors"
+          >
+            <LogOut size={16} />
+            Logout
+          </button>
           <button
             onClick={() => navigate('/')}
             className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs text-text-secondary hover:text-primary-light hover:bg-primary/10 transition-colors"
@@ -67,7 +120,7 @@ export default function Layout() {
             <ArrowLeft size={14} />
             Back to Landing
           </button>
-          <div className="text-xs text-text-secondary text-center">
+          <div className="text-xs text-text-secondary text-center pt-1">
             MVP v1.1 • 2026
           </div>
         </div>

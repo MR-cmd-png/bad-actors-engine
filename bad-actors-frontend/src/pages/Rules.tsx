@@ -5,6 +5,7 @@ import Button from '../components/Button'
 import Input from '../components/Input'
 import Badge from '../components/Badge'
 import Modal from '../components/Modal'
+import { useAuth } from '../api/auth'
 import { Shield, Plus, ToggleLeft, ToggleRight, Eye, Tag, Pencil, Check, Trash2, AlertTriangle } from 'lucide-react'
 import { motion } from 'framer-motion'
 
@@ -41,6 +42,9 @@ function getEventTypesForCondition(condition: string): string[] {
 }
 
 export default function Rules() {
+  const { user } = useAuth()
+  const isAdmin = user?.role === 'admin'
+
   const [rules, setRules] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [togglingId, setTogglingId] = useState<string | null>(null)
@@ -188,7 +192,7 @@ export default function Rules() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Rules</h1>
-        <p className="text-sm text-text-secondary mt-1">Configure risk scoring rules</p>
+        <p className="text-sm text-text-secondary mt-1">{isAdmin ? 'Configure risk scoring rules' : 'View risk scoring rules'}</p>
       </div>
 
       {message && (
@@ -198,8 +202,9 @@ export default function Rules() {
         </motion.div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Create rule */}
+      <div className={`grid grid-cols-1 lg:grid-cols-3 gap-6 ${!isAdmin ? 'lg:grid-cols-1' : ''}`}>
+        {/* Create rule - Admin Only */}
+        {isAdmin && (
         <Card delay={0.1} className="lg:col-span-1">
           <div className="flex items-center gap-2 mb-4">
             <Plus size={18} className="text-primary-light" />
@@ -268,9 +273,10 @@ export default function Rules() {
             </Button>
           </div>
         </Card>
+        )}
 
         {/* Rule List */}
-        <Card delay={0.2} className="lg:col-span-2">
+        <Card delay={isAdmin ? 0.2 : 0.1} className={isAdmin ? 'lg:col-span-2' : ''}>
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold">🛡️ Rule List</h3>
             <Badge>{activeCount} active</Badge>
@@ -336,34 +342,38 @@ export default function Rules() {
                         <Eye size={24} />
                       </button>
 
-                      <button
-                        onClick={() => openEdit(rule)}
-                        title="Edit rule"
-                        className="p-1 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95 text-text-secondary hover:text-amber-400 hover:bg-amber-500/10"
-                      >
-                        <Pencil size={20} />
-                      </button>
+                      {isAdmin && (
+                        <>
+                          <button
+                            onClick={() => openEdit(rule)}
+                            title="Edit rule"
+                            className="p-1 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95 text-text-secondary hover:text-amber-400 hover:bg-amber-500/10"
+                          >
+                            <Pencil size={20} />
+                          </button>
 
-                      <button
-                        onClick={() => handleToggle(rule)}
-                        disabled={togglingId === rule.rule_id}
-                        title={rule.active ? 'Click to deactivate' : 'Click to activate'}
-                        className={`p-1 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95 disabled:opacity-50 ${
-                          rule.active
-                            ? 'text-emerald-400 hover:bg-emerald-500/10'
-                            : 'text-text-secondary hover:bg-bg-card-hover'
-                        }`}
-                      >
-                        {rule.active ? <ToggleRight size={28} /> : <ToggleLeft size={28} />}
-                      </button>
+                          <button
+                            onClick={() => handleToggle(rule)}
+                            disabled={togglingId === rule.rule_id}
+                            title={rule.active ? 'Click to deactivate' : 'Click to activate'}
+                            className={`p-1 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95 disabled:opacity-50 ${
+                              rule.active
+                                ? 'text-emerald-400 hover:bg-emerald-500/10'
+                                : 'text-text-secondary hover:bg-bg-card-hover'
+                            }`}
+                          >
+                            {rule.active ? <ToggleRight size={28} /> : <ToggleLeft size={28} />}
+                          </button>
 
-                      <button
-                        onClick={() => handleDelete(rule)}
-                        title="Delete rule"
-                        className="p-1 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95 text-text-secondary hover:text-red-400 hover:bg-red-500/10"
-                      >
-                        <Trash2 size={20} />
-                      </button>
+                          <button
+                            onClick={() => handleDelete(rule)}
+                            title="Delete rule"
+                            className="p-1 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95 text-text-secondary hover:text-red-400 hover:bg-red-500/10"
+                          >
+                            <Trash2 size={20} />
+                          </button>
+                        </>
+                      )}
                     </div>
                   </div>
 

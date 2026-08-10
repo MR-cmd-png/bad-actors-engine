@@ -6,6 +6,7 @@ import Input from '../components/Input'
 import Modal from '../components/Modal'
 import Badge from '../components/Badge'
 import BatchImportModal from '../components/BatchImportModal'
+import { useAuth } from '../api/auth'
 import {
   UserPlus, Search, AlertTriangle, Clock, RefreshCw,
   ChevronLeft, ChevronRight, FileText, Users, Upload,
@@ -27,6 +28,9 @@ const ORDER_OPTIONS = [
 ]
 
 export default function Entities() {
+  const { user } = useAuth()
+  const isAdmin = user?.role === 'admin'
+
   // ---------- Create / Detail ----------
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', phone: '' })
@@ -144,11 +148,13 @@ export default function Entities() {
       <div className="flex items-end justify-between">
         <div>
           <h1 className="text-2xl font-bold">Entities</h1>
-          <p className="text-sm text-text-secondary mt-1">Manage entities and query full profiles</p>
+          <p className="text-sm text-text-secondary mt-1">{isAdmin ? 'Manage entities and query full profiles' : 'View entities and their risk profiles'}</p>
         </div>
-        <Button onClick={() => setBatchOpen(true)}>
-          <Upload size={16} /> Batch Import
-        </Button>
+        {isAdmin && (
+          <Button onClick={() => setBatchOpen(true)}>
+            <Upload size={16} /> Batch Import
+          </Button>
+        )}
       </div>
 
       {message && (
@@ -161,8 +167,9 @@ export default function Entities() {
         </motion.div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Create Entity */}
+      <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 ${!isAdmin ? 'md:grid-cols-1' : ''}`}>
+        {/* Create Entity - Admin Only */}
+        {isAdmin && (
         <Card delay={0.1}>
           <div className="flex items-center gap-2 mb-4">
             <UserPlus size={18} className="text-primary-light" />
@@ -180,9 +187,10 @@ export default function Entities() {
             </Button>
           </div>
         </Card>
+        )}
 
         {/* Lookup Entity */}
-        <Card delay={0.2}>
+        <Card delay={isAdmin ? 0.2 : 0.1}>
           <div className="flex items-center gap-2 mb-4">
             <Search size={18} className="text-primary-light" />
             <h3 className="font-semibold">Lookup Entity</h3>

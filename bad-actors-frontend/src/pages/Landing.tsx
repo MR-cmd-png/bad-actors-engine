@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { useAuth } from '../api/auth'
 import {
   Shield,
   Activity,
@@ -15,6 +16,7 @@ import {
   Eye,
   ArrowRight,
   ArrowUp,
+  LogIn,
 } from 'lucide-react'
 
 const features = [
@@ -72,6 +74,7 @@ const techStack = [
 
 export default function Landing() {
   const navigate = useNavigate()
+  const { user, token } = useAuth()
   const [showBackToTop, setShowBackToTop] = useState(false)
 
   useEffect(() => {
@@ -178,6 +181,22 @@ export default function Landing() {
           <button onClick={() => scrollToSection('about')} className="text-text-secondary hover:text-text-primary transition-colors">
             About
           </button>
+          {token && user ? (
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/15 text-primary-light border border-primary/30 hover:bg-primary/25 transition-all"
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              {user.username}
+            </button>
+          ) : (
+            <button
+              onClick={() => navigate('/login')}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-purple-600 text-white font-medium hover:shadow-lg hover:shadow-primary/30 transition-all"
+            >
+              <LogIn size={14} /> Sign In
+            </button>
+          )}
         </motion.div>
       </nav>
 
@@ -236,14 +255,14 @@ export default function Landing() {
           >
             {/* Primary Enter Button */}
             <motion.button
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate(token ? '/dashboard' : '/login')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
               className="group relative px-10 py-4 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-semibold text-lg shadow-lg shadow-primary/40 hover:shadow-xl hover:shadow-primary/50 transition-all duration-300"
             >
               <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary to-purple-600 blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
               <span className="relative flex items-center gap-2">
-                Enter the Engine
+                {token ? 'Enter the Engine' : 'Sign In to Get Started'}
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </span>
             </motion.button>
@@ -401,14 +420,14 @@ export default function Landing() {
             </p>
             <div className="flex items-center gap-4">
               <motion.button
-                onClick={() => navigate('/dashboard')}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-                className="group px-8 py-3 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-semibold shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/50 transition-all duration-300 flex items-center gap-2"
-              >
-                Launch the Engine
-                <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-              </motion.button>
+              onClick={() => navigate(token ? '/dashboard' : '/login')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+              className="group px-8 py-3 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-semibold shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/50 transition-all duration-300 flex items-center gap-2"
+            >
+              {token ? 'Launch the Engine' : 'Sign In & Launch'}
+              <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </motion.button>
               <span className="text-sm text-text-secondary">
                 No credit card required • Free forever tier
               </span>
