@@ -10,7 +10,8 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from database import get_db, Base, engine, Async_Session
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
+from sqlalchemy import select, func, text
+import os
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 import models
@@ -37,9 +38,23 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup():
     try:
+        if os.getenv("RESET_DB") == "1":
+            tables = [
+                "timelines", "evidence_claims", "risk_assessments", "signals",
+                "events", "investigations", "actors", "companies_organizations",
+                "relationships", "sources", "pilot_properties", "users",
+            ]
+            async with engine.begin() as conn:
+                for t in tables:
+                    await conn.execute(text(f"DROP TABLE IF EXISTS {t}"))
+            print("RESET_DB=1 — all tables dropped")
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
         print("Database tables initialized")
+        if os.getenv("AUTO_SEED") == "1":
+            from seed_pilot import main as seed_main
+            await seed_main(dispose_engine=False)
+            print("AUTO_SEED=1 — demo data seeded")
     except Exception as e:
         print(f"Error creating database tables: {e}")
         print("App will start but database operations may not work")

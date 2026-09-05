@@ -8,7 +8,7 @@
 - 写接口 require_admin，读接口 get_current_user；
 - 用户类 FK（采集人/Assessment人/Manager）由登录态注入，请求体不可伪造；
 - 创建 Event/Signal/Evidence/RiskAssessment 时同事务自动追加 Timeline 记录；
-- 枚举值一律 Literal 收口，DB 侧仍存Medium文字符串。
+- 枚举值一律 Literal 收口，DB 侧存英文枚举字符串。
 """
 from datetime import datetime
 from typing import Literal, Optional
@@ -278,7 +278,7 @@ class TimelineUpdate(BaseModel):
 
 # ===================== PATCH/DELETE 通用工具 =====================
 async def _patch_row(db: AsyncSession, row, data: _TDict[str, _Any]):
-    """把 update_data Medium非 None 字段覆盖到 row（局部更新）。"""
+    """Copy non-None fields from update data onto the row (partial update)."""
     for k, v in data.items():
         if v is not None:
             setattr(row, k, v)

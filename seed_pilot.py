@@ -73,7 +73,7 @@ def _tl(db, prop, entry_type, title, occurred, ref_type=None, ref_id=None, descr
     ))
 
 
-async def main():
+async def main(dispose_engine: bool = True):
     # Idempotent table create — seed works even if the app has never run.
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
@@ -434,7 +434,9 @@ async def main():
         print(f"  Open GET /property/{prop.id}/profile for the full intelligence picture")
 
     # Proactively release the connection pool — avoids aiomysql warnings on Windows proactor shutdown.
-    await engine.dispose()
+    if dispose_engine:
+        await engine.dispose()
 
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
