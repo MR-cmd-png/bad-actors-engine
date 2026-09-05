@@ -22,26 +22,26 @@ import {
 const features = [
   {
     icon: Brain,
-    title: 'AI-Powered Detection',
-    desc: 'Advanced rule engine with intelligent scoring algorithms that evolve with your data.',
+    title: 'Intelligence Graph',
+    desc: 'Behavior actors, companies, and relationships woven into one evidence-backed picture per property.',
     color: 'from-purple-500 to-fuchsia-500',
   },
   {
     icon: Activity,
-    title: 'Real-Time Monitoring',
-    desc: 'Live event tracking and instant risk assessment for every entity in your system.',
+    title: 'Signals & Early Warnings',
+    desc: 'Track disputes, regulatory actions and red-flag signals with a full audit timeline.',
     color: 'from-cyan-500 to-blue-500',
   },
   {
     icon: Shield,
-    title: 'Adaptive Rules',
-    desc: 'Customizable rule engine to define, test, and deploy detection logic in seconds.',
+    title: 'Evidence-Based Assessment',
+    desc: 'Analyst-written risk assessments backed by verifiable sources instead of black-box scores.',
     color: 'from-emerald-500 to-teal-500',
   },
   {
     icon: Lock,
     title: 'Secure by Design',
-    desc: 'Enterprise-grade security with encrypted data pipelines and access control.',
+    desc: 'Enterprise-grade security with JWT access control and role-based write permissions.',
     color: 'from-amber-500 to-orange-500',
   },
   {
@@ -53,7 +53,7 @@ const features = [
   {
     icon: Eye,
     title: 'Deep Insights',
-    desc: 'Comprehensive dashboards and analytics for informed risk management decisions.',
+    desc: 'Comprehensive dashboards and analytics for informed due diligence decisions.',
     color: 'from-indigo-500 to-violet-500',
   },
 ]
@@ -241,9 +241,9 @@ export default function Landing() {
             transition={{ delay: 0.4 }}
             className="text-xl text-text-secondary max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            An advanced behavioral analysis engine that identifies potential threats and
-            high-risk entities through intelligent rule matching, real-time scoring, and
-            continuous monitoring.
+            A commercial real estate due diligence intelligence engine that maps
+            who is connected to a property, what happened there, which signals
+            fired, and what the evidence-backed risk assessment concludes.
           </motion.p>
 
           {/* CTA Buttons */}

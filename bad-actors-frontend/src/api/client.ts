@@ -1,7 +1,14 @@
 import axios from 'axios'
 
+// baseURL 策略：优先 VITE_API_BASE_URL；开发态走 vite proxy(/api -> http://localhost:8000)；
+// 生产构建默认指向 Railway 域名，可用 .env 覆盖
+const env = (import.meta as any).env || {}
+const API_BASE_URL: string =
+  env.VITE_API_BASE_URL ||
+  (env.DEV ? '/api' : 'https://bad-actors-engine-production.up.railway.app')
+
 const apiClient = axios.create({
-  baseURL: 'https://bad-actors-engine-production.up.railway.app',
+  baseURL: API_BASE_URL,
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
 })

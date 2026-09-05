@@ -1,104 +1,63 @@
 import apiClient from './client'
-export const batchCreateEntities = (
-  entities: Array<{ name: string; email: string; phone: string }>
-) => apiClient.post('/entities/batch', { entities })
-// Enable/disable rule
-export const toggleRule = (ruleId: string, active: boolean) =>
-  apiClient.patch(`/rule/${encodeURIComponent(ruleId)}/toggle`, { active })
-// ======================== Entity ========================
-export interface EntityCreate {
+
+// ======================== 物业 ========================
+export interface PropertyCreate {
   name: string
-  email: string
-  phone: string
+  address: string
+  property_type: string
+  ownership_or_management: string
+  status?: string
+  relevant_dates?: Record<string, any>
+  description?: string
 }
 
-export interface Entity {
-  id: number
-  name: string
-  email: string
-  phone: string
-}
+export const createProperty = (data: PropertyCreate) =>
+  apiClient.post('/property/create', data)
 
-export const createEntity = (data: EntityCreate) =>
-  apiClient.post('/entity/create', data)
+export const listProperties = (params?: Record<string, any>) =>
+  apiClient.get('/property', { params })
 
-export const getEntityDetail = (entityId: number) =>
-  apiClient.get(`/entity/${entityId}`)
+export const getPropertyDetail = (propertyId: number) =>
+  apiClient.get(`/property/${propertyId}`)
 
-// ======================== Event ========================
-export interface EventCreate {
-  entity_id: number
-  type: string
-  metadata_json: Record<string, any>
-}
+// 情报图景装配端点（核心）
+export const getPropertyProfile = (propertyId: number) =>
+  apiClient.get(`/property/${propertyId}/profile`)
 
-export const createEvent = (data: EventCreate) =>
-  apiClient.post('/event/create', data)
+export const getPropertyTimeline = (propertyId: number) =>
+  apiClient.get(`/property/${propertyId}/timeline`)
 
-export interface EventListParams {
-  page?: number
-  page_size?: number
-  entity_id?: number
-  type?: string
-  date_from?: string
-  date_to?: string
-  keyword?: string
-}
+// ======================== 通用情报 CRUD ========================
+// 说明：列表均为 GET /{res}?page&page_size&property_id；创建均为 POST /{res}/create
+export const listActors = (params?: Record<string, any>) => apiClient.get('/actor', { params })
+export const createActor = (data: Record<string, any>) => apiClient.post('/actor/create', data)
 
-export const listEvents = (params: EventListParams) =>
-  apiClient.get('/events', { params })
+export const listCompanies = (params?: Record<string, any>) => apiClient.get('/company', { params })
+export const createCompany = (data: Record<string, any>) => apiClient.post('/company/create', data)
 
-// ======================== Rule ========================
-export interface RuleCreate {
-  rule_id: string
-  definition: {
-    condition: string
-    score: number
-    event_types?: string[]
-  }
-  active: boolean
-}
+export const listRelationships = (params?: Record<string, any>) => apiClient.get('/relationship', { params })
+export const createRelationship = (data: Record<string, any>) => apiClient.post('/relationship/create', data)
 
-export const createRule = (data: RuleCreate) =>
-  apiClient.post('/rule/create', data)
+export const listEvents = (params?: Record<string, any>) => apiClient.get('/event', { params })
+export const createEvent = (data: Record<string, any>) => apiClient.post('/event/create', data)
 
-// Edit rule (update definition: condition / score / associated event types)
-export const updateRule = (
-  ruleId: string,
-  definition: { condition: string; score: number; event_types: string[] }
-) => apiClient.put(`/rule/${encodeURIComponent(ruleId)}`, { definition })
+export const listSignals = (params?: Record<string, any>) => apiClient.get('/signal', { params })
+export const createSignal = (data: Record<string, any>) => apiClient.post('/signal/create', data)
 
-export const listActiveRules = () =>
-  apiClient.get('/rule/list')
+export const listSources = (params?: Record<string, any>) => apiClient.get('/source', { params })
+export const createSource = (data: Record<string, any>) => apiClient.post('/source/create', data)
 
-export const deleteRule = (ruleId: string) =>
-  apiClient.post(`/rule/${encodeURIComponent(ruleId)}/delete`)
+export const listEvidence = (params?: Record<string, any>) => apiClient.get('/evidence', { params })
+export const createEvidence = (data: Record<string, any>) => apiClient.post('/evidence/create', data)
 
-// ======================== Score ========================
-export const calcEntityScore = (entityId: number) =>
-  apiClient.post(`/entity/${entityId}/calc_score`)
+export const listRiskAssessments = (params?: Record<string, any>) => apiClient.get('/risk-assessment', { params })
+export const createRiskAssessment = (data: Record<string, any>) => apiClient.post('/risk-assessment/create', data)
+
+export const listInvestigations = (params?: Record<string, any>) => apiClient.get('/investigation', { params })
+export const createInvestigation = (data: Record<string, any>) => apiClient.post('/investigation/create', data)
+
+export const listTimelines = (params?: Record<string, any>) => apiClient.get('/timeline', { params })
+export const createTimeline = (data: Record<string, any>) => apiClient.post('/timeline/create', data)
 
 // ======================== Dashboard ========================
-export const getHighRiskEntities = () =>
-  apiClient.get('/dashboard/high_risk')
-export interface EntityListParams {
-  page?: number
-  page_size?: number
-  keyword?: string
-  risk_level?: string
-  order_by?: string
-}
-
-export const listEntities = (params: {
-  page?: number; page_size?: number; keyword?: string;
-  risk_level?: string; order_by?: string
-}) => apiClient.get('/entities', { params })
-// Batch recalculate all entity risk scores
-// Batch recalculate all entity risk scores
-export const batchCalculateScore = (only_with_events: boolean) =>
-  apiClient.post('/risk/batch-calculate', null, {
-    params: { only_with_events },
-    timeout: 600000,   // 10 minutes, batch recalculation is slow
-  })
-export const calculateScore = (entity_id: number) =>
-  apiClient.post(`/risk/calculate/${entity_id}`)
+export const getDashboardOverview = () => apiClient.get('/dashboard/overview')

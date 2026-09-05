@@ -1,82 +1,81 @@
 import { useEffect, useState } from 'react'
-import { getHighRiskEntities } from '../api'
+import { getDashboardOverview } from '../api'
 import Card from '../components/Card'
 import Badge from '../components/Badge'
-import { AlertTriangle, Users, ShieldAlert, TrendingUp } from 'lucide-react'
-import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, PieChart, Pie, Cell,
-} from 'recharts'
-import { motion } from "framer-motion"
+import { Building2, FolderSearch, ShieldAlert, AlertTriangle, Clock } from 'lucide-react'
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
 
-const pieData = [
-  { name: 'High', value: 0, color: '#ef4444' },
-  { name: 'Medium', value: 0, color: '#f59e0b' },
-  { name: 'Low', value: 0, color: '#10b981' },
-]
+// severity -> 饼图配色
+const fmtTime = (v: any) => (typeof v === 'string' ? v.slice(0, 19).replace('T', ' ') : '—')
+
+const PIE_COLORS: Record<string, string> = {
+  低: '#10b981',
+  中: '#f59e0b',
+  高: '#ef4444',
+  极高: '#a21caf',
+}
 
 export default function Dashboard() {
   const [data, setData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
   useEffect(() => {
-    getHighRiskEntities()
+    getDashboardOverview()
       .then((res: any) => {
-        setData(res)
+        setData(res.data)
         setLoading(false)
       })
-      .catch(() => setLoading(false))
+      .catch((e: any) => {
+        setError(e.message || '加载概览失败')
+        setLoading(false)
+      })
   }, [])
 
-  const highRiskList = data?.data || []
-  const highRiskCount = data?.high_risk_count || 0
+  if (loading) return <div className="text-center py-24 text-text-secondary">加载概览中...</div>
+  if (error) return <div className="text-center py-24 text-red-400">{error}</div>
 
   const stats = [
     {
-      label: 'High Risk Entities',
-      value: highRiskCount,
+      label: '试点物业',
+      value: data.property_count,
+      icon: Building2,
+      color: 'from-primary to-purple-500',
+      bgColor: 'bg-primary/10',
+    },
+    {
+      label: '进行中调查',
+      value: data.ongoing_investigation_count,
+      icon: FolderSearch,
+      color: 'from-emerald-500 to-teal-500',
+      bgColor: 'bg-emerald-500/10',
+    },
+    {
+      label: '最高风险等级',
+      value: data.highest_severity ?? '—',
       icon: ShieldAlert,
       color: 'from-red-500 to-pink-500',
       bgColor: 'bg-red-500/10',
     },
     {
-      label: 'Today\'s New Events',
-      value: '—',
-      icon: TrendingUp,
+      label: '待核实信号',
+      value: data.pending_signal_count,
+      icon: AlertTriangle,
       color: 'from-amber-500 to-orange-500',
       bgColor: 'bg-amber-500/10',
     },
-    {
-      label: 'Pending Alerts',
-      value: highRiskCount,
-      icon: AlertTriangle,
-      color: 'from-primary to-purple-500',
-      bgColor: 'bg-primary/10',
-    },
-    {
-      label: 'Active Rules',
-      value: '—',
-      icon: Users,
-      color: 'from-emerald-500 to-teal-500',
-      bgColor: 'bg-emerald-500/10',
-    },
   ]
 
-  // Mock trend data
-  const trendData = [
-    { date: '08-01', score: 20 },
-    { date: '08-02', score: 35 },
-    { date: '08-03', score: 28 },
-    { date: '08-04', score: 62 },
-    { date: '08-05', score: highRiskCount * 15 || 45 },
-  ]
+  const pieData = Object.entries(data.severity_distribution || {})
+    .filter(([, v]) => (v as number) > 0)
+    .map(([name, value]) => ({ name, value }))
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-text-primary">Dashboard</h1>
-        <p className="text-sm text-text-secondary mt-1">Bad Actor Detection Engine — Global Overview</p>
+        <p className="text-sm text-text-secondary mt-1">商业地产尽职调查情报引擎 — 试点概览</p>
       </div>
 
       {/* Stats Cards */}
@@ -98,132 +97,80 @@ export default function Dashboard() {
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Trend Chart */}
-        <Card className="lg:col-span-2" delay={0.2}>
-          <h3 className="text-sm font-semibold text-text-primary mb-4">Risk Score Trend</h3>
-          <ResponsiveContainer width="100%" height={240}>
-            <AreaChart data={trendData}>
-              <defs>
-                <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis dataKey="date" stroke="#94a3b8" fontSize={12} />
-              <YAxis stroke="#94a3b8" fontSize={12} />
-              <Tooltip
-                contentStyle={{
-                  background: '#1e293b',
-                  border: '1px solid #334155',
-                  borderRadius: '8px',
-                  color: '#f1f5f9',
-                }}
-              />
-              <Area
-                type="monotone"
-                dataKey="score"
-                stroke="#6366f1"
-                strokeWidth={2}
-                fill="url(#colorScore)"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+        {/* Severity distribution */}
+        <Card delay={0.3}>
+          <h3 className="text-sm font-semibold text-text-primary mb-4">风险评估严重度分布</h3>
+          {pieData.length === 0 ? (
+            <div className="text-center py-16 text-text-secondary text-sm">暂无风险评估数据</div>
+          ) : (
+            <>
+              <ResponsiveContainer width="100%" height={240}>
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={55}
+                    outerRadius={85}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {pieData.map((entry) => (
+                      <Cell key={entry.name} fill={PIE_COLORS[entry.name] || '#6366f1'} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      background: '#1e293b',
+                      border: '1px solid #334155',
+                      borderRadius: '8px',
+                      color: '#f1f5f9',
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="flex justify-center gap-4 mt-2">
+                {pieData.map((p) => (
+                  <div key={p.name} className="flex items-center gap-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full" style={{ background: PIE_COLORS[p.name] }} />
+                    <span className="text-xs text-text-secondary">{p.name}</span>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </Card>
 
-        {/* Pie Chart */}
-        <Card delay={0.3}>
-          <h3 className="text-sm font-semibold text-text-primary mb-4">Risk Level Distribution</h3>
-          <ResponsiveContainer width="100%" height={240}>
-            <PieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                innerRadius={55}
-                outerRadius={85}
-                paddingAngle={5}
-                dataKey="value"
-              >
-                {pieData.map((entry, idx) => (
-                  <Cell key={idx} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{
-                  background: '#1e293b',
-                  border: '1px solid #334155',
-                  borderRadius: '8px',
-                  color: '#f1f5f9',
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="flex justify-center gap-4 mt-2">
-            {pieData.map((p) => (
-              <div key={p.name} className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full" style={{ background: p.color }} />
-                <span className="text-xs text-text-secondary">{p.name}</span>
-              </div>
-            ))}
+        {/* Recent timeline */}
+        <Card className="lg:col-span-2" delay={0.4}>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-semibold text-text-primary flex items-center gap-2">
+              <Clock size={15} /> 最近时间线动态
+            </h3>
+            <Badge>{(data.recent_timeline || []).length} 条</Badge>
           </div>
+          {(data.recent_timeline || []).length === 0 ? (
+            <div className="text-center py-16 text-text-secondary text-sm">暂无时间线记录</div>
+          ) : (
+            <div className="space-y-3">
+              {data.recent_timeline.map((t: any) => (
+                <div key={t.id} className="flex items-start gap-3 p-3 rounded-lg bg-bg-dark border border-border/60">
+                  <span className="text-xs font-mono text-text-secondary whitespace-nowrap mt-0.5">
+                    {fmtTime(t.occurred_at)}
+                  </span>
+                  <Badge variant={t.entry_type === '信号' ? 'high' : 'default'}>{t.entry_type}</Badge>
+                  <div className="min-w-0">
+                    <p className="text-sm text-text-primary truncate">{t.title}</p>
+                    <p className="text-xs text-text-secondary">
+                      {t.property_name ?? '—'}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </Card>
       </div>
-
-      {/* High Risk Table */}
-      <Card delay={0.4}>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-text-primary">🔴 High Risk Entity List</h3>
-          <Badge variant="high">{highRiskCount} entities</Badge>
-        </div>
-        {loading ? (
-          <div className="text-center py-12 text-text-secondary">Loading...</div>
-        ) : highRiskList.length === 0 ? (
-          <div className="text-center py-12 text-text-secondary">
-            <ShieldAlert size={48} className="mx-auto mb-3 opacity-30" />
-            <p>No high risk entities</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-border">
-                  {['ID', 'Name', 'Email', 'Phone', 'Risk Score', 'Level', 'Updated At'].map((h) => (
-                    <th key={h} className="text-left text-xs font-medium text-text-secondary py-3 px-4">
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {highRiskList.map((item: any, i: number) => (
-                  <motion.tr
-                    key={item.entity.id}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="border-b border-border/50 hover:bg-bg-card-hover/50 transition-colors"
-                  >
-                    <td className="py-3 px-4 text-sm font-mono text-text-secondary">#{item.entity.id}</td>
-                    <td className="py-3 px-4 text-sm font-medium text-text-primary">{item.entity.name}</td>
-                    <td className="py-3 px-4 text-sm text-text-secondary">{item.entity.email}</td>
-                    <td className="py-3 px-4 text-sm text-text-secondary">{item.entity.phone}</td>
-                    <td className="py-3 px-4">
-                      <span className="text-lg font-bold text-red-400">{item.score}</span>
-                    </td>
-                    <td className="py-3 px-4">
-                      <Badge variant="high">{item.risk_level}</Badge>
-                    </td>
-                    <td className="py-3 px-4 text-xs text-text-secondary">
-                      {item.update_time?.slice(0, 19).replace('T', ' ')}
-                    </td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </Card>
     </div>
   )
 }

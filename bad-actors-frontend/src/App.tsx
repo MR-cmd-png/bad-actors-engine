@@ -4,10 +4,16 @@ import Layout from './components/Layout'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
-import Entities from './pages/Entities'
+import Intelligence from './pages/Intelligence'
+import Actors from './pages/Actors'
+import Companies from './pages/Companies'
+import Relationships from './pages/Relationships'
 import Events from './pages/Events'
-import Rules from './pages/Rules'
-import Scoring from './pages/Scoring'
+import Signals from './pages/Signals'
+import Sources from './pages/Sources'
+import Evidence from './pages/Evidence'
+import RiskAssessments from './pages/RiskAssessments'
+import Investigations from './pages/Investigations'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { token, user } = useAuth()
@@ -29,17 +35,35 @@ export default function App() {
             <Route path="/dashboard" element={
               <ProtectedRoute><Dashboard /></ProtectedRoute>
             } />
-            <Route path="/entities" element={
-              <ProtectedRoute><Entities /></ProtectedRoute>
+            <Route path="/property" element={
+              <ProtectedRoute><Intelligence /></ProtectedRoute>
+            } />
+            <Route path="/actors" element={
+              <ProtectedRoute><Actors /></ProtectedRoute>
+            } />
+            <Route path="/companies" element={
+              <ProtectedRoute><Companies /></ProtectedRoute>
+            } />
+            <Route path="/relationships" element={
+              <ProtectedRoute><Relationships /></ProtectedRoute>
             } />
             <Route path="/events" element={
               <ProtectedRoute><Events /></ProtectedRoute>
             } />
-            <Route path="/rules" element={
-              <ProtectedRoute><Rules /></ProtectedRoute>
+            <Route path="/signals" element={
+              <ProtectedRoute><Signals /></ProtectedRoute>
             } />
-            <Route path="/scoring" element={
-              <ProtectedRoute><Scoring /></ProtectedRoute>
+            <Route path="/sources" element={
+              <ProtectedRoute><Sources /></ProtectedRoute>
+            } />
+            <Route path="/evidence" element={
+              <ProtectedRoute><Evidence /></ProtectedRoute>
+            } />
+            <Route path="/risk-assessments" element={
+              <ProtectedRoute><RiskAssessments /></ProtectedRoute>
+            } />
+            <Route path="/investigations" element={
+              <ProtectedRoute><Investigations /></ProtectedRoute>
             } />
           </Route>
         </Routes>
