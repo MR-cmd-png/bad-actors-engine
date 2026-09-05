@@ -1,64 +1,95 @@
 import apiClient from './client'
 
-// ======================== 物业 ========================
-export interface PropertyCreate {
-  name: string
-  address: string
-  property_type: string
-  ownership_or_management: string
-  status?: string
-  relevant_dates?: Record<string, any>
-  description?: string
-}
-
-export const createProperty = (data: PropertyCreate) =>
+// ======================== Property ========================
+export const createProperty = (data: Record<string, any>) =>
   apiClient.post('/property/create', data)
-
 export const listProperties = (params?: Record<string, any>) =>
   apiClient.get('/property/list', { params })
-
 export const getPropertyDetail = (propertyId: number) =>
   apiClient.get(`/property/${propertyId}`)
+export const updateProperty = (propertyId: number, data: Record<string, any>) =>
+  apiClient.patch(`/property/${propertyId}`, data)
+export const deleteProperty = (propertyId: number) =>
+  apiClient.delete(`/property/${propertyId}`)
 
-// 情报图景装配端点（核心）
+// ======================== Property intelligence (profile + timeline) ========================
 export const getPropertyProfile = (propertyId: number) =>
   apiClient.get(`/property/${propertyId}/profile`)
-
 export const getPropertyTimeline = (propertyId: number) =>
   apiClient.get(`/property/${propertyId}/timeline`)
 
-// ======================== 通用情报 CRUD ========================
-// 列表 GET /{res}/list；创建 POST /{res}/create
-// （列表挂 /list 后缀：避免裸路径与前端 SPA 深链接 /property、/events、/evidence 冲突）
-export const listActors = (params?: Record<string, any>) => apiClient.get('/actor', { params })
-export const createActor = (data: Record<string, any>) => apiClient.post('/actor/create', data)
+// ======================== Generic CRUD helpers ========================
+// Lists use /list suffix where bare path conflicts with SPA deep-link.
+// Updates are PATCH partial, deletes are hard delete (admin-only on server).
+const crud = (path: string, listPath?: string) => ({
+  list: (params?: Record<string, any>) => apiClient.get(`/${listPath ?? path}`, { params }),
+  create: (data: Record<string, any>) => apiClient.post(`/${path}/create`, data),
+  detail: (id: number) => apiClient.get(`/${path}/${id}`),
+  update: (id: number, data: Record<string, any>) => apiClient.patch(`/${path}/${id}`, data),
+  remove: (id: number) => apiClient.delete(`/${path}/${id}`),
+})
 
-export const listCompanies = (params?: Record<string, any>) => apiClient.get('/company', { params })
-export const createCompany = (data: Record<string, any>) => apiClient.post('/company/create', data)
+export const actorApi = crud('actor')
+export const companyApi = crud('company')
+export const relationshipApi = crud('relationship')
+export const eventApi = crud('event', 'event/list')        // SPA deep-link conflict
+export const signalApi = crud('signal')
+export const sourceApi = crud('source')
+export const evidenceApi = crud('evidence', 'evidence/list')  // SPA deep-link conflict
+export const riskAssessmentApi = crud('risk-assessment')
+export const investigationApi = crud('investigation')
+export const timelineApi = crud('timeline')
 
-export const listRelationships = (params?: Record<string, any>) => apiClient.get('/relationship', { params })
-export const createRelationship = (data: Record<string, any>) => apiClient.post('/relationship/create', data)
+// Backwards-compat named exports (older CrudPage configs still reference these)
+export const listActors = actorApi.list
+export const createActor = actorApi.create
+export const updateActor = actorApi.update
+export const deleteActor = actorApi.remove
 
-export const listEvents = (params?: Record<string, any>) => apiClient.get('/event/list', { params })
-export const createEvent = (data: Record<string, any>) => apiClient.post('/event/create', data)
+export const listCompanies = companyApi.list
+export const createCompany = companyApi.create
+export const updateCompany = companyApi.update
+export const deleteCompany = companyApi.remove
 
-export const listSignals = (params?: Record<string, any>) => apiClient.get('/signal', { params })
-export const createSignal = (data: Record<string, any>) => apiClient.post('/signal/create', data)
+export const listRelationships = relationshipApi.list
+export const createRelationship = relationshipApi.create
+export const updateRelationship = relationshipApi.update
+export const deleteRelationship = relationshipApi.remove
 
-export const listSources = (params?: Record<string, any>) => apiClient.get('/source', { params })
-export const createSource = (data: Record<string, any>) => apiClient.post('/source/create', data)
+export const listEvents = eventApi.list
+export const createEvent = eventApi.create
+export const updateEvent = eventApi.update
+export const deleteEvent = eventApi.remove
 
-export const listEvidence = (params?: Record<string, any>) => apiClient.get('/evidence/list', { params })
-export const createEvidence = (data: Record<string, any>) => apiClient.post('/evidence/create', data)
+export const listSignals = signalApi.list
+export const createSignal = signalApi.create
+export const updateSignal = signalApi.update
+export const deleteSignal = signalApi.remove
 
-export const listRiskAssessments = (params?: Record<string, any>) => apiClient.get('/risk-assessment', { params })
-export const createRiskAssessment = (data: Record<string, any>) => apiClient.post('/risk-assessment/create', data)
+export const listSources = sourceApi.list
+export const createSource = sourceApi.create
+export const updateSource = sourceApi.update
+export const deleteSource = sourceApi.remove
 
-export const listInvestigations = (params?: Record<string, any>) => apiClient.get('/investigation', { params })
-export const createInvestigation = (data: Record<string, any>) => apiClient.post('/investigation/create', data)
+export const listEvidence = evidenceApi.list
+export const createEvidence = evidenceApi.create
+export const updateEvidence = evidenceApi.update
+export const deleteEvidence = evidenceApi.remove
 
-export const listTimelines = (params?: Record<string, any>) => apiClient.get('/timeline', { params })
-export const createTimeline = (data: Record<string, any>) => apiClient.post('/timeline/create', data)
+export const listRiskAssessments = riskAssessmentApi.list
+export const createRiskAssessment = riskAssessmentApi.create
+export const updateRiskAssessment = riskAssessmentApi.update
+export const deleteRiskAssessment = riskAssessmentApi.remove
+
+export const listInvestigations = investigationApi.list
+export const createInvestigation = investigationApi.create
+export const updateInvestigation = investigationApi.update
+export const deleteInvestigation = investigationApi.remove
+
+export const listTimelines = timelineApi.list
+export const createTimeline = timelineApi.create
+export const updateTimeline = timelineApi.update
+export const deleteTimeline = timelineApi.remove
 
 // ======================== Dashboard ========================
 export const getDashboardOverview = () => apiClient.get('/dashboard/overview')

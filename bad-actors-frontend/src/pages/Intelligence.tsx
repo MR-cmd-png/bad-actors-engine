@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import {
   Building2, Users, Network, Zap, AlertTriangle, FileCheck,
   ShieldAlert, Clock, Search,
@@ -32,20 +32,20 @@ export default function Intelligence() {
         setLoading(false)
       })
       .catch((e) => {
-        setError(e.message || '装配情报图景失败')
+        setError(e.message || 'Failed to assemble profile')
         setLoading(false)
       })
   }, [propertyId])
 
   if (propsLoading || (propertyId != null && loading && !profile)) {
-    return <div className="text-center py-24 text-text-secondary">情报图景装配中...</div>
+    return <div className="text-center py-24 text-text-secondary">Assembling intelligence picture...</div>
   }
   if (error) return <div className="text-center py-24 text-red-600">{error}</div>
   if (properties.length === 0) {
     return (
       <div className="text-center py-24 text-text-secondary">
         <Building2 size={48} className="mx-auto mb-3 opacity-30" />
-        <p>尚无试点物业，请先在「物业情报」页新建试点物业</p>
+        <p>No pilot property yet — create one on the Property page</p>
       </div>
     )
   }
@@ -53,7 +53,7 @@ export default function Intelligence() {
 
   const { property, actors, companies, relationships, events, signals, sources, evidence, risk_assessments, timeline, risk_summary } = profile
 
-  // 主体名称查找：关系边的 subject/object -> 可读名称
+  // 主体名称查找：Relationships边的 subject/object -> 可读名称
   const nameOf = (type: string, id: number) => {
     if (type === 'property') return property?.name
     if (type === 'actor') return actors.find((a: any) => a.id === id)?.name ?? `actor#${id}`
@@ -93,39 +93,39 @@ export default function Intelligence() {
           <div className="flex items-center gap-3">
             <ShieldAlert size={28} className="text-red-400" />
             <div>
-              <p className="text-xs text-text-secondary">总体风险等级</p>
+              <p className="text-xs text-text-secondary">Overall risk</p>
               <p className="text-lg font-bold text-text-primary">
-                {risk_summary.overall_severity ?? '暂无评估'}
+                {risk_summary.overall_severity ?? 'No assessment'}
               </p>
             </div>
           </div>
           <div>
-            <p className="text-xs text-text-secondary">主要风险类别</p>
+            <p className="text-xs text-text-secondary">Top risk category</p>
             <p className="text-sm font-semibold text-text-primary">{risk_summary.top_category ?? '—'}</p>
           </div>
           <div>
-            <p className="text-xs text-text-secondary">最近评估状态</p>
+            <p className="text-xs text-text-secondary">Latest status</p>
             <p className="text-sm font-semibold text-text-primary">{risk_summary.latest_status ?? '—'}</p>
           </div>
           <div>
-            <p className="text-xs text-text-secondary">评估条数</p>
+            <p className="text-xs text-text-secondary">Assessments</p>
             <p className="text-sm font-semibold text-text-primary">{risk_summary.assessment_count}</p>
           </div>
           <div>
-            <p className="text-xs text-text-secondary">物业状态</p>
+            <p className="text-xs text-text-secondary">Property status</p>
             <Badge variant={levelVariant(null)}>{property.status}</Badge>
           </div>
         </div>
       </Card>
 
-      {/* 关联主体：行为人 + 公司 + 关系 */}
+      {/* 关联主体：Actors + 公司 + Relationships */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card delay={0.1}>
           <h3 className="text-sm font-semibold text-text-primary mb-4 flex items-center gap-2">
-            <Users size={16} className="text-primary-light" /> 行为人（{actors.length}）
+            <Users size={16} className="text-primary-light" /> Actors（{actors.length}）
           </h3>
           <div className="space-y-3">
-            {actors.length === 0 && <p className="text-xs text-text-secondary">暂无</p>}
+            {actors.length === 0 && <p className="text-xs text-text-secondary">No data</p>}
             {actors.map((a: any) => (
               <div key={a.id} className="p-3 rounded-lg bg-bg-dark border border-border/60">
                 <div className="flex items-center justify-between">
@@ -140,10 +140,10 @@ export default function Intelligence() {
 
         <Card delay={0.15}>
           <h3 className="text-sm font-semibold text-text-primary mb-4 flex items-center gap-2">
-            <Building2 size={16} className="text-primary-light" /> 公司组织（{companies.length}）
+            <Building2 size={16} className="text-primary-light" /> Companies（{companies.length}）
           </h3>
           <div className="space-y-3">
-            {companies.length === 0 && <p className="text-xs text-text-secondary">暂无</p>}
+            {companies.length === 0 && <p className="text-xs text-text-secondary">No data</p>}
             {companies.map((c: any) => (
               <div key={c.id} className="p-3 rounded-lg bg-bg-dark border border-border/60">
                 <div className="flex items-center justify-between gap-2">
@@ -160,10 +160,10 @@ export default function Intelligence() {
 
         <Card delay={0.2}>
           <h3 className="text-sm font-semibold text-text-primary mb-4 flex items-center gap-2">
-            <Network size={16} className="text-primary-light" /> 关系（{relationships.length}）
+            <Network size={16} className="text-primary-light" /> Relationships（{relationships.length}）
           </h3>
           <div className="space-y-3">
-            {relationships.length === 0 && <p className="text-xs text-text-secondary">暂无</p>}
+            {relationships.length === 0 && <p className="text-xs text-text-secondary">No data</p>}
             {relationships.map((r: any) => (
               <div key={r.id} className="p-3 rounded-lg bg-bg-dark border border-border/60">
                 <div className="flex items-center justify-between gap-2">
@@ -181,14 +181,14 @@ export default function Intelligence() {
         </Card>
       </div>
 
-      {/* 事件 + 信号 */}
+      {/* Events + 信号 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card delay={0.25}>
           <h3 className="text-sm font-semibold text-text-primary mb-4 flex items-center gap-2">
-            <Zap size={16} className="text-primary-light" /> 事件（{events.length}）
+            <Zap size={16} className="text-primary-light" /> Events（{events.length}）
           </h3>
           <div className="space-y-3">
-            {events.length === 0 && <p className="text-xs text-text-secondary">暂无</p>}
+            {events.length === 0 && <p className="text-xs text-text-secondary">No data</p>}
             {events.map((e: any) => (
               <div key={e.id} className="p-3 rounded-lg bg-bg-dark border border-border/60">
                 <div className="flex items-center justify-between gap-2">
@@ -206,10 +206,10 @@ export default function Intelligence() {
 
         <Card delay={0.3}>
           <h3 className="text-sm font-semibold text-text-primary mb-4 flex items-center gap-2">
-            <AlertTriangle size={16} className="text-amber-400" /> 预警信号（{signals.length}）
+            <AlertTriangle size={16} className="text-amber-400" /> Signals（{signals.length}）
           </h3>
           <div className="space-y-3">
-            {signals.length === 0 && <p className="text-xs text-text-secondary">暂无</p>}
+            {signals.length === 0 && <p className="text-xs text-text-secondary">No data</p>}
             {signals.map((s: any) => (
               <div
                 key={s.id}
@@ -238,10 +238,10 @@ export default function Intelligence() {
       {/* 证据（含来源） */}
       <Card delay={0.35}>
         <h3 className="text-sm font-semibold text-text-primary mb-4 flex items-center gap-2">
-          <FileCheck size={16} className="text-primary-light" /> 证据与来源（{evidence.length}）
+          <FileCheck size={16} className="text-primary-light" /> Evidence & sources（{evidence.length}）
         </h3>
         <div className="space-y-3">
-          {evidence.length === 0 && <p className="text-xs text-text-secondary">暂无</p>}
+          {evidence.length === 0 && <p className="text-xs text-text-secondary">No data</p>}
           {evidence.map((ev: any) => {
             const src = sourceById(ev.source_id)
             return (
@@ -251,12 +251,12 @@ export default function Intelligence() {
                   <Badge>{ev.evidence_type}</Badge>
                 </div>
                 <p className="text-xs text-text-secondary mt-1">
-                  支撑 {ev.supports_type}#{ev.supports_id}
+                  Supports {ev.supports_type}#{ev.supports_id}
                   {ev.content_or_ref && <> · {ev.content_or_ref}</>}
                 </p>
                 {src && (
                   <p className="text-xs text-text-secondary mt-1">
-                    来源：{src.name}（{src.source_type} · 可靠性
+                    Source: {src.name}（{src.source_type} · Reliability
                     <span className={src.reliability === '高' ? 'text-emerald-600' : src.reliability === '中' ? 'text-amber-600' : 'text-red-600'}> {src.reliability}</span>）
                   </p>
                 )}
@@ -266,37 +266,37 @@ export default function Intelligence() {
         </div>
       </Card>
 
-      {/* 风险评估 */}
+      {/* Risk assessments */}
       <Card delay={0.4}>
         <h3 className="text-sm font-semibold text-text-primary mb-4 flex items-center gap-2">
-          <ShieldAlert size={16} className="text-primary-light" /> 风险评估（{risk_assessments.length}）
+          <ShieldAlert size={16} className="text-primary-light" /> Risk assessments（{risk_assessments.length}）
         </h3>
         <div className="space-y-3">
-          {risk_assessments.length === 0 && <p className="text-xs text-text-secondary">暂无</p>}
+          {risk_assessments.length === 0 && <p className="text-xs text-text-secondary">No data</p>}
           {risk_assessments.map((ra: any) => (
             <div key={ra.id} className="p-3 rounded-lg bg-bg-dark border border-border/60">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-sm font-medium text-text-primary">{ra.risk_category}</span>
                 <div className="flex items-center gap-2">
                   <Badge variant={levelVariant(ra.severity)}>{ra.severity}</Badge>
-                  <Badge variant={levelVariant(ra.confidence)}>置信 {ra.confidence}</Badge>
+                  <Badge variant={levelVariant(ra.confidence)}>Confidence {ra.confidence}</Badge>
                   <Badge>{ra.status}</Badge>
                 </div>
               </div>
               <p className="text-xs text-text-secondary mt-1.5">{ra.rationale}</p>
-              <p className="text-xs text-text-secondary/70 mt-1">评估时间：{fmtTime(ra.assessed_at)}</p>
+              <p className="text-xs text-text-secondary/70 mt-1">Assessed: {fmtTime(ra.assessed_at)}</p>
             </div>
           ))}
         </div>
       </Card>
 
-      {/* 时间线 */}
+      {/* Timeline */}
       <Card delay={0.45}>
         <h3 className="text-sm font-semibold text-text-primary mb-4 flex items-center gap-2">
-          <Clock size={16} className="text-primary-light" /> 时间线（{timeline.length}）
+          <Clock size={16} className="text-primary-light" /> Timeline（{timeline.length}）
         </h3>
         <div className="relative pl-4 border-l border-border space-y-4">
-          {timeline.length === 0 && <p className="text-xs text-text-secondary">暂无</p>}
+          {timeline.length === 0 && <p className="text-xs text-text-secondary">No data</p>}
           {timeline.map((t: any) => (
             <div key={t.id} className="relative">
               <span className="absolute -left-[21px] top-1.5 w-2.5 h-2.5 rounded-full bg-primary border-2 border-bg-card" />
@@ -314,7 +314,7 @@ export default function Intelligence() {
       {/* 底部提示 */}
       <p className="text-xs text-text-secondary flex items-center gap-1.5">
         <Search size={12} />
-        以上图景由 /property/{propertyId}/profile 实时装配，节点增删后刷新即见。
+        This picture is assembled live from /property/{propertyId}/profile — refresh after any change.
       </p>
     </div>
   )

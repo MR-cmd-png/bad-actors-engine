@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { useAuth } from '../api/auth'
 import { useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
@@ -41,7 +41,7 @@ export default function Login() {
             </div>
             <h1 className="text-[22px] leading-none font-extrabold tracking-wide text-text-primary">ANABASED</h1>
             <p className="text-[11px] font-bold tracking-[0.22em] text-primary mt-1.5">BAD ACTORS ENGINE</p>
-            <p className="text-sm text-text-secondary mt-4">登录尽调情报工作台</p>
+            <p className="text-sm text-text-secondary mt-4">Sign in to the Due-Diligence Intelligence Workbench</p>
           </div>
 
           {error && (
@@ -63,7 +63,7 @@ export default function Login() {
                 onChange={(e) => setUsername(e.target.value)}
                 required
                 className="w-full px-4 py-3 bg-bg-dark border border-border rounded-lg text-text-primary placeholder-text-secondary/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all"
-                placeholder="请输入用户名"
+                placeholder="Enter your username"
               />
             </div>
 
@@ -76,7 +76,7 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="w-full px-4 py-3 bg-bg-dark border border-border rounded-lg text-text-primary placeholder-text-secondary/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all pr-12"
-                  placeholder="请输入密码"
+                  placeholder="Enter your password"
                 />
                 <button
                   type="button"
@@ -96,7 +96,7 @@ export default function Login() {
               {loading ? (
                 <Loader2 size={20} className="animate-spin" />
               ) : (
-                '登 录'
+                'Sign in'
               )}
             </button>
           </form>
@@ -104,7 +104,7 @@ export default function Login() {
 
         <div className="mt-4 text-center">
           <Link to="/" className="text-sm text-slate-400 hover:text-white transition-colors">
-            ← 返回首页
+            ← Back to landing
           </Link>
         </div>
       </motion.div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getDashboardOverview } from '../api'
 import Card from '../components/Card'
@@ -12,7 +12,7 @@ import {
   ResponsiveContainer, PieChart, Pie, Cell,
 } from 'recharts'
 
-// ANABASED 工作台（对照参考稿）：Hero 横幅 + 统计卡 + 三色趋势 + 环形分布 + 最近事件 + 右栏预警/动态 + CTA
+// ANABASED 工作台（对照参考稿）：Hero 横幅 + 统计卡 + 三色趋势 + 环形分布 + Recent events + 右栏预警/动态 + CTA
 const HERO_IMG =
   'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dramatic%20coastal%20cliff%20at%20dusk%2C%20dark%20blue%20ocean%20waves%20crashing%20on%20rocks%2C%20moody%20cinematic%20wide%20seascape%2C%20deep%20navy%20with%20amber%20sunset%20glow&image_size=landscape_16_9'
 
@@ -40,12 +40,12 @@ export default function Dashboard() {
         setLoading(false)
       })
       .catch((e: any) => {
-        setError(e.message || '加载概览失败')
+        setError(e.message || 'Failed to load overview')
         setLoading(false)
       })
   }, [])
 
-  if (loading) return <div className="text-center py-24 text-text-secondary">加载概览中...</div>
+  if (loading) return <div className="text-center py-24 text-text-secondary">Loading overview...</div>
   if (error) return <div className="text-center py-24 text-red-600">{error}</div>
 
   const dist = data.severity_distribution || {}
@@ -56,12 +56,12 @@ export default function Dashboard() {
     .filter(([, v]) => (v as number) > 0)
     .map(([name, value]) => ({ name, value }))
 
-  // 统计卡（全部真实数值）
+  // 统计卡（View all真实数值）
   const stats = [
-    { label: '试点物业', value: data.property_count, icon: Building2, tint: 'bg-primary/10 text-primary' },
-    { label: '进行中调查', value: data.ongoing_investigation_count, icon: FolderSearch, tint: 'bg-emerald-50 text-emerald-600' },
-    { label: '待核实信号', value: data.pending_signal_count, icon: AlertTriangle, tint: 'bg-amber-50 text-amber-600' },
-    { label: '高/极高评估', value: highCount, icon: ShieldAlert, tint: 'bg-red-50 text-red-600' },
+    { label: 'Properties', value: data.property_count, icon: Building2, tint: 'bg-primary/10 text-primary' },
+    { label: 'Open investigations', value: data.ongoing_investigation_count, icon: FolderSearch, tint: 'bg-emerald-50 text-emerald-600' },
+    { label: 'Pending signals', value: data.pending_signal_count, icon: AlertTriangle, tint: 'bg-amber-50 text-amber-600' },
+    { label: 'High/Critical assessments', value: highCount, icon: ShieldAlert, tint: 'bg-red-50 text-red-600' },
   ]
 
   return (
@@ -73,17 +73,17 @@ export default function Dashboard() {
         <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 w-full p-7 lg:p-9">
           <div>
             <h2 className="text-2xl lg:text-[32px] leading-tight font-extrabold text-white tracking-tight">
-              在问题到来之前，先看见它。
+              Spot problems before they arrive.
             </h2>
             <p className="text-sm text-slate-300 mt-2">
-              更聪明的筛查。更安全的资产。更稳健的收益。
+              Smarter screening. Safer assets. Stronger returns.
             </p>
           </div>
           <div className="flex items-center gap-0 divide-x divide-white/15">
             {[
-              { icon: Target, l1: '识别', l2: 'RISK' },
-              { icon: ShieldCheck, l1: '预防', l2: 'ISSUES' },
-              { icon: Eye, l1: '守护', l2: 'BUSINESS' },
+              { icon: Target, l1: 'Identify', l2: 'RISK' },
+              { icon: ShieldCheck, l1: 'Prevent', l2: 'ISSUES' },
+              { icon: Eye, l1: 'Protect', l2: 'BUSINESS' },
             ].map((f) => (
               <div key={f.l2} className="px-4 lg:px-6 flex flex-col items-center text-center first:pl-0 last:pr-0">
                 <f.icon size={26} className="text-white mb-2" />
@@ -117,7 +117,7 @@ export default function Dashboard() {
         {/* 近30天事件风险趋势 */}
         <Card className="xl:col-span-2" delay={0.15}>
           <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-            <h3 className="text-base font-bold text-text-primary">事件风险趋势（近 30 天）</h3>
+            <h3 className="text-base font-bold text-text-primary">Event risk trend (last 30 days)</h3>
             <div className="flex items-center gap-4 text-xs text-text-secondary">
               <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-600" />低</span>
               <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-500" />中</span>
@@ -125,7 +125,7 @@ export default function Dashboard() {
             </div>
           </div>
           {trendData.length === 0 ? (
-            <div className="text-center py-16 text-text-secondary text-sm">暂无事件数据</div>
+            <div className="text-center py-16 text-text-secondary text-sm">No event data yet</div>
           ) : (
             <ResponsiveContainer width="100%" height={250}>
               <AreaChart data={trendData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
@@ -158,11 +158,11 @@ export default function Dashboard() {
           )}
         </Card>
 
-        {/* 风险评估分布（环形 + 中心总数） */}
+        {/* Risk assessment distribution（环形 + 中心总数） */}
         <Card delay={0.2}>
-          <h3 className="text-base font-bold text-text-primary mb-2">风险评估分布</h3>
+          <h3 className="text-base font-bold text-text-primary mb-2">Risk assessment distribution</h3>
           {pieData.length === 0 ? (
-            <div className="text-center py-16 text-text-secondary text-sm">暂无风险评估数据</div>
+            <div className="text-center py-16 text-text-secondary text-sm">No assessment data yet</div>
           ) : (
             <>
               <div className="relative">
@@ -187,7 +187,7 @@ export default function Dashboard() {
                 </ResponsiveContainer>
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                   <p className="text-3xl font-extrabold text-text-primary">{totalAssessments}</p>
-                  <p className="text-xs text-text-secondary">风险评估</p>
+                  <p className="text-xs text-text-secondary">Risk assessments</p>
                 </div>
               </div>
               <div className="space-y-2 mt-3">
@@ -207,27 +207,27 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      {/* ===================== 最近事件 + 右栏 ===================== */}
+      {/* ===================== Recent events + 右栏 ===================== */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
-        {/* 最近事件表 */}
+        {/* Recent events表 */}
         <Card className="xl:col-span-2" hover={false} delay={0.25}>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-bold text-text-primary">最近事件</h3>
+            <h3 className="text-base font-bold text-text-primary">Recent events</h3>
             <button
               onClick={() => navigate('/events')}
               className="text-xs font-semibold text-primary hover:text-primary-light flex items-center gap-1"
             >
-              查看全部 <ArrowRight size={13} />
+              View all <ArrowRight size={13} />
             </button>
           </div>
           {(data.recent_events || []).length === 0 ? (
-            <div className="text-center py-14 text-text-secondary text-sm">暂无事件</div>
+            <div className="text-center py-14 text-text-secondary text-sm">No events yet</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-border">
-                    {['日期', '事件', '物业', '风险等级', '状态'].map((h) => (
+                    {['Date', 'Event', 'Property', 'Risk', 'Status'].map((h) => (
                       <th key={h} className="text-left text-[11px] font-semibold text-text-secondary py-2.5 px-3 whitespace-nowrap">
                         {h}
                       </th>
@@ -250,21 +250,21 @@ export default function Dashboard() {
           )}
         </Card>
 
-        {/* 右栏：风险预警 + 系统动态 */}
+        {/* 右栏：风险预警 + System activity */}
         <div className="space-y-5">
           <Card hover={false} delay={0.3}>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-base font-bold text-text-primary">最近风险预警</h3>
+              <h3 className="text-base font-bold text-text-primary">Recent risk alerts</h3>
               <button
                 onClick={() => navigate('/signals')}
                 className="text-xs font-semibold text-primary hover:text-primary-light flex items-center gap-1"
               >
-                全部 <ArrowRight size={13} />
+                View all <ArrowRight size={13} />
               </button>
             </div>
             <div className="space-y-1">
               {(data.recent_signals || []).length === 0 && (
-                <p className="text-center py-8 text-text-secondary text-sm">暂无预警</p>
+                <p className="text-center py-8 text-text-secondary text-sm">No alerts yet</p>
               )}
               {(data.recent_signals || []).map((s: any) => (
                 <button
@@ -275,7 +275,7 @@ export default function Dashboard() {
                   <span className={`w-1 h-10 rounded-full shrink-0 ${s.importance === '高' ? 'bg-red-600' : s.importance === '中' ? 'bg-amber-500' : 'bg-emerald-500'}`} />
                   <span className="min-w-0 flex-1">
                     <span className={`block text-[11px] font-bold tracking-wider ${s.importance === '高' ? 'text-red-600' : 'text-amber-600'}`}>
-                      {s.importance === '高' ? '高风险' : s.importance === '中' ? '中风险' : '低风险'} · {s.status}
+                      {s.importance === '高' ? 'HIGH RISK' : s.importance === '中' ? 'MEDIUM RISK' : 'LOW RISK'} · {s.status}
                     </span>
                     <span className="block text-sm font-medium text-text-primary truncate">{s.indicator}</span>
                     <span className="block text-[11px] text-text-secondary truncate">{s.property_name ?? '—'}</span>
@@ -289,11 +289,11 @@ export default function Dashboard() {
 
           <Card hover={false} delay={0.35}>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-base font-bold text-text-primary">系统动态</h3>
+              <h3 className="text-base font-bold text-text-primary">System activity</h3>
             </div>
             <div className="space-y-3.5">
               {(data.recent_timeline || []).length === 0 && (
-                <p className="text-center py-6 text-text-secondary text-sm">暂无动态</p>
+                <p className="text-center py-6 text-text-secondary text-sm">No activity yet</p>
               )}
               {(data.recent_timeline || []).map((t: any) => {
                 const Icon = ENTRY_ICONS[t.entry_type] || Flag
@@ -322,9 +322,9 @@ export default function Dashboard() {
             <ShieldCheck size={22} className="text-white" />
           </span>
           <div>
-            <p className="text-base font-bold text-white">让每一条情报都变成保护。</p>
+            <p className="text-base font-bold text-white">Turn every insight into protection.</p>
             <p className="text-xs text-slate-400 mt-1">
-              ANABASED Bad Actors Engine 把行为人、关系、事件与证据拼成一幅经得起推敲的情报图景。
+              ANABASED Bad Actors Engine stitches actors, relationships, events and evidence into a defensible intelligence picture.
             </p>
           </div>
         </div>
@@ -333,7 +333,7 @@ export default function Dashboard() {
           className="flex items-center gap-2 px-5 py-3 bg-primary hover:bg-primary-dark text-white text-sm font-semibold rounded-lg transition-colors shrink-0 shadow-sm"
         >
           <ShieldCheck size={16} />
-          进入物业情报
+          Open Property Intelligence
         </button>
       </div>
     </div>

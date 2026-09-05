@@ -1,36 +1,40 @@
-import CrudPage from '../components/CrudPage'
+﻿import CrudPage from '../components/CrudPage'
 import Badge from '../components/Badge'
-import { listEvents, createEvent } from '../api'
+import { eventApi } from '../api'
+import { EVENT_CATEGORIES, SEVERITY, SIGNAL_STATUS, t } from '../api/enums'
 
-// 事件管理：指控 / 纠纷 / 监管 / 诉讼 / 可疑交易（创建后自动上时间线）
+const sevVariant = (v: any) => v === '极高' || v === '高' ? 'high' : v === '中' ? 'medium' : v === '低' ? 'low' : 'default'
+
 export default function Events() {
+  const catOptions = ['指控', '合同纠纷', '监管处罚', '诉讼', '仲裁', '可疑交易', '投诉', '其他']
+  const sevOptions = ['低', '中', '高']
+  const statusOptions = ['进行中', '已确认', '已解决', '已关闭']
   return (
     <CrudPage
-      title="事件"
-      description="指控 / 合同纠纷 / 监管处罚 / 诉讼 / 可疑交易等关键事件"
-      fetchList={listEvents}
-      createItem={createEvent}
+      title="Events"
+      description="Incidents, allegations, disputes, suspicious activity"
+      fetchList={eventApi.list}
+      createItem={eventApi.create}
+      updateItem={eventApi.update}
+      deleteItem={eventApi.remove}
       filterByProperty
       fields={[
-        { key: 'property_id', label: '所属物业 ID', type: 'number', required: true },
-        { key: 'title', label: '事件标题', required: true },
-        { key: 'event_category', label: '事件类别', type: 'select', options: ['指控', '合同纠纷', '监管处罚', '诉讼', '仲裁', '可疑交易', '投诉', '其他'], required: true },
-        { key: 'severity', label: '严重程度', type: 'select', options: ['低', '中', '高'] },
-        { key: 'status', label: '状态', type: 'select', options: ['进行中', '已解决', '已了结'] },
-        { key: 'actor_id', label: '关联行为人 ID（可空）', type: 'number' },
-        { key: 'company_id', label: '关联公司 ID（可空）', type: 'number' },
-        { key: 'occurred_at', label: '发生时间（可空，ISO 格式）', placeholder: '2025-06-30T10:00:00' },
-        { key: 'description', label: '描述', type: 'textarea' },
+        { key: 'property_id', label: 'Property ID', type: 'number', required: true },
+        { key: 'title', label: 'Title', required: true },
+        { key: 'event_category', label: 'Category', type: 'select', options: catOptions, required: true },
+        { key: 'severity', label: 'Severity', type: 'select', options: sevOptions, required: true },
+        { key: 'status', label: 'Status', type: 'select', options: statusOptions, required: true },
+        { key: 'actor_id', label: 'Actor ID', type: 'number' },
+        { key: 'company_id', label: 'Company ID', type: 'number' },
+        { key: 'description', label: 'Description', type: 'textarea' },
       ]}
       columns={[
         { key: 'id', label: 'ID' },
-        { key: 'title', label: '标题', render: (r) => <span className="font-medium text-text-primary">{r.title}</span> },
-        { key: 'event_category', label: '类别' },
-        { key: 'severity', label: '严重度', render: (r) => <Badge variant={r.severity === '高' ? 'high' : r.severity === '中' ? 'medium' : 'low'}>{r.severity}</Badge> },
-        { key: 'status', label: '状态' },
-        { key: 'occurred_at', label: '发生时间' },
-        { key: 'actor_id', label: '行为人' },
-        { key: 'company_id', label: '公司' },
+        { key: 'title', label: 'Title', render: (r) => <span className="font-medium text-text-primary">{r.title}</span> },
+        { key: 'event_category', label: 'Category', render: (r) => <Badge>{t(r.event_category, EVENT_CATEGORIES)}</Badge> },
+        { key: 'severity', label: 'Severity', render: (r) => <Badge variant={sevVariant(r.severity)}>{t(r.severity, SEVERITY)}</Badge> },
+        { key: 'status', label: 'Status', render: (r) => <Badge>{t(r.status, SIGNAL_STATUS)}</Badge> },
+        { key: 'occurred_at', label: 'Occurred' },
       ]}
     />
   )

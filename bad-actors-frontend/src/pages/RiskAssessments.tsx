@@ -1,37 +1,40 @@
-import CrudPage from '../components/CrudPage'
+﻿import CrudPage from '../components/CrudPage'
 import Badge from '../components/Badge'
-import { listRiskAssessments, createRiskAssessment } from '../api'
+import { riskAssessmentApi } from '../api'
+import { RISK_CATEGORIES, SEVERITY, CONFIDENCE, RISK_STATUS, t } from '../api/enums'
 
-// 风险评估管理：分析师撰写（评估人由后端按登录态注入；创建后自动上时间线）
+const sevVariant = (v: any) => v === '极高' ? 'high' : v === '高' ? 'high' : v === '中' ? 'medium' : 'low'
+
 export default function RiskAssessments() {
+  const catOptions = ['合规', '法律', '财务', '运营', '声誉', '关联交易', '欺诈', '其他']
+  const sevOptions = ['低', '中', '高', '极高']
+  const confOptions = ['高', '中', '低']
+  const statusOptions = ['初评', '复核中', '已确认', '已缓解', '已关闭']
   return (
     <CrudPage
-      title="风险评估"
-      description="合规 / 法律 / 财务 / 运营 / 声誉 / 关联交易 / 欺诈风险的 analyst 判断"
-      fetchList={listRiskAssessments}
-      createItem={createRiskAssessment}
+      title="Risk Assessments"
+      description="Analyst-written risk evaluations (not auto-scoring)"
+      fetchList={riskAssessmentApi.list}
+      createItem={riskAssessmentApi.create}
+      updateItem={riskAssessmentApi.update}
+      deleteItem={riskAssessmentApi.remove}
       filterByProperty
       fields={[
-        { key: 'property_id', label: '所属物业 ID', type: 'number', required: true },
-        { key: 'risk_category', label: '风险类别', type: 'select', options: ['合规', '法律', '财务', '运营', '声誉', '关联交易', '欺诈', '其他'], required: true },
-        { key: 'severity', label: '严重度', type: 'select', options: ['低', '中', '高', '极高'] },
-        { key: 'confidence', label: '置信度', type: 'select', options: ['高', '中', '低'] },
-        { key: 'status', label: '状态', type: 'select', options: ['初评', '复核中', '已确认', '已缓解', '已关闭'] },
-        { key: 'actor_id', label: '针对行为人 ID（可空）', type: 'number' },
-        { key: 'rationale', label: '理由/论证', type: 'textarea', required: true },
+        { key: 'property_id', label: 'Property ID', type: 'number', required: true },
+        { key: 'risk_category', label: 'Category', type: 'select', options: catOptions, required: true },
+        { key: 'severity', label: 'Severity', type: 'select', options: sevOptions, required: true },
+        { key: 'confidence', label: 'Confidence', type: 'select', options: confOptions, required: true },
+        { key: 'status', label: 'Status', type: 'select', options: statusOptions, required: true },
+        { key: 'actor_id', label: 'Actor ID', type: 'number' },
+        { key: 'rationale', label: 'Rationale', type: 'textarea', required: true },
       ]}
       columns={[
         { key: 'id', label: 'ID' },
-        { key: 'risk_category', label: '类别', render: (r) => <span className="font-medium text-text-primary">{r.risk_category}</span> },
-        {
-          key: 'severity', label: '严重度',
-          render: (r) => <Badge variant={r.severity === '极高' || r.severity === '高' ? 'high' : r.severity === '中' ? 'medium' : 'low'}>{r.severity}</Badge>,
-        },
-        { key: 'confidence', label: '置信度' },
-        { key: 'status', label: '状态' },
-        { key: 'rationale', label: '论证', render: (r) => <span className="text-xs line-clamp-2">{r.rationale}</span> },
-        { key: 'assessed_by', label: '评估人' },
-        { key: 'assessed_at', label: '评估时间' },
+        { key: 'risk_category', label: 'Category', render: (r) => <Badge>{t(r.risk_category, RISK_CATEGORIES)}</Badge> },
+        { key: 'severity', label: 'Severity', render: (r) => <Badge variant={sevVariant(r.severity)}>{t(r.severity, SEVERITY)}</Badge> },
+        { key: 'confidence', label: 'Conf.', render: (r) => <Badge>{t(r.confidence, CONFIDENCE)}</Badge> },
+        { key: 'status', label: 'Status', render: (r) => <Badge>{t(r.status, RISK_STATUS)}</Badge> },
+        { key: 'assessed_at', label: 'Assessed' },
       ]}
     />
   )

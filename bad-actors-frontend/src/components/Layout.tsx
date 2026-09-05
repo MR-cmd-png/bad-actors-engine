@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
@@ -28,19 +28,19 @@ import { listProperties, getDashboardOverview } from '../api'
 const SIDEBAR_IMG =
   'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=rocky%20coastline%20aerial%20view%20at%20dusk%2C%20dark%20navy%20ocean%20waves%2C%20moody%20cinematic%20lighting%2C%20deep%20blue%20tones&image_size=portrait_4_3'
 
-// 尽调情报工作台导航（读权限全员可用，写权限 admin 专属由接口层把控）
+// Due-diligence intelligence workspace nav (read to all, write gated by API)
 const navItems = [
-  { path: '/dashboard', label: '仪表盘', icon: LayoutDashboard },
-  { path: '/property', label: '物业情报', icon: Building2 },
-  { path: '/actors', label: '行为人', icon: Users },
-  { path: '/companies', label: '公司组织', icon: Building },
-  { path: '/relationships', label: '关系网络', icon: Network },
-  { path: '/events', label: '事件', icon: Zap },
-  { path: '/signals', label: '信号', icon: AlertTriangle },
-  { path: '/sources', label: '信息来源', icon: FileText },
-  { path: '/evidence', label: '证据主张', icon: FileCheck },
-  { path: '/risk-assessments', label: '风险评估', icon: ShieldAlert },
-  { path: '/investigations', label: '调查案件', icon: FolderSearch },
+  { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { path: '/property', label: 'Property Profile', icon: Building2 },
+  { path: '/actors', label: 'Actors', icon: Users },
+  { path: '/companies', label: 'Companies', icon: Building },
+  { path: '/relationships', label: 'Relationships', icon: Network },
+  { path: '/events', label: 'Events', icon: Zap },
+  { path: '/signals', label: 'Signals', icon: AlertTriangle },
+  { path: '/sources', label: 'Sources', icon: FileText },
+  { path: '/evidence', label: 'Evidence', icon: FileCheck },
+  { path: '/risk-assessments', label: 'Risk Assessments', icon: ShieldAlert },
+  { path: '/investigations', label: 'Investigations', icon: FolderSearch },
 ]
 
 export default function Layout() {
@@ -179,7 +179,7 @@ export default function Layout() {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="搜索物业名称…"
+              placeholder="Search properties..."
               className="w-full pl-10 pr-4 py-2.5 bg-bg-dark border border-transparent rounded-full text-sm text-text-primary placeholder-text-secondary focus:outline-none focus:border-primary focus:bg-white transition-all"
             />
             {results.length > 0 && (
@@ -208,7 +208,7 @@ export default function Layout() {
               >
                 <Building2 size={15} className="text-primary" />
                 <span className="max-w-[150px] truncate font-medium text-text-primary">
-                  {currentProperty?.name ?? '选择物业'}
+                  {currentProperty?.name ?? 'Select property'}
                 </span>
                 <ChevronDown size={14} className="text-text-secondary" />
               </button>
@@ -218,7 +218,7 @@ export default function Layout() {
                   <div className="absolute right-0 top-full mt-2 w-64 bg-white border border-border rounded-xl shadow-lg overflow-hidden z-20">
                     <div className="max-h-72 overflow-y-auto">
                       {properties.length === 0 && (
-                        <p className="px-4 py-3 text-sm text-text-secondary">暂无物业</p>
+                        <p className="px-4 py-3 text-sm text-text-secondary">No properties yet</p>
                       )}
                       {properties.map((p) => (
                         <button
@@ -241,7 +241,7 @@ export default function Layout() {
             <button
               onClick={() => navigate('/signals')}
               className="relative p-2.5 rounded-lg hover:bg-bg-dark transition-colors"
-              title="待核实信号"
+              title="Pending signals"
             >
               <Bell size={18} className="text-text-primary" />
               {pendingSignals > 0 && (
@@ -279,7 +279,7 @@ export default function Layout() {
                       className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
                     >
                       <LogOut size={15} />
-                      退出登录
+                      Sign out
                     </button>
                   </div>
                 </>
