@@ -4,7 +4,7 @@ import { investigationApi } from '../api'
 import { INVESTIGATION_STATUS, t } from '../api/enums'
 
 export default function Investigations() {
-  const statusOptions = ['进行Medium', 'Paused', 'Closed']
+  const statusOptions = ['In Progress', 'Paused', 'Closed']
   return (
     <CrudPage
       title="Investigations"

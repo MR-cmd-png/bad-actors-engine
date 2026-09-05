@@ -9,7 +9,7 @@ export default function RiskAssessments() {
   const catOptions = ['Compliance', 'Legal', 'Financial', 'Operational', 'Reputational', 'Related Party Transaction', 'Fraud', 'Other']
   const sevOptions = ['Low', 'Medium', 'High', 'Critical']
   const confOptions = ['High', 'Medium', 'Low']
-  const statusOptions = ['Draft', '复核Medium', 'Confirmed', 'Mitigated', 'Closed']
+  const statusOptions = ['Draft', 'Under Review', 'Confirmed', 'Mitigated', 'Closed']
   return (
     <CrudPage
       title="Risk Assessments"

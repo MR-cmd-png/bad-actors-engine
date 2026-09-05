@@ -1,4 +1,4 @@
-# bad-actors-engine 商业地产尽职调查情报引擎
+﻿# bad-actors-engine 商业地产尽职调查情报引擎
 # Copyright (C) 2026 MR-cmd-png 保留所有著作权利
 # Open Source License: MIT
 # 未经作者许可，禁止去除版权标识、冒充原创进行商业售卖
@@ -164,13 +164,13 @@ async def logout():
 # ===================== Dashboard 概览（真实Data，取代旧 mock/high_risk） =====================
 @app.get("/dashboard/overview", summary="Dashboard - 试点物业情报概览")
 async def dashboard_overview(db: AsyncSession = Depends(get_db), _: models.User = Depends(get_current_user)):
-    # 统计：物业数 / 进行Medium调查 / PendingSignal
+    # 统计：物业数 / In Progress调查 / PendingSignal
     property_count = (await db.execute(
         select(func.count()).select_from(models.PilotProperty)
     )).scalar() or 0
     ongoing_investigation_count = (await db.execute(
         select(func.count()).select_from(models.Investigation)
-        .where(models.Investigation.status == "进行Medium")
+        .where(models.Investigation.status == "In Progress")
     )).scalar() or 0
     pending_signal_count = (await db.execute(
         select(func.count()).select_from(models.Signal)

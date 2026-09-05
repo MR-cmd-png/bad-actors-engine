@@ -1,4 +1,4 @@
-# bad-actors-engine 商业地产尽职调查情报引擎
+﻿# bad-actors-engine 商业地产尽职调查情报引擎
 # Copyright (C) 2026 MR-cmd-png 保留所有著作权利
 # Open Source License: MIT
 # 未经作者许可，禁止去除版权标识、冒充原创进行商业售卖
@@ -39,7 +39,7 @@ NODE_MODELS = {
 async def _ensure_exists(db: AsyncSession, model, row_id: int, label: str):
     row = await db.get(model, row_id)
     if not row:
-        raise HTTPException(status_code=400, detail=f"关联{label}不存在")
+        raise HTTPException(status_code=400, detail=f"Referenced {label} does not exist")
 
 
 async def _paged_list(db: AsyncSession, stmt, page: int, page_size: int):
@@ -109,9 +109,9 @@ class RelationshipCreate(BaseModel):
 class EventCreate(BaseModel):
     property_id: int
     title: str
-    event_category: Literal["Allegation", "Contract Dispute", "Regulatory Penalty", "诉讼", "Arbitration", "Suspicious Transaction", "Complaint", "Other"]
+    event_category: Literal["Allegation", "Contract Dispute", "Regulatory Penalty", "Lawsuit", "Arbitration", "Suspicious Transaction", "Complaint", "Other"]
     severity: Literal["Low", "Medium", "High"] = "Medium"
-    status: str = "进行Medium"
+    status: str = "In Progress"
     actor_id: Optional[int] = None
     company_id: Optional[int] = None
     description: Optional[str] = None
@@ -156,7 +156,7 @@ class RiskAssessmentCreate(BaseModel):
     severity: Literal["Low", "Medium", "High", "Critical"] = "Medium"
     confidence: Literal["High", "Medium", "Low"] = "Medium"
     rationale: str
-    status: Literal["Draft", "复核Medium", "Confirmed", "Mitigated", "Closed"] = "Draft"
+    status: Literal["Draft", "Under Review", "Confirmed", "Mitigated", "Closed"] = "Draft"
     actor_id: Optional[int] = None
 
 
@@ -165,7 +165,7 @@ class InvestigationCreate(BaseModel):
     title: str
     case_no: Optional[str] = None
     summary: Optional[str] = None
-    status: Literal["进行Medium", "Paused", "Closed"] = "进行Medium"
+    status: Literal["In Progress", "Paused", "Closed"] = "In Progress"
 
 
 class TimelineCreate(BaseModel):
@@ -209,7 +209,7 @@ class RelationshipUpdate(BaseModel):
 
 class EventUpdate(BaseModel):
     title: Optional[str] = None
-    event_category: Optional[Literal["Allegation", "Contract Dispute", "Regulatory Penalty", "诉讼", "Arbitration", "Suspicious Transaction", "Complaint", "Other"]] = None
+    event_category: Optional[Literal["Allegation", "Contract Dispute", "Regulatory Penalty", "Lawsuit", "Arbitration", "Suspicious Transaction", "Complaint", "Other"]] = None
     severity: Optional[Literal["Low", "Medium", "High"]] = None
     status: Optional[str] = None
     actor_id: Optional[int] = None
@@ -254,7 +254,7 @@ class RiskAssessmentUpdate(BaseModel):
     severity: Optional[Literal["Low", "Medium", "High", "Critical"]] = None
     confidence: Optional[Literal["High", "Medium", "Low"]] = None
     rationale: Optional[str] = None
-    status: Optional[Literal["Draft", "复核Medium", "Confirmed", "Mitigated", "Closed"]] = None
+    status: Optional[Literal["Draft", "Under Review", "Confirmed", "Mitigated", "Closed"]] = None
     actor_id: Optional[int] = None
 
 
@@ -262,7 +262,7 @@ class InvestigationUpdate(BaseModel):
     title: Optional[str] = None
     case_no: Optional[str] = None
     summary: Optional[str] = None
-    status: Optional[Literal["进行Medium", "Paused", "Closed"]] = None
+    status: Optional[Literal["In Progress", "Paused", "Closed"]] = None
     closed_at: Optional[datetime] = None
 
 

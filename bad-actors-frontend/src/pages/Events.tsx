@@ -6,9 +6,9 @@ import { EVENT_CATEGORIES, SEVERITY, SIGNAL_STATUS, t } from '../api/enums'
 const sevVariant = (v: any) => v === 'Critical' || v === 'High' ? 'high' : v === 'Medium' ? 'medium' : v === 'Low' ? 'low' : 'default'
 
 export default function Events() {
-  const catOptions = ['Allegation', 'Contract Dispute', 'Regulatory Penalty', '诉讼', 'Arbitration', 'Suspicious Transaction', 'Complaint', 'Other']
+  const catOptions = ['Allegation', 'Contract Dispute', 'Regulatory Penalty', 'Lawsuit', 'Arbitration', 'Suspicious Transaction', 'Complaint', 'Other']
   const sevOptions = ['Low', 'Medium', 'High']
-  const statusOptions = ['进行Medium', 'Confirmed', 'Resolved', 'Closed']
+  const statusOptions = ['In Progress', 'Confirmed', 'Resolved', 'Closed']
   return (
     <CrudPage
       title="Events"

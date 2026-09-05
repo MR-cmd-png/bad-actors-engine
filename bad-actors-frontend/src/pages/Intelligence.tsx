@@ -10,7 +10,7 @@ import { useProperties } from '../api/propertyContext'
 
 // severity / confidence / importance 统一映射到 Badge 配色（极高按最高警示色处理）
 const levelVariant = (v?: string | null) =>
-  v === '极高' || v === '高' ? 'high' : v === '中' ? 'medium' : v === '低' ? 'low' : 'default'
+  v === 'Critical' || v === 'High' ? 'high' : v === 'Medium' ? 'medium' : v === 'Low' ? 'low' : 'default'
 
 const fmtTime = (v: any) => (typeof v === 'string' ? v.slice(0, 19).replace('T', ' ') : '—')
 
@@ -214,14 +214,14 @@ export default function Intelligence() {
               <div
                 key={s.id}
                 className={`p-3 rounded-lg border ${
-                  s.importance === '高'
+                  s.importance === 'High'
                     ? 'bg-red-500/5 border-red-500/30'
                     : 'bg-bg-dark border-border/60'
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-sm font-medium text-text-primary flex items-center gap-1.5">
-                    {s.importance === '高' && <AlertTriangle size={13} className="text-red-600 shrink-0" />}
+                    {s.importance === 'High' && <AlertTriangle size={13} className="text-red-600 shrink-0" />}
                     {s.indicator}
                   </span>
                   <Badge variant={levelVariant(s.importance)}>{s.importance}</Badge>
@@ -257,7 +257,7 @@ export default function Intelligence() {
                 {src && (
                   <p className="text-xs text-text-secondary mt-1">
                     Source: {src.name}（{src.source_type} · Reliability
-                    <span className={src.reliability === '高' ? 'text-emerald-600' : src.reliability === '中' ? 'text-amber-600' : 'text-red-600'}> {src.reliability}</span>）
+                    <span className={src.reliability === 'High' ? 'text-emerald-600' : src.reliability === 'Medium' ? 'text-amber-600' : 'text-red-600'}> {src.reliability}</span>）
                   </p>
                 )}
               </div>
@@ -302,7 +302,7 @@ export default function Intelligence() {
               <span className="absolute -left-[21px] top-1.5 w-2.5 h-2.5 rounded-full bg-primary border-2 border-bg-card" />
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-xs font-mono text-text-secondary">{fmtTime(t.occurred_at)}</span>
-                <Badge variant={t.entry_type === '信号' ? 'high' : 'default'}>{t.entry_type}</Badge>
+                <Badge variant={t.entry_type === 'Signal' ? 'high' : 'default'}>{t.entry_type}</Badge>
                 <span className="text-sm font-medium text-text-primary">{t.title}</span>
               </div>
               {t.description && <p className="text-xs text-text-secondary mt-1 ml-1">{t.description}</p>}

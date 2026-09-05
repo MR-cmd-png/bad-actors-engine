@@ -17,15 +17,15 @@ const HERO_IMG =
   'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dramatic%20coastal%20cliff%20at%20dusk%2C%20dark%20blue%20ocean%20waves%20crashing%20on%20rocks%2C%20moody%20cinematic%20wide%20seascape%2C%20deep%20navy%20with%20amber%20sunset%20glow&image_size=landscape_16_9'
 
 const levelVariant = (v?: string | null) =>
-  v === '极高' || v === '高' ? 'high' : v === '中' ? 'medium' : v === '低' ? 'low' : 'default'
+  v === 'Critical' || v === 'High' ? 'high' : v === 'Medium' ? 'medium' : v === 'Low' ? 'low' : 'default'
 
 const fmtTime = (v: any) => (typeof v === 'string' ? v.slice(0, 19).replace('T', ' ') : '—')
 const fmtDay = (v: any) => (typeof v === 'string' ? v.slice(5, 10).replace('T', ' ') : '—')
 
 // 严重度配色（与参考稿 Clean/Medium/High 三色一致）
-const SEV_COLORS: Record<string, string> = { 低: '#16a34a', 中: '#f59e0b', 高: '#dc2626', 极高: '#9f1239' }
+const SEV_COLORS: Record<string, string> = { Low: '#16a34a', Medium: '#f59e0b', High: '#dc2626', Critical: '#9f1239' }
 // 时间线条目图标
-const ENTRY_ICONS: Record<string, any> = { 事件: Zap, 信号: AlertTriangle, 证据: FileCheck, 评估: ShieldAlert, 里程碑: Flag }
+const ENTRY_ICONS: Record<string, any> = { Event: Zap, Signal: AlertTriangle, Evidence: FileCheck, Assessment: ShieldAlert, Milestone: Flag }
 
 export default function Dashboard() {
   const navigate = useNavigate()
@@ -50,7 +50,7 @@ export default function Dashboard() {
 
   const dist = data.severity_distribution || {}
   const totalAssessments = Object.values(dist).reduce((s: number, v: any) => s + (v as number), 0)
-  const highCount = (dist['高'] || 0) + (dist['极高'] || 0)
+  const highCount = (dist['High'] || 0) + (dist['Critical'] || 0)
   const trendData = data.daily_event_counts || []
   const pieData = Object.entries(dist)
     .filter(([, v]) => (v as number) > 0)
@@ -119,9 +119,9 @@ export default function Dashboard() {
           <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
             <h3 className="text-base font-bold text-text-primary">Event risk trend (last 30 days)</h3>
             <div className="flex items-center gap-4 text-xs text-text-secondary">
-              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-600" />低</span>
-              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-500" />中</span>
-              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-red-600" />高</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-600" />Low</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-500" />Medium</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-red-600" />High</span>
             </div>
           </div>
           {trendData.length === 0 ? (
@@ -130,7 +130,7 @@ export default function Dashboard() {
             <ResponsiveContainer width="100%" height={250}>
               <AreaChart data={trendData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
                 <defs>
-                  {(['低', '中', '高'] as const).map((k) => (
+                  {(['Low', 'Medium', 'High'] as const).map((k) => (
                     <linearGradient key={k} id={`grad-${k}`} x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor={SEV_COLORS[k]} stopOpacity={0.25} />
                       <stop offset="95%" stopColor={SEV_COLORS[k]} stopOpacity={0} />
@@ -141,7 +141,7 @@ export default function Dashboard() {
                 <XAxis dataKey="date" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} interval={6} />
                 <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
                 <Tooltip contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: 12 }} />
-                {(['高', '中', '低'] as const).map((k) => (
+                {(['High', 'Medium', 'Low'] as const).map((k) => (
                   <Area
                     key={k}
                     type="monotone"
@@ -272,10 +272,10 @@ export default function Dashboard() {
                   onClick={() => navigate('/signals')}
                   className="w-full flex items-center gap-3 p-2.5 rounded-lg hover:bg-bg-card-hover transition-colors text-left"
                 >
-                  <span className={`w-1 h-10 rounded-full shrink-0 ${s.importance === '高' ? 'bg-red-600' : s.importance === '中' ? 'bg-amber-500' : 'bg-emerald-500'}`} />
+                  <span className={`w-1 h-10 rounded-full shrink-0 ${s.importance === 'High' ? 'bg-red-600' : s.importance === 'Medium' ? 'bg-amber-500' : 'bg-emerald-500'}`} />
                   <span className="min-w-0 flex-1">
-                    <span className={`block text-[11px] font-bold tracking-wider ${s.importance === '高' ? 'text-red-600' : 'text-amber-600'}`}>
-                      {s.importance === '高' ? 'HIGH RISK' : s.importance === '中' ? 'MEDIUM RISK' : 'LOW RISK'} · {s.status}
+                    <span className={`block text-[11px] font-bold tracking-wider ${s.importance === 'High' ? 'text-red-600' : 'text-amber-600'}`}>
+                      {s.importance === 'High' ? 'HIGH RISK' : s.importance === 'Medium' ? 'MEDIUM RISK' : 'LOW RISK'} · {s.status}
                     </span>
                     <span className="block text-sm font-medium text-text-primary truncate">{s.indicator}</span>
                     <span className="block text-[11px] text-text-secondary truncate">{s.property_name ?? '—'}</span>

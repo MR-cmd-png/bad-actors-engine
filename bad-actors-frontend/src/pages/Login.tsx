@@ -56,7 +56,7 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1.5">用户名</label>
+              <label className="block text-sm font-medium text-text-secondary mb-1.5">Username</label>
               <input
                 type="text"
                 value={username}
@@ -68,7 +68,7 @@ export default function Login() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1.5">密码</label>
+              <label className="block text-sm font-medium text-text-secondary mb-1.5">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
