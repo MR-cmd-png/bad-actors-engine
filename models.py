@@ -51,11 +51,13 @@ class Actor(Base):
     __tablename__ = "actors"
     id: Mapped[Big_id] = mapped_column(comment="Actor id")
     property_id: Mapped[int] = mapped_column(ForeignKey("pilot_properties.id"), comment="所属物业")
-    name: Mapped[Str100] = mapped_column(comment="行为人名称")
+    name: Mapped[Str100] = mapped_column(comment="Actor name")
     actor_type: Mapped[Str50] = mapped_column(comment="自然人/法定代表人/负责人/承包商/租户/供应商/前员工/其他")
     role_in_property: Mapped[Optional[str]] = mapped_column(String(255), comment="与物业的角色")
-    contact_info: Mapped[dict] = mapped_column(JSON, default=dict, comment="email/phone 联系方式 JSON")
-    background_notes: Mapped[Optional[str]] = mapped_column(String(1000), comment="背景备注")
+    # 原本 contact_info(JSON) 拆成 email / phone 两独立列，避免前端强制写 JSON
+    email: Mapped[Optional[str]] = mapped_column(String(100), comment="Email")
+    phone: Mapped[Optional[str]] = mapped_column(String(50), comment="Phone number")
+    background_notes: Mapped[Optional[str]] = mapped_column(String(1000), comment="Background notes")
 
 
 # 3) 公司/组织

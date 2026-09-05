@@ -107,37 +107,37 @@ async def main():
         shen = models.Actor(  # CASE-001 正常住客
             property_id=prop.id, name="沈*然", actor_type="自然人",
             role_in_property="散客住客（CASE-001）",
-            contact_info={"email": "shen***@gmail.com"},
+            email="shen***@gmail.com",
             background_notes="低风险正常住客：设备/IP/支付方式均为独立唯一，历史订单无异常",
         )
         chen = models.Actor(  # CASE-002 共享设备
             property_id=prop.id, name="陈*薇", actor_type="租户",
             role_in_property="住客（CASE-002）",
-            contact_info={"phone": "137****2210"},
+            phone="137****2210",
             background_notes="与另外 4 个预订身份共用同一台设备下单",
         )
         liu = models.Actor(  # CASE-003 高频预订
             property_id=prop.id, name="刘*宇", actor_type="租户",
             role_in_property="住客（CASE-003）",
-            contact_info={"phone": "150****8843"},
+            phone="150****8843",
             background_notes="30 天内发起 14 次预订查询，远超正常频次",
         )
         zhao = models.Actor(  # CASE-004 VPN + 高频
             property_id=prop.id, name="赵*航", actor_type="租户",
             role_in_property="住客（CASE-004）",
-            contact_info={"email": "z***@proximail.com"},
+            email="z***@proximail.com",
             background_notes="订单均出自 VPN/代理出口 IP，且预订频次偏高",
         )
         wu = models.Actor(  # CASE-005 合成集群主身份
             property_id=prop.id, name="吴*群", actor_type="其他",
             role_in_property="可疑集群主身份（CASE-005，关联 3 个身份）",
-            contact_info={"email": "w***@maildrop.cn"},
+            email="w***@maildrop.cn",
             background_notes="背后集群重复使用相近身份、设备、IP 与支付指纹，疑似规模化恶意预订",
         )
         sun = models.Actor(  # CASE-006 支付复用
             property_id=prop.id, name="孙*倩", actor_type="租户",
             role_in_property="住客（CASE-006）",
-            contact_info={"phone": "188****3027"},
+            phone="188****3027",
             background_notes="其支付指纹与另外 4 个身份一致，疑似盗用同一支付工具",
         )
         db.add_all([shen, chen, liu, zhao, wu, sun])

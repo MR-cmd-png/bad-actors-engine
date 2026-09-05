@@ -31,6 +31,16 @@ class PilotPropertyCreate(BaseModel):
     description: Optional[str] = None
 
 
+class PilotPropertyUpdate(BaseModel):
+    name: Optional[str] = None
+    address: Optional[str] = None
+    property_type: Optional[Literal["商场", "写字楼", "社区商业", "产业园", "其他"]] = None
+    ownership_or_management: Optional[str] = None
+    status: Optional[str] = None
+    relevant_dates: Optional[dict] = None
+    description: Optional[str] = None
+
+
 async def _get_property_or_404(db: AsyncSession, property_id: int) -> models.PilotProperty:
     prop = await db.get(models.PilotProperty, property_id)
     if not prop:
@@ -78,6 +88,34 @@ async def get_property_detail(
 ):
     prop = await _get_property_or_404(db, property_id)
     return {"code": 0, "data": prop}
+
+
+@router.patch("/property/{property_id}", summary="Update property (partial)")
+async def update_property(
+    property_id: int,
+    data: PilotPropertyUpdate,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    prop = await _get_property_or_404(db, property_id)
+    update_data = data.model_dump(exclude_unset=True)
+    for k, v in update_data.items():
+        setattr(prop, k, v)
+    await db.commit()
+    await db.refresh(prop)
+    return {"code": 0, "data": prop}
+
+
+@router.delete("/property/{property_id}", summary="Delete property")
+async def delete_property(
+    property_id: int,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    prop = await _get_property_or_404(db, property_id)
+    await db.delete(prop)
+    await db.commit()
+    return {"code": 0, "message": "Deleted"}
 
 
 # ===================== 情报图景装配（核心验证端点） =====================

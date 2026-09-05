@@ -81,7 +81,8 @@ class ActorCreate(BaseModel):
     name: str
     actor_type: Literal["自然人", "法定代表人", "负责人", "承包商", "租户", "供应商", "前员工", "其他"]
     role_in_property: Optional[str] = None
-    contact_info: dict = Field(default_factory=dict)
+    email: Optional[str] = None  # 原本 contact_info(JSON) 拆成独立 email / phone
+    phone: Optional[str] = None
     background_notes: Optional[str] = None
 
 
@@ -178,6 +179,119 @@ class TimelineCreate(BaseModel):
     occurred_at: Optional[datetime] = None
 
 
+# ===================== Update Pydantic Models（局部更新，所有字段 Optional） =====================
+from typing import Any as _Any, Dict as _TDict
+
+
+class ActorUpdate(BaseModel):
+    name: Optional[str] = None
+    actor_type: Optional[Literal["自然人", "法定代表人", "负责人", "承包商", "租户", "供应商", "前员工", "其他"]] = None
+    role_in_property: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    background_notes: Optional[str] = None
+
+
+class CompanyUpdate(BaseModel):
+    name: Optional[str] = None
+    org_type: Optional[Literal["公司", "信托", "合伙企业", "社会组织", "其他"]] = None
+    registration_no: Optional[str] = None
+    jurisdiction: Optional[str] = None
+    role: Optional[str] = None
+    notes: Optional[str] = None
+
+
+class RelationshipUpdate(BaseModel):
+    relation_type: Optional[Literal["控股", "任职", "关联交易", "亲属", "代持", "担保", "诉讼对手", "其他"]] = None
+    nature_description: Optional[str] = None
+    confidence: Optional[Literal["高", "中", "低"]] = None
+
+
+class EventUpdate(BaseModel):
+    title: Optional[str] = None
+    event_category: Optional[Literal["指控", "合同纠纷", "监管处罚", "诉讼", "仲裁", "可疑交易", "投诉", "其他"]] = None
+    severity: Optional[Literal["低", "中", "高"]] = None
+    status: Optional[str] = None
+    actor_id: Optional[int] = None
+    company_id: Optional[int] = None
+    description: Optional[str] = None
+    occurred_at: Optional[datetime] = None
+
+
+class SignalUpdate(BaseModel):
+    indicator: Optional[str] = None
+    signal_type: Optional[Literal["预警", "异常", "趋势", "关联红旗", "其他"]] = None
+    importance: Optional[Literal["低", "中", "高"]] = None
+    status: Optional[Literal["待核实", "已确认", "已排除"]] = None
+    event_id: Optional[int] = None
+    description: Optional[str] = None
+    observed_at: Optional[datetime] = None
+
+
+class SourceUpdate(BaseModel):
+    name: Optional[str] = None
+    source_type: Optional[Literal["工商登记", "裁判文书", "新闻", "监管公告", "合同", "访谈", "现场走访", "内部举报", "其他"]] = None
+    reliability: Optional[Literal["高", "中", "低"]] = None
+    reference: Optional[str] = None
+    notes: Optional[str] = None
+    obtained_at: Optional[datetime] = None
+
+
+class EvidenceUpdate(BaseModel):
+    claim: Optional[str] = None
+    evidence_type: Optional[Literal["文件", "陈述", "观察", "数据", "截图", "其他"]] = None
+    source_id: Optional[int] = None
+    supports_type: Optional[Literal["event", "signal", "risk_assessment", "actor", "company"]] = None
+    supports_id: Optional[int] = None
+    content_or_ref: Optional[str] = None
+    property_id: Optional[int] = None
+    reliability_note: Optional[str] = None
+    verified_at: Optional[datetime] = None
+
+
+class RiskAssessmentUpdate(BaseModel):
+    risk_category: Optional[Literal["合规", "法律", "财务", "运营", "声誉", "关联交易", "欺诈", "其他"]] = None
+    severity: Optional[Literal["低", "中", "高", "极高"]] = None
+    confidence: Optional[Literal["高", "中", "低"]] = None
+    rationale: Optional[str] = None
+    status: Optional[Literal["初评", "复核中", "已确认", "已缓解", "已关闭"]] = None
+    actor_id: Optional[int] = None
+
+
+class InvestigationUpdate(BaseModel):
+    title: Optional[str] = None
+    case_no: Optional[str] = None
+    summary: Optional[str] = None
+    status: Optional[Literal["进行中", "暂停", "结案"]] = None
+    closed_at: Optional[datetime] = None
+
+
+class TimelineUpdate(BaseModel):
+    title: Optional[str] = None
+    entry_type: Optional[Literal["事件", "信号", "证据", "评估", "里程碑"]] = None
+    description: Optional[str] = None
+    investigation_id: Optional[int] = None
+    ref_type: Optional[str] = None
+    ref_id: Optional[int] = None
+    occurred_at: Optional[datetime] = None
+
+
+# ===================== PATCH/DELETE 通用工具 =====================
+async def _patch_row(db: AsyncSession, row, data: _TDict[str, _Any]):
+    """把 update_data 中非 None 字段覆盖到 row（局部更新）。"""
+    for k, v in data.items():
+        if v is not None:
+            setattr(row, k, v)
+    await db.commit()
+    await db.refresh(row)
+
+
+async def _delete_row(db: AsyncSession, row):
+    await db.delete(row)
+    await db.commit()
+    return {"code": 0, "message": "Deleted"}
+
+
 # ===================== 行为人 =====================
 @router.post("/actor/create", summary="创建行为人")
 async def create_actor(
@@ -218,6 +332,33 @@ async def get_actor_detail(
     if not actor:
         raise HTTPException(status_code=404, detail="Actor not found")
     return {"code": 0, "data": actor}
+
+
+@router.patch("/actor/{actor_id}", summary="Update Actor (partial)")
+async def update_actor(
+    actor_id: int,
+    data: ActorUpdate,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.Actor, actor_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Actor not found")
+    await _patch_row(db, row, data.model_dump(exclude_unset=True))
+    return {"code": 0, "data": row}
+
+
+@router.delete("/actor/{actor_id}", summary="Delete Actor")
+async def delete_actor(
+    actor_id: int,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.Actor, actor_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Actor not found")
+    return await _delete_row(db, row)
+
 
 
 # ===================== 公司/组织 =====================
@@ -263,6 +404,33 @@ async def get_company_detail(
     return {"code": 0, "data": company}
 
 
+@router.patch("/company/{company_id}", summary="Update Company (partial)")
+async def update_company(
+    company_id: int,
+    data: CompanyUpdate,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.CompanyOrganization, company_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Company not found")
+    await _patch_row(db, row, data.model_dump(exclude_unset=True))
+    return {"code": 0, "data": row}
+
+
+@router.delete("/company/{company_id}", summary="Delete Company")
+async def delete_company(
+    company_id: int,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.CompanyOrganization, company_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Company not found")
+    return await _delete_row(db, row)
+
+
+
 # ===================== 关系 =====================
 @router.post("/relationship/create", summary="创建关系边")
 async def create_relationship(
@@ -302,6 +470,33 @@ async def get_relationship_detail(
     if not relationship:
         raise HTTPException(status_code=404, detail="Relationship not found")
     return {"code": 0, "data": relationship}
+
+
+@router.patch("/relationship/{relationship_id}", summary="Update Relationship (partial)")
+async def update_relationship(
+    relationship_id: int,
+    data: RelationshipUpdate,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.Relationship, relationship_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Relationship not found")
+    await _patch_row(db, row, data.model_dump(exclude_unset=True))
+    return {"code": 0, "data": row}
+
+
+@router.delete("/relationship/{relationship_id}", summary="Delete Relationship")
+async def delete_relationship(
+    relationship_id: int,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.Relationship, relationship_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Relationship not found")
+    return await _delete_row(db, row)
+
 
 
 # ===================== 事件 =====================
@@ -362,6 +557,33 @@ async def get_event_detail(
     return {"code": 0, "data": event}
 
 
+@router.patch("/event/{event_id}", summary="Update Event (partial)")
+async def update_event(
+    event_id: int,
+    data: EventUpdate,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.Event, event_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Event not found")
+    await _patch_row(db, row, data.model_dump(exclude_unset=True))
+    return {"code": 0, "data": row}
+
+
+@router.delete("/event/{event_id}", summary="Delete Event")
+async def delete_event(
+    event_id: int,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.Event, event_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Event not found")
+    return await _delete_row(db, row)
+
+
+
 # ===================== 信号 =====================
 @router.post("/signal/create", summary="创建信号（自动追加时间线）")
 async def create_signal(
@@ -417,6 +639,33 @@ async def get_signal_detail(
     return {"code": 0, "data": signal}
 
 
+@router.patch("/signal/{signal_id}", summary="Update Signal (partial)")
+async def update_signal(
+    signal_id: int,
+    data: SignalUpdate,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.Signal, signal_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Signal not found")
+    await _patch_row(db, row, data.model_dump(exclude_unset=True))
+    return {"code": 0, "data": row}
+
+
+@router.delete("/signal/{signal_id}", summary="Delete Signal")
+async def delete_signal(
+    signal_id: int,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.Signal, signal_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Signal not found")
+    return await _delete_row(db, row)
+
+
+
 # ===================== 来源 =====================
 @router.post("/source/create", summary="创建来源（采集人由登录态注入）")
 async def create_source(
@@ -453,6 +702,33 @@ async def get_source_detail(
     if not source:
         raise HTTPException(status_code=404, detail="Source not found")
     return {"code": 0, "data": source}
+
+
+@router.patch("/source/{source_id}", summary="Update Source (partial)")
+async def update_source(
+    source_id: int,
+    data: SourceUpdate,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.Source, source_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Source not found")
+    await _patch_row(db, row, data.model_dump(exclude_unset=True))
+    return {"code": 0, "data": row}
+
+
+@router.delete("/source/{source_id}", summary="Delete Source")
+async def delete_source(
+    source_id: int,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.Source, source_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Source not found")
+    return await _delete_row(db, row)
+
 
 
 # ===================== 证据与主张 =====================
@@ -511,6 +787,33 @@ async def get_evidence_detail(
     return {"code": 0, "data": evidence}
 
 
+@router.patch("/evidence/{evidence_id}", summary="Update Evidence (partial)")
+async def update_evidence(
+    evidence_id: int,
+    data: EvidenceUpdate,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.EvidenceClaim, evidence_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Evidence not found")
+    await _patch_row(db, row, data.model_dump(exclude_unset=True))
+    return {"code": 0, "data": row}
+
+
+@router.delete("/evidence/{evidence_id}", summary="Delete Evidence")
+async def delete_evidence(
+    evidence_id: int,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.EvidenceClaim, evidence_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Evidence not found")
+    return await _delete_row(db, row)
+
+
+
 # ===================== 风险评估 =====================
 @router.post("/risk-assessment/create", summary="创建风险评估（评估人由登录态注入，自动追加时间线）")
 async def create_risk_assessment(
@@ -564,6 +867,33 @@ async def get_risk_assessment_detail(
     return {"code": 0, "data": assessment}
 
 
+@router.patch("/risk-assessment/{assessment_id}", summary="Update Risk assessment (partial)")
+async def update_assessment(
+    assessment_id: int,
+    data: RiskAssessmentUpdate,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.RiskAssessment, assessment_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Risk assessment not found")
+    await _patch_row(db, row, data.model_dump(exclude_unset=True))
+    return {"code": 0, "data": row}
+
+
+@router.delete("/risk-assessment/{assessment_id}", summary="Delete Risk assessment")
+async def delete_assessment(
+    assessment_id: int,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.RiskAssessment, assessment_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Risk assessment not found")
+    return await _delete_row(db, row)
+
+
+
 # ===================== 调查/案件 =====================
 @router.post("/investigation/create", summary="创建调查案件（负责人由登录态注入）")
 async def create_investigation(
@@ -604,6 +934,33 @@ async def get_investigation_detail(
     if not investigation:
         raise HTTPException(status_code=404, detail="Investigation not found")
     return {"code": 0, "data": investigation}
+
+
+@router.patch("/investigation/{investigation_id}", summary="Update Investigation (partial)")
+async def update_investigation(
+    investigation_id: int,
+    data: InvestigationUpdate,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.Investigation, investigation_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Investigation not found")
+    await _patch_row(db, row, data.model_dump(exclude_unset=True))
+    return {"code": 0, "data": row}
+
+
+@router.delete("/investigation/{investigation_id}", summary="Delete Investigation")
+async def delete_investigation(
+    investigation_id: int,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.Investigation, investigation_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Investigation not found")
+    return await _delete_row(db, row)
+
 
 
 # ===================== 时间线 =====================
@@ -648,3 +1005,29 @@ async def get_timeline_detail(
     if not entry:
         raise HTTPException(status_code=404, detail="Timeline entry not found")
     return {"code": 0, "data": entry}
+
+
+@router.patch("/timeline/{timeline_id}", summary="Update Timeline entry (partial)")
+async def update_timeline(
+    timeline_id: int,
+    data: TimelineUpdate,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.Timeline, timeline_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Timeline entry not found")
+    await _patch_row(db, row, data.model_dump(exclude_unset=True))
+    return {"code": 0, "data": row}
+
+
+@router.delete("/timeline/{timeline_id}", summary="Delete Timeline entry")
+async def delete_timeline(
+    timeline_id: int,
+    db: AsyncSession = Depends(get_db),
+    _: models.User = Depends(require_admin),
+):
+    row = await db.get(models.Timeline, timeline_id)
+    if not row:
+        raise HTTPException(status_code=404, detail="Timeline entry not found")
+    return await _delete_row(db, row)
