@@ -4,7 +4,7 @@ import { companyApi } from '../api'
 import { ORG_TYPES, t } from '../api/enums'
 
 export default function Companies() {
-  const options = ['公司', '信托', '合伙企业', '社会组织', '其他']
+  const options = ['Company', 'Trust', 'Partnership', 'Social Org', 'Other']
   return (
     <CrudPage
       title="Companies & Organizations"

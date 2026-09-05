@@ -4,8 +4,8 @@ import { relationshipApi } from '../api'
 import { RELATION_TYPES, t } from '../api/enums'
 
 export default function Relationships() {
-  const relOptions = ['控股', '任职', '关联交易', '亲属', '代持', '担保', '诉讼对手', '其他']
-  const confOptions = ['高', '中', '低']
+  const relOptions = ['Controlling', 'Position', 'Related Party Transaction', 'Family', 'Nominee Holding', 'Guarantee', 'Litigation Counterparty', 'Other']
+  const confOptions = ['High', 'Medium', 'Low']
   return (
     <CrudPage
       title="Relationships"

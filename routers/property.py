@@ -23,10 +23,10 @@ SEVERITY_RANK = models.SEVERITY_RANK
 class PilotPropertyCreate(BaseModel):
     name: str
     address: str
-    # Literal 在 API 层收口合法枚举值，DB 侧仍存中文字符串
-    property_type: Literal["商场", "写字楼", "社区商业", "产业园", "其他"]
+    # Literal 在 API 层收口合法枚举值，DB 侧仍存Medium文字符串
+    property_type: Literal["Shopping Mall", "Office Tower", "Community Retail", "Industrial Park", "Other"]
     ownership_or_management: str
-    status: str = "在营"
+    status: str = "Operating"
     relevant_dates: dict = Field(default_factory=dict)
     description: Optional[str] = None
 
@@ -34,7 +34,7 @@ class PilotPropertyCreate(BaseModel):
 class PilotPropertyUpdate(BaseModel):
     name: Optional[str] = None
     address: Optional[str] = None
-    property_type: Optional[Literal["商场", "写字楼", "社区商业", "产业园", "其他"]] = None
+    property_type: Optional[Literal["Shopping Mall", "Office Tower", "Community Retail", "Industrial Park", "Other"]] = None
     ownership_or_management: Optional[str] = None
     status: Optional[str] = None
     relevant_dates: Optional[dict] = None
@@ -159,7 +159,7 @@ async def get_property_profile(
         .limit(200)
     )).scalars().all()
 
-    # 2) 关系是全局边表：仅保留触及本物业范围内节点（物业/行为人/公司）的边
+    # 2) 关系是全局边表：仅保留触及本物业范围内节点（物业/行为人/Company）的边
     actor_ids = {a.id for a in actors}
     company_ids = {c.id for c in companies}
 
@@ -178,7 +178,7 @@ async def get_property_profile(
         if _in_scope(r.subject_type, r.subject_id) or _in_scope(r.object_type, r.object_id)
     ]
 
-    # 3) 来源：取本物业证据所引用的底层来源
+    # 3) 来源：取本物业Evidence所引用的底层来源
     source_ids = {e.source_id for e in evidence}
     sources = []
     if source_ids:
@@ -186,7 +186,7 @@ async def get_property_profile(
             select(models.Source).where(models.Source.id.in_(source_ids)).order_by(models.Source.id)
         )).scalars().all()
 
-    # 4) 总体风险摘要：最高 severity + 最近评估状态
+    # 4) 总体风险摘要：最High severity + 最近Assessment状态
     if assessments:
         top = max(assessments, key=lambda a: SEVERITY_RANK.get(a.severity, 0))
         latest = max(assessments, key=lambda a: a.assessed_at or a.create_time)

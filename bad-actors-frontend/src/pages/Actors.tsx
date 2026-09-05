@@ -4,7 +4,7 @@ import { actorApi } from '../api'
 import { ACTOR_TYPES, t } from '../api/enums'
 
 export default function Actors() {
-  const actorOptions = ['自然人', '法定代表人', '负责人', '承包商', '租户', '供应商', '前员工', '其他']
+  const actorOptions = ['Individual', 'Legal Representative', 'Manager', 'Contractor', 'Tenant', 'Supplier', 'Former Employee', 'Other']
   return (
     <CrudPage
       title="Actors"

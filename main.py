@@ -19,7 +19,7 @@ from auth import (
     hash_password, verify_password, create_access_token,
     get_current_user, require_admin
 )
-# 注意：所有业务路由必须在本文件末尾 SPA 兜底路由之前 include
+# 注意：所有业务路由必须在本Document末尾 SPA 兜底路由之前 include
 from routers import property as property_routes
 from routers import intel as intel_routes
 
@@ -161,25 +161,25 @@ async def logout():
     return {"code": 0, "message": "Logout successful"}
 
 
-# ===================== Dashboard 概览（真实数据，取代旧 mock/high_risk） =====================
+# ===================== Dashboard 概览（真实Data，取代旧 mock/high_risk） =====================
 @app.get("/dashboard/overview", summary="Dashboard - 试点物业情报概览")
 async def dashboard_overview(db: AsyncSession = Depends(get_db), _: models.User = Depends(get_current_user)):
-    # 统计：物业数 / 进行中调查 / 待核实信号
+    # 统计：物业数 / 进行Medium调查 / PendingSignal
     property_count = (await db.execute(
         select(func.count()).select_from(models.PilotProperty)
     )).scalar() or 0
     ongoing_investigation_count = (await db.execute(
         select(func.count()).select_from(models.Investigation)
-        .where(models.Investigation.status == "进行中")
+        .where(models.Investigation.status == "进行Medium")
     )).scalar() or 0
     pending_signal_count = (await db.execute(
         select(func.count()).select_from(models.Signal)
-        .where(models.Signal.status == "待核实")
+        .where(models.Signal.status == "Pending")
     )).scalar() or 0
 
-    # 风险评估分布与全局最高 severity
+    # 风险Assessment分布与全局最High severity
     assessments = (await db.execute(select(models.RiskAssessment))).scalars().all()
-    severity_distribution = {"低": 0, "中": 0, "高": 0, "极高": 0}
+    severity_distribution = {"Low": 0, "Medium": 0, "High": 0, "Critical": 0}
     for a in assessments:
         severity_distribution[a.severity] = severity_distribution.get(a.severity, 0) + 1
     highest_severity = None
@@ -188,7 +188,7 @@ async def dashboard_overview(db: AsyncSession = Depends(get_db), _: models.User 
             assessments, key=lambda a: SEVERITY_RANK.get(a.severity, 0)
         ).severity
 
-    # 近 30 天事件按日 × 严重度计数（Dashboard 三色趋势图的真实数据源）
+    # 近 30 天Event按日 × 严重度计数（Dashboard 三色Trend图的真实Data源）
     since = datetime.now() - timedelta(days=30)
     trend_rows = (await db.execute(
         select(func.date(models.Event.occurred_at), models.Event.severity, func.count())
@@ -201,12 +201,12 @@ async def dashboard_overview(db: AsyncSession = Depends(get_db), _: models.User 
         key = (datetime.now() - timedelta(days=i)).date().isoformat()
         daily_event_counts.append({
             "date": key[5:],  # MM-DD
-            "低": trend_map.get((key, "低"), 0),
-            "中": trend_map.get((key, "中"), 0),
-            "高": trend_map.get((key, "高"), 0),
+            "Low": trend_map.get((key, "Low"), 0),
+            "Medium": trend_map.get((key, "Medium"), 0),
+            "High": trend_map.get((key, "High"), 0),
         })
 
-    # 最近事件（带物业名，供「最近事件」表格）
+    # 最近Event（带物业名，供「最近Event」表格）
     event_rows = (await db.execute(
         select(models.Event, models.PilotProperty)
         .outerjoin(models.PilotProperty, models.PilotProperty.id == models.Event.property_id)
@@ -226,7 +226,7 @@ async def dashboard_overview(db: AsyncSession = Depends(get_db), _: models.User 
         for e, p in event_rows
     ]
 
-    # 最近预警信号（供右栏 Recent Risk Alerts）
+    # 最近AlertSignal（供右栏 Recent Risk Alerts）
     signal_rows = (await db.execute(
         select(models.Signal, models.PilotProperty)
         .outerjoin(models.PilotProperty, models.PilotProperty.id == models.Signal.property_id)

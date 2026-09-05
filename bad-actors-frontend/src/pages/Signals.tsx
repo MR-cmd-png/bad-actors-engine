@@ -3,12 +3,12 @@ import Badge from '../components/Badge'
 import { signalApi } from '../api'
 import { SIGNAL_TYPES, IMPORTANCE, SIGNAL_STATUS, t } from '../api/enums'
 
-const impVariant = (v: any) => v === '高' ? 'high' : v === '中' ? 'medium' : 'low'
+const impVariant = (v: any) => v === 'High' ? 'high' : v === 'Medium' ? 'medium' : 'low'
 
 export default function Signals() {
-  const stOptions = ['预警', '异常', '趋势', '关联红旗', '其他']
-  const impOptions = ['低', '中', '高']
-  const statusOptions = ['待核实', '已确认', '已排除']
+  const stOptions = ['Alert', 'Anomaly', 'Trend', 'Connection Red Flag', 'Other']
+  const impOptions = ['Low', 'Medium', 'High']
+  const statusOptions = ['Pending', 'Confirmed', 'Dismissed']
   return (
     <CrudPage
       title="Signals"

@@ -4,8 +4,8 @@ import { sourceApi } from '../api'
 import { SOURCE_TYPES, CONFIDENCE, t } from '../api/enums'
 
 export default function Sources() {
-  const stOptions = ['工商登记', '裁判文书', '新闻', '监管公告', '合同', '访谈', '现场走访', '内部举报', '其他']
-  const relOptions = ['高', '中', '低']
+  const stOptions = ['Business Registry', 'Court Document', 'News', 'Regulatory Notice', 'Contract', 'Interview', 'Site Visit', 'Whistleblower', 'Other']
+  const relOptions = ['High', 'Medium', 'Low']
   return (
     <CrudPage
       title="Sources"

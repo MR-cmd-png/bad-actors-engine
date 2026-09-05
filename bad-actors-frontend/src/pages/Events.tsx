@@ -3,12 +3,12 @@ import Badge from '../components/Badge'
 import { eventApi } from '../api'
 import { EVENT_CATEGORIES, SEVERITY, SIGNAL_STATUS, t } from '../api/enums'
 
-const sevVariant = (v: any) => v === '极高' || v === '高' ? 'high' : v === '中' ? 'medium' : v === '低' ? 'low' : 'default'
+const sevVariant = (v: any) => v === 'Critical' || v === 'High' ? 'high' : v === 'Medium' ? 'medium' : v === 'Low' ? 'low' : 'default'
 
 export default function Events() {
-  const catOptions = ['指控', '合同纠纷', '监管处罚', '诉讼', '仲裁', '可疑交易', '投诉', '其他']
-  const sevOptions = ['低', '中', '高']
-  const statusOptions = ['进行中', '已确认', '已解决', '已关闭']
+  const catOptions = ['Allegation', 'Contract Dispute', 'Regulatory Penalty', '诉讼', 'Arbitration', 'Suspicious Transaction', 'Complaint', 'Other']
+  const sevOptions = ['Low', 'Medium', 'High']
+  const statusOptions = ['进行Medium', 'Confirmed', 'Resolved', 'Closed']
   return (
     <CrudPage
       title="Events"

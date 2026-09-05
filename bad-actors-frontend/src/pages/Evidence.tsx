@@ -4,7 +4,7 @@ import { evidenceApi } from '../api'
 import { EVIDENCE_TYPES, t } from '../api/enums'
 
 export default function Evidence() {
-  const etOptions = ['文件', '陈述', '观察', '数据', '截图', '其他']
+  const etOptions = ['Document', 'Statement', 'Observation', 'Data', 'Screenshot', 'Other']
   const supOptions = ['event', 'signal', 'risk_assessment', 'actor', 'company']
   return (
     <CrudPage

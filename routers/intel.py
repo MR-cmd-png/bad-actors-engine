@@ -2,13 +2,13 @@
 # Copyright (C) 2026 MR-cmd-png 保留所有著作权利
 # Open Source License: MIT
 # 未经作者许可，禁止去除版权标识、冒充原创进行商业售卖
-"""情报业务表 CRUD（行为人/公司/关系/事件/信号/来源/证据/风险评估/调查/时间线）。
+"""情报业务表 CRUD（行为人/Company/关系/Event/Signal/来源/Evidence/风险Assessment/调查/时间线）。
 
 约定：
 - 写接口 require_admin，读接口 get_current_user；
-- 用户类 FK（采集人/评估人/负责人）由登录态注入，请求体不可伪造；
+- 用户类 FK（采集人/Assessment人/Manager）由登录态注入，请求体不可伪造；
 - 创建 Event/Signal/Evidence/RiskAssessment 时同事务自动追加 Timeline 记录；
-- 枚举值一律 Literal 收口，DB 侧仍存中文字符串。
+- 枚举值一律 Literal 收口，DB 侧仍存Medium文字符串。
 """
 from datetime import datetime
 from typing import Literal, Optional
@@ -79,7 +79,7 @@ def _append_timeline(
 class ActorCreate(BaseModel):
     property_id: int
     name: str
-    actor_type: Literal["自然人", "法定代表人", "负责人", "承包商", "租户", "供应商", "前员工", "其他"]
+    actor_type: Literal["Individual", "Legal Representative", "Manager", "Contractor", "Tenant", "Supplier", "Former Employee", "Other"]
     role_in_property: Optional[str] = None
     email: Optional[str] = None  # 原本 contact_info(JSON) 拆成独立 email / phone
     phone: Optional[str] = None
@@ -88,7 +88,7 @@ class ActorCreate(BaseModel):
 
 class CompanyCreate(BaseModel):
     name: str
-    org_type: Literal["公司", "信托", "合伙企业", "社会组织", "其他"]
+    org_type: Literal["Company", "Trust", "Partnership", "Social Org", "Other"]
     property_id: Optional[int] = None
     registration_no: Optional[str] = None
     jurisdiction: Optional[str] = None
@@ -101,17 +101,17 @@ class RelationshipCreate(BaseModel):
     subject_id: int
     object_type: Literal["actor", "company", "property"]
     object_id: int
-    relation_type: Literal["控股", "任职", "关联交易", "亲属", "代持", "担保", "诉讼对手", "其他"]
+    relation_type: Literal["Controlling", "Position", "Related Party Transaction", "Family", "Nominee Holding", "Guarantee", "Litigation Counterparty", "Other"]
     nature_description: Optional[str] = None
-    confidence: Literal["高", "中", "低"] = "中"
+    confidence: Literal["High", "Medium", "Low"] = "Medium"
 
 
 class EventCreate(BaseModel):
     property_id: int
     title: str
-    event_category: Literal["指控", "合同纠纷", "监管处罚", "诉讼", "仲裁", "可疑交易", "投诉", "其他"]
-    severity: Literal["低", "中", "高"] = "中"
-    status: str = "进行中"
+    event_category: Literal["Allegation", "Contract Dispute", "Regulatory Penalty", "诉讼", "Arbitration", "Suspicious Transaction", "Complaint", "Other"]
+    severity: Literal["Low", "Medium", "High"] = "Medium"
+    status: str = "进行Medium"
     actor_id: Optional[int] = None
     company_id: Optional[int] = None
     description: Optional[str] = None
@@ -121,9 +121,9 @@ class EventCreate(BaseModel):
 class SignalCreate(BaseModel):
     property_id: int
     indicator: str
-    signal_type: Literal["预警", "异常", "趋势", "关联红旗", "其他"]
-    importance: Literal["低", "中", "高"] = "中"
-    status: Literal["待核实", "已确认", "已排除"] = "待核实"
+    signal_type: Literal["Alert", "Anomaly", "Trend", "Connection Red Flag", "Other"]
+    importance: Literal["Low", "Medium", "High"] = "Medium"
+    status: Literal["Pending", "Confirmed", "Dismissed"] = "Pending"
     event_id: Optional[int] = None
     description: Optional[str] = None
     observed_at: Optional[datetime] = None
@@ -131,8 +131,8 @@ class SignalCreate(BaseModel):
 
 class SourceCreate(BaseModel):
     name: str
-    source_type: Literal["工商登记", "裁判文书", "新闻", "监管公告", "合同", "访谈", "现场走访", "内部举报", "其他"]
-    reliability: Literal["高", "中", "低"] = "中"
+    source_type: Literal["Business Registry", "Court Document", "News", "Regulatory Notice", "Contract", "Interview", "Site Visit", "Whistleblower", "Other"]
+    reliability: Literal["High", "Medium", "Low"] = "Medium"
     reference: Optional[str] = None
     notes: Optional[str] = None
     obtained_at: Optional[datetime] = None
@@ -140,7 +140,7 @@ class SourceCreate(BaseModel):
 
 class EvidenceCreate(BaseModel):
     claim: str
-    evidence_type: Literal["文件", "陈述", "观察", "数据", "截图", "其他"]
+    evidence_type: Literal["Document", "Statement", "Observation", "Data", "Screenshot", "Other"]
     source_id: int
     supports_type: Literal["event", "signal", "risk_assessment", "actor", "company"]
     supports_id: int
@@ -152,11 +152,11 @@ class EvidenceCreate(BaseModel):
 
 class RiskAssessmentCreate(BaseModel):
     property_id: int
-    risk_category: Literal["合规", "法律", "财务", "运营", "声誉", "关联交易", "欺诈", "其他"]
-    severity: Literal["低", "中", "高", "极高"] = "中"
-    confidence: Literal["高", "中", "低"] = "中"
+    risk_category: Literal["Compliance", "Legal", "Financial", "Operational", "Reputational", "Related Party Transaction", "Fraud", "Other"]
+    severity: Literal["Low", "Medium", "High", "Critical"] = "Medium"
+    confidence: Literal["High", "Medium", "Low"] = "Medium"
     rationale: str
-    status: Literal["初评", "复核中", "已确认", "已缓解", "已关闭"] = "初评"
+    status: Literal["Draft", "复核Medium", "Confirmed", "Mitigated", "Closed"] = "Draft"
     actor_id: Optional[int] = None
 
 
@@ -165,13 +165,13 @@ class InvestigationCreate(BaseModel):
     title: str
     case_no: Optional[str] = None
     summary: Optional[str] = None
-    status: Literal["进行中", "暂停", "结案"] = "进行中"
+    status: Literal["进行Medium", "Paused", "Closed"] = "进行Medium"
 
 
 class TimelineCreate(BaseModel):
     property_id: int
     title: str
-    entry_type: Literal["事件", "信号", "证据", "评估", "里程碑"]
+    entry_type: Literal["Event", "Signal", "Evidence", "Assessment", "Milestone"]
     description: Optional[str] = None
     investigation_id: Optional[int] = None
     ref_type: Optional[str] = None
@@ -185,7 +185,7 @@ from typing import Any as _Any, Dict as _TDict
 
 class ActorUpdate(BaseModel):
     name: Optional[str] = None
-    actor_type: Optional[Literal["自然人", "法定代表人", "负责人", "承包商", "租户", "供应商", "前员工", "其他"]] = None
+    actor_type: Optional[Literal["Individual", "Legal Representative", "Manager", "Contractor", "Tenant", "Supplier", "Former Employee", "Other"]] = None
     role_in_property: Optional[str] = None
     email: Optional[str] = None
     phone: Optional[str] = None
@@ -194,7 +194,7 @@ class ActorUpdate(BaseModel):
 
 class CompanyUpdate(BaseModel):
     name: Optional[str] = None
-    org_type: Optional[Literal["公司", "信托", "合伙企业", "社会组织", "其他"]] = None
+    org_type: Optional[Literal["Company", "Trust", "Partnership", "Social Org", "Other"]] = None
     registration_no: Optional[str] = None
     jurisdiction: Optional[str] = None
     role: Optional[str] = None
@@ -202,15 +202,15 @@ class CompanyUpdate(BaseModel):
 
 
 class RelationshipUpdate(BaseModel):
-    relation_type: Optional[Literal["控股", "任职", "关联交易", "亲属", "代持", "担保", "诉讼对手", "其他"]] = None
+    relation_type: Optional[Literal["Controlling", "Position", "Related Party Transaction", "Family", "Nominee Holding", "Guarantee", "Litigation Counterparty", "Other"]] = None
     nature_description: Optional[str] = None
-    confidence: Optional[Literal["高", "中", "低"]] = None
+    confidence: Optional[Literal["High", "Medium", "Low"]] = None
 
 
 class EventUpdate(BaseModel):
     title: Optional[str] = None
-    event_category: Optional[Literal["指控", "合同纠纷", "监管处罚", "诉讼", "仲裁", "可疑交易", "投诉", "其他"]] = None
-    severity: Optional[Literal["低", "中", "高"]] = None
+    event_category: Optional[Literal["Allegation", "Contract Dispute", "Regulatory Penalty", "诉讼", "Arbitration", "Suspicious Transaction", "Complaint", "Other"]] = None
+    severity: Optional[Literal["Low", "Medium", "High"]] = None
     status: Optional[str] = None
     actor_id: Optional[int] = None
     company_id: Optional[int] = None
@@ -220,9 +220,9 @@ class EventUpdate(BaseModel):
 
 class SignalUpdate(BaseModel):
     indicator: Optional[str] = None
-    signal_type: Optional[Literal["预警", "异常", "趋势", "关联红旗", "其他"]] = None
-    importance: Optional[Literal["低", "中", "高"]] = None
-    status: Optional[Literal["待核实", "已确认", "已排除"]] = None
+    signal_type: Optional[Literal["Alert", "Anomaly", "Trend", "Connection Red Flag", "Other"]] = None
+    importance: Optional[Literal["Low", "Medium", "High"]] = None
+    status: Optional[Literal["Pending", "Confirmed", "Dismissed"]] = None
     event_id: Optional[int] = None
     description: Optional[str] = None
     observed_at: Optional[datetime] = None
@@ -230,8 +230,8 @@ class SignalUpdate(BaseModel):
 
 class SourceUpdate(BaseModel):
     name: Optional[str] = None
-    source_type: Optional[Literal["工商登记", "裁判文书", "新闻", "监管公告", "合同", "访谈", "现场走访", "内部举报", "其他"]] = None
-    reliability: Optional[Literal["高", "中", "低"]] = None
+    source_type: Optional[Literal["Business Registry", "Court Document", "News", "Regulatory Notice", "Contract", "Interview", "Site Visit", "Whistleblower", "Other"]] = None
+    reliability: Optional[Literal["High", "Medium", "Low"]] = None
     reference: Optional[str] = None
     notes: Optional[str] = None
     obtained_at: Optional[datetime] = None
@@ -239,7 +239,7 @@ class SourceUpdate(BaseModel):
 
 class EvidenceUpdate(BaseModel):
     claim: Optional[str] = None
-    evidence_type: Optional[Literal["文件", "陈述", "观察", "数据", "截图", "其他"]] = None
+    evidence_type: Optional[Literal["Document", "Statement", "Observation", "Data", "Screenshot", "Other"]] = None
     source_id: Optional[int] = None
     supports_type: Optional[Literal["event", "signal", "risk_assessment", "actor", "company"]] = None
     supports_id: Optional[int] = None
@@ -250,11 +250,11 @@ class EvidenceUpdate(BaseModel):
 
 
 class RiskAssessmentUpdate(BaseModel):
-    risk_category: Optional[Literal["合规", "法律", "财务", "运营", "声誉", "关联交易", "欺诈", "其他"]] = None
-    severity: Optional[Literal["低", "中", "高", "极高"]] = None
-    confidence: Optional[Literal["高", "中", "低"]] = None
+    risk_category: Optional[Literal["Compliance", "Legal", "Financial", "Operational", "Reputational", "Related Party Transaction", "Fraud", "Other"]] = None
+    severity: Optional[Literal["Low", "Medium", "High", "Critical"]] = None
+    confidence: Optional[Literal["High", "Medium", "Low"]] = None
     rationale: Optional[str] = None
-    status: Optional[Literal["初评", "复核中", "已确认", "已缓解", "已关闭"]] = None
+    status: Optional[Literal["Draft", "复核Medium", "Confirmed", "Mitigated", "Closed"]] = None
     actor_id: Optional[int] = None
 
 
@@ -262,13 +262,13 @@ class InvestigationUpdate(BaseModel):
     title: Optional[str] = None
     case_no: Optional[str] = None
     summary: Optional[str] = None
-    status: Optional[Literal["进行中", "暂停", "结案"]] = None
+    status: Optional[Literal["进行Medium", "Paused", "Closed"]] = None
     closed_at: Optional[datetime] = None
 
 
 class TimelineUpdate(BaseModel):
     title: Optional[str] = None
-    entry_type: Optional[Literal["事件", "信号", "证据", "评估", "里程碑"]] = None
+    entry_type: Optional[Literal["Event", "Signal", "Evidence", "Assessment", "Milestone"]] = None
     description: Optional[str] = None
     investigation_id: Optional[int] = None
     ref_type: Optional[str] = None
@@ -278,7 +278,7 @@ class TimelineUpdate(BaseModel):
 
 # ===================== PATCH/DELETE 通用工具 =====================
 async def _patch_row(db: AsyncSession, row, data: _TDict[str, _Any]):
-    """把 update_data 中非 None 字段覆盖到 row（局部更新）。"""
+    """把 update_data Medium非 None 字段覆盖到 row（局部更新）。"""
     for k, v in data.items():
         if v is not None:
             setattr(row, k, v)
@@ -361,8 +361,8 @@ async def delete_actor(
 
 
 
-# ===================== 公司/组织 =====================
-@router.post("/company/create", summary="创建公司/组织")
+# ===================== Company/组织 =====================
+@router.post("/company/create", summary="创建Company/组织")
 async def create_company(
     data: CompanyCreate,
     db: AsyncSession = Depends(get_db),
@@ -377,7 +377,7 @@ async def create_company(
     return {"code": 0, "data": company}
 
 
-@router.get("/company", summary="公司/组织列表（property_id 过滤 + 分页）")
+@router.get("/company", summary="Company/组织列表（property_id 过滤 + 分页）")
 async def list_companies(
     page: int = 1,
     page_size: int = 20,
@@ -392,7 +392,7 @@ async def list_companies(
     return {"code": 0, "total": total, "page": page, "page_size": page_size, "data": rows}
 
 
-@router.get("/company/{company_id}", summary="公司/组织详情")
+@router.get("/company/{company_id}", summary="Company/组织详情")
 async def get_company_detail(
     company_id: int,
     db: AsyncSession = Depends(get_db),
@@ -499,8 +499,8 @@ async def delete_relationship(
 
 
 
-# ===================== 事件 =====================
-@router.post("/event/create", summary="创建事件（自动追加时间线）")
+# ===================== Event =====================
+@router.post("/event/create", summary="创建Event（自动追加时间线）")
 async def create_event(
     data: EventCreate,
     db: AsyncSession = Depends(get_db),
@@ -510,14 +510,14 @@ async def create_event(
     if data.actor_id is not None:
         await _ensure_exists(db, models.Actor, data.actor_id, "行为人")
     if data.company_id is not None:
-        await _ensure_exists(db, models.CompanyOrganization, data.company_id, "公司")
+        await _ensure_exists(db, models.CompanyOrganization, data.company_id, "Company")
     event = models.Event(**data.model_dump())
     db.add(event)
     await db.flush()  # 先拿 event.id 供时间线引用
     _append_timeline(
         db,
         property_id=event.property_id,
-        entry_type="事件",
+        entry_type="Event",
         title=event.title,
         ref_type="event",
         ref_id=event.id,
@@ -530,7 +530,7 @@ async def create_event(
 
 
 # /list 后缀：避免与前端 SPA 深链接 /events 整页刷新冲突
-@router.get("/event/list", summary="事件列表（property_id 过滤 + 分页）")
+@router.get("/event/list", summary="Event列表（property_id 过滤 + 分页）")
 async def list_events(
     page: int = 1,
     page_size: int = 20,
@@ -545,7 +545,7 @@ async def list_events(
     return {"code": 0, "total": total, "page": page, "page_size": page_size, "data": rows}
 
 
-@router.get("/event/{event_id}", summary="事件详情")
+@router.get("/event/{event_id}", summary="Event详情")
 async def get_event_detail(
     event_id: int,
     db: AsyncSession = Depends(get_db),
@@ -584,8 +584,8 @@ async def delete_event(
 
 
 
-# ===================== 信号 =====================
-@router.post("/signal/create", summary="创建信号（自动追加时间线）")
+# ===================== Signal =====================
+@router.post("/signal/create", summary="创建Signal（自动追加时间线）")
 async def create_signal(
     data: SignalCreate,
     db: AsyncSession = Depends(get_db),
@@ -593,14 +593,14 @@ async def create_signal(
 ):
     await _ensure_exists(db, models.PilotProperty, data.property_id, "物业")
     if data.event_id is not None:
-        await _ensure_exists(db, models.Event, data.event_id, "事件")
+        await _ensure_exists(db, models.Event, data.event_id, "Event")
     signal = models.Signal(**data.model_dump())
     db.add(signal)
     await db.flush()
     _append_timeline(
         db,
         property_id=signal.property_id,
-        entry_type="信号",
+        entry_type="Signal",
         title=signal.indicator,
         ref_type="signal",
         ref_id=signal.id,
@@ -612,7 +612,7 @@ async def create_signal(
     return {"code": 0, "data": signal}
 
 
-@router.get("/signal", summary="信号列表（property_id 过滤 + 分页）")
+@router.get("/signal", summary="Signal列表（property_id 过滤 + 分页）")
 async def list_signals(
     page: int = 1,
     page_size: int = 20,
@@ -627,7 +627,7 @@ async def list_signals(
     return {"code": 0, "total": total, "page": page, "page_size": page_size, "data": rows}
 
 
-@router.get("/signal/{signal_id}", summary="信号详情")
+@router.get("/signal/{signal_id}", summary="Signal详情")
 async def get_signal_detail(
     signal_id: int,
     db: AsyncSession = Depends(get_db),
@@ -731,8 +731,8 @@ async def delete_source(
 
 
 
-# ===================== 证据与主张 =====================
-@router.post("/evidence/create", summary="创建证据（自动追加时间线）")
+# ===================== Evidence与主张 =====================
+@router.post("/evidence/create", summary="创建Evidence（自动追加时间线）")
 async def create_evidence(
     data: EvidenceCreate,
     db: AsyncSession = Depends(get_db),
@@ -748,7 +748,7 @@ async def create_evidence(
     _append_timeline(
         db,
         property_id=evidence.property_id,
-        entry_type="证据",
+        entry_type="Evidence",
         title=evidence.claim,
         ref_type="evidence",
         ref_id=evidence.id,
@@ -760,7 +760,7 @@ async def create_evidence(
 
 
 # /list 后缀：避免与前端 SPA 深链接 /evidence 整页刷新冲突
-@router.get("/evidence/list", summary="证据列表（property_id 过滤 + 分页）")
+@router.get("/evidence/list", summary="Evidence列表（property_id 过滤 + 分页）")
 async def list_evidence(
     page: int = 1,
     page_size: int = 20,
@@ -775,7 +775,7 @@ async def list_evidence(
     return {"code": 0, "total": total, "page": page, "page_size": page_size, "data": rows}
 
 
-@router.get("/evidence/{evidence_id}", summary="证据详情")
+@router.get("/evidence/{evidence_id}", summary="Evidence详情")
 async def get_evidence_detail(
     evidence_id: int,
     db: AsyncSession = Depends(get_db),
@@ -814,8 +814,8 @@ async def delete_evidence(
 
 
 
-# ===================== 风险评估 =====================
-@router.post("/risk-assessment/create", summary="创建风险评估（评估人由登录态注入，自动追加时间线）")
+# ===================== 风险Assessment =====================
+@router.post("/risk-assessment/create", summary="创建风险Assessment（Assessment人由登录态注入，自动追加时间线）")
 async def create_risk_assessment(
     data: RiskAssessmentCreate,
     db: AsyncSession = Depends(get_db),
@@ -830,8 +830,8 @@ async def create_risk_assessment(
     _append_timeline(
         db,
         property_id=assessment.property_id,
-        entry_type="评估",
-        title=f"{assessment.risk_category}风险评估（{assessment.severity}）",
+        entry_type="Assessment",
+        title=f"{assessment.risk_category}风险Assessment（{assessment.severity}）",
         ref_type="risk_assessment",
         ref_id=assessment.id,
     )
@@ -840,7 +840,7 @@ async def create_risk_assessment(
     return {"code": 0, "data": assessment}
 
 
-@router.get("/risk-assessment", summary="风险评估列表（property_id 过滤 + 分页）")
+@router.get("/risk-assessment", summary="风险Assessment列表（property_id 过滤 + 分页）")
 async def list_risk_assessments(
     page: int = 1,
     page_size: int = 20,
@@ -855,7 +855,7 @@ async def list_risk_assessments(
     return {"code": 0, "total": total, "page": page, "page_size": page_size, "data": rows}
 
 
-@router.get("/risk-assessment/{assessment_id}", summary="风险评估详情")
+@router.get("/risk-assessment/{assessment_id}", summary="风险Assessment详情")
 async def get_risk_assessment_detail(
     assessment_id: int,
     db: AsyncSession = Depends(get_db),
@@ -895,7 +895,7 @@ async def delete_assessment(
 
 
 # ===================== 调查/案件 =====================
-@router.post("/investigation/create", summary="创建调查案件（负责人由登录态注入）")
+@router.post("/investigation/create", summary="创建调查案件（Manager由登录态注入）")
 async def create_investigation(
     data: InvestigationCreate,
     db: AsyncSession = Depends(get_db),
@@ -964,7 +964,7 @@ async def delete_investigation(
 
 
 # ===================== 时间线 =====================
-@router.post("/timeline/create", summary="手动追加时间线条目（如里程碑）")
+@router.post("/timeline/create", summary="手动追加时间线条目（如Milestone）")
 async def create_timeline(
     data: TimelineCreate,
     db: AsyncSession = Depends(get_db),

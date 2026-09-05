@@ -3,13 +3,13 @@ import Badge from '../components/Badge'
 import { riskAssessmentApi } from '../api'
 import { RISK_CATEGORIES, SEVERITY, CONFIDENCE, RISK_STATUS, t } from '../api/enums'
 
-const sevVariant = (v: any) => v === '极高' ? 'high' : v === '高' ? 'high' : v === '中' ? 'medium' : 'low'
+const sevVariant = (v: any) => v === 'Critical' ? 'high' : v === 'High' ? 'high' : v === 'Medium' ? 'medium' : 'low'
 
 export default function RiskAssessments() {
-  const catOptions = ['合规', '法律', '财务', '运营', '声誉', '关联交易', '欺诈', '其他']
-  const sevOptions = ['低', '中', '高', '极高']
-  const confOptions = ['高', '中', '低']
-  const statusOptions = ['初评', '复核中', '已确认', '已缓解', '已关闭']
+  const catOptions = ['Compliance', 'Legal', 'Financial', 'Operational', 'Reputational', 'Related Party Transaction', 'Fraud', 'Other']
+  const sevOptions = ['Low', 'Medium', 'High', 'Critical']
+  const confOptions = ['High', 'Medium', 'Low']
+  const statusOptions = ['Draft', '复核Medium', 'Confirmed', 'Mitigated', 'Closed']
   return (
     <CrudPage
       title="Risk Assessments"
