@@ -15,9 +15,9 @@ export default function Card({ children, className = '', hover = true, delay = 0
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay }}
       whileHover={hover ? { y: -2, transition: { duration: 0.2 } } : {}}
-      className={`bg-bg-card border border-border rounded-xl p-6 ${
-        hover ? 'hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5' : ''
-      } transition-colors duration-300 ${className}`}
+      className={`bg-bg-card border border-border rounded-xl p-6 shadow-sm ${
+        hover ? 'hover:border-slate-300 hover:shadow-md' : ''
+      } transition-all duration-300 ${className}`}
     >
       {children}
     </motion.div>

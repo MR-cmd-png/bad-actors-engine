@@ -1,3 +1,4 @@
+// 风险等级药丸徽章（浅色底 + 深色字，对照参考稿 Clean/Medium/High 配色）
 interface BadgeProps {
   children: React.ReactNode
   variant?: 'low' | 'medium' | 'high' | 'default'
@@ -5,10 +6,10 @@ interface BadgeProps {
 
 export default function Badge({ children, variant = 'default' }: BadgeProps) {
   const colors = {
-    low: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
-    medium: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
-    high: 'bg-red-500/15 text-red-400 border-red-500/30',
-    default: 'bg-primary/15 text-primary-light border-primary/30',
+    low: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    medium: 'bg-amber-50 text-amber-700 border-amber-200',
+    high: 'bg-red-50 text-red-700 border-red-200',
+    default: 'bg-slate-100 text-slate-600 border-slate-200',
   }
 
   return (

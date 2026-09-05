@@ -24,13 +24,13 @@ const features = [
     icon: Brain,
     title: 'Intelligence Graph',
     desc: 'Behavior actors, companies, and relationships woven into one evidence-backed picture per property.',
-    color: 'from-purple-500 to-fuchsia-500',
+    color: 'from-primary to-primary-dark',
   },
   {
     icon: Activity,
     title: 'Signals & Early Warnings',
     desc: 'Track disputes, regulatory actions and red-flag signals with a full audit timeline.',
-    color: 'from-cyan-500 to-blue-500',
+    color: 'from-navy-light to-slate-600',
   },
   {
     icon: Shield,
@@ -54,7 +54,7 @@ const features = [
     icon: Eye,
     title: 'Deep Insights',
     desc: 'Comprehensive dashboards and analytics for informed due diligence decisions.',
-    color: 'from-indigo-500 to-violet-500',
+    color: 'from-slate-500 to-slate-700',
   },
 ]
 
@@ -113,7 +113,7 @@ export default function Landing() {
         transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
-        className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-purple-500/20 blur-[120px]"
+        className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-primary/15 blur-[120px]"
         animate={{
           x: [0, -40, 40, 0],
           y: [0, -30, 30, 0],
@@ -121,7 +121,7 @@ export default function Landing() {
         transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
-        className="absolute top-[40%] right-[20%] w-[300px] h-[300px] rounded-full bg-cyan-500/10 blur-[100px]"
+        className="absolute top-[40%] right-[20%] w-[300px] h-[300px] rounded-full bg-blue-500/10 blur-[100px]"
         animate={{
           x: [0, 30, -20, 0],
           y: [0, -20, 40, 0],
@@ -159,7 +159,7 @@ export default function Landing() {
           animate={{ opacity: 1, x: 0 }}
           className="flex items-center gap-3"
         >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center shadow-lg shadow-primary/30">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg shadow-primary/30">
             <Shield size={22} className="text-white" />
           </div>
           <div>
@@ -192,7 +192,7 @@ export default function Landing() {
           ) : (
             <button
               onClick={() => navigate('/login')}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-purple-600 text-white font-medium hover:shadow-lg hover:shadow-primary/30 transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-primary-dark text-white font-medium hover:shadow-lg hover:shadow-primary/30 transition-all"
             >
               <LogIn size={14} /> Sign In
             </button>
@@ -227,7 +227,7 @@ export default function Landing() {
             className="text-5xl md:text-7xl font-bold mb-6 tracking-tight"
           >
             <span className="text-text-primary">Detect. </span>
-            <span className="bg-gradient-to-r from-primary via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary via-red-400 to-rose-300 bg-clip-text text-transparent">
               Analyze.
             </span>
             <br />
@@ -258,9 +258,9 @@ export default function Landing() {
               onClick={() => navigate(token ? '/dashboard' : '/login')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
-              className="group relative px-10 py-4 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-semibold text-lg shadow-lg shadow-primary/40 hover:shadow-xl hover:shadow-primary/50 transition-all duration-300"
+              className="group relative px-10 py-4 rounded-xl bg-gradient-to-r from-primary to-primary-dark text-white font-semibold text-lg shadow-lg shadow-primary/40 hover:shadow-xl hover:shadow-primary/50 transition-all duration-300"
             >
-              <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary to-purple-600 blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
+              <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary to-primary-dark blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
               <span className="relative flex items-center gap-2">
                 {token ? 'Enter the Engine' : 'Sign In to Get Started'}
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
@@ -272,7 +272,7 @@ export default function Landing() {
               onClick={() => scrollToSection('features')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
-              className="px-8 py-4 rounded-xl bg-white/5 border border-border text-text-primary font-semibold text-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300"
+              className="px-8 py-4 rounded-xl bg-white border border-border text-text-primary font-semibold text-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300"
             >
               Explore Features
             </motion.button>
@@ -293,7 +293,7 @@ export default function Landing() {
                 transition={{ delay: 0.7 + i * 0.1 }}
                 className="text-center"
               >
-                <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary-light to-cyan-400 bg-clip-text text-transparent">
+                <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary-light to-red-400 bg-clip-text text-transparent">
                   {stat.value}
                 </div>
                 <div className="text-sm text-text-secondary mt-1">{stat.label}</div>
@@ -311,13 +311,13 @@ export default function Landing() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-medium mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary-light text-xs font-medium mb-4">
             <Cpu size={14} />
             Core Capabilities
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-text-primary mb-4">
             Powered by{" "}
-            <span className="bg-gradient-to-r from-cyan-400 to-primary bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-red-400 to-primary bg-clip-text text-transparent">
               Intelligence
             </span>
           </h2>
@@ -335,7 +335,7 @@ export default function Landing() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
               whileHover={{ y: -5 }}
-              className="group relative p-6 rounded-2xl bg-white/5 border border-border backdrop-blur-sm hover:border-primary/50 transition-all duration-300"
+              className="group relative p-6 rounded-2xl bg-white border border-border backdrop-blur-sm hover:border-primary/50 transition-all duration-300"
             >
               <div
                 className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 shadow-lg`}
@@ -344,7 +344,7 @@ export default function Landing() {
               </div>
               <h3 className="text-lg font-semibold text-text-primary mb-2">{feature.title}</h3>
               <p className="text-sm text-text-secondary leading-relaxed">{feature.desc}</p>
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             </motion.div>
           ))}
         </div>
@@ -358,13 +358,13 @@ export default function Landing() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-medium mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary-light text-xs font-medium mb-4">
             <Globe size={14} />
             Tech Stack
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-text-primary mb-4">
             Built on{" "}
-            <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-red-400 to-rose-400 bg-clip-text text-transparent">
               Modern Infrastructure
             </span>
           </h2>
@@ -379,9 +379,9 @@ export default function Landing() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
               whileHover={{ scale: 1.05 }}
-              className="p-6 rounded-2xl bg-white/5 border border-border text-center backdrop-blur-sm hover:border-primary/40 transition-all duration-300"
+              className="p-6 rounded-2xl bg-white border border-border text-center backdrop-blur-sm hover:border-primary/40 transition-all duration-300"
             >
-              <div className="w-14 h-14 mx-auto mb-3 rounded-xl bg-gradient-to-br from-primary/20 to-purple-500/20 flex items-center justify-center">
+              <div className="w-14 h-14 mx-auto mb-3 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center">
                 <Zap size={28} className="text-primary-light" />
               </div>
               <h4 className="font-semibold text-text-primary">{tech.name}</h4>
@@ -409,7 +409,7 @@ export default function Landing() {
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-text-primary mb-6">
               Reimagine Risk{" "}
-              <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent">
                 Intelligence
               </span>
             </h2>
@@ -423,7 +423,7 @@ export default function Landing() {
               onClick={() => navigate(token ? '/dashboard' : '/login')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
-              className="group px-8 py-3 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-semibold shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/50 transition-all duration-300 flex items-center gap-2"
+              className="group px-8 py-3 rounded-xl bg-gradient-to-r from-primary to-primary-dark text-white font-semibold shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/50 transition-all duration-300 flex items-center gap-2"
             >
               {token ? 'Launch the Engine' : 'Sign In & Launch'}
               <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -440,7 +440,7 @@ export default function Landing() {
       <footer className="relative z-10 px-8 py-12 border-t border-border">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
               <Shield size={16} className="text-white" />
             </div>
             <span className="text-sm text-text-secondary">
@@ -462,7 +462,7 @@ export default function Landing() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full bg-gradient-to-r from-primary to-purple-600 text-white shadow-lg shadow-primary/40 hover:shadow-xl hover:shadow-primary/60 transition-all duration-300 flex items-center justify-center"
+          className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full bg-gradient-to-r from-primary to-primary-dark text-white shadow-lg shadow-primary/40 hover:shadow-xl hover:shadow-primary/60 transition-all duration-300 flex items-center justify-center"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >

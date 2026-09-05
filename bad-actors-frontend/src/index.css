@@ -1,24 +1,31 @@
 @import "tailwindcss";
 
+/*
+ * ANABASED 浅色主题令牌（对照参考稿）：
+ * 红色主色 + 深海军蓝品牌色 + 白卡片浅灰底；bg-dark 在浅色语境下是「卡内凹面/输入框」的浅灰
+ */
 @theme {
-  --color-primary: #6366f1;
-  --color-primary-light: #818cf8;
-  --color-primary-dark: #4f46e5;
-  --color-danger: #ef4444;
+  --color-primary: #d92632;
+  --color-primary-light: #b91c1c;
+  --color-primary-dark: #9f1239;
+  --color-danger: #dc2626;
   --color-warning: #f59e0b;
-  --color-success: #10b981;
-  --color-bg-dark: #0f172a;
-  --color-bg-card: #1e293b;
-  --color-bg-card-hover: #334155;
-  --color-text-primary: #f1f5f9;
-  --color-text-secondary: #94a3b8;
-  --color-border: #334155;
+  --color-success: #16a34a;
+  --color-navy: #0e1b2e;
+  --color-navy-light: #16273f;
+  --color-bg-page: #eef1f5;
+  --color-bg-dark: #f1f5f9;
+  --color-bg-card: #ffffff;
+  --color-bg-card-hover: #f8fafc;
+  --color-text-primary: #10233c;
+  --color-text-secondary: #64748b;
+  --color-border: #e2e8f0;
 }
 
 body {
   margin: 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: var(--color-bg-dark);
+  background: var(--color-bg-page);
   color: var(--color-text-primary);
   scroll-behavior: smooth;
 }
@@ -28,8 +35,8 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar（浅色） */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--color-bg-dark); }
-::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--color-text-secondary); }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }

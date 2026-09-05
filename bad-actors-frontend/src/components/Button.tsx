@@ -25,11 +25,11 @@ export default function Button({
 
   const variants = {
     primary:
-      'bg-gradient-to-r from-primary to-purple-500 text-white hover:shadow-lg hover:shadow-primary/25 active:scale-[0.98]',
+      'bg-primary text-white hover:bg-primary-dark shadow-sm active:scale-[0.98]',
     danger:
-      'bg-gradient-to-r from-red-500 to-pink-500 text-white hover:shadow-lg hover:shadow-red-500/25 active:scale-[0.98]',
+      'bg-red-600 text-white hover:bg-red-700 shadow-sm active:scale-[0.98]',
     ghost:
-      'bg-bg-card-hover text-text-primary hover:bg-border active:scale-[0.98]',
+      'bg-bg-dark text-text-primary hover:bg-slate-200 active:scale-[0.98]',
   }
 
   return (

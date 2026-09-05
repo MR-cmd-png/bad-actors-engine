@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Shield, Eye, EyeOff, Loader2 } from 'lucide-react'
 
+// 登录页：ANABASED 海军蓝 + 红色主色（对照参考稿品牌体系）
 export default function Login() {
   const { login, loading, error } = useAuth()
   const navigate = useNavigate()
@@ -21,10 +22,11 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen flex items-center justify-center bg-navy">
+      {/* 氛围光斑 */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
       </div>
 
       <motion.div
@@ -32,22 +34,21 @@ export default function Login() {
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 w-full max-w-md mx-4"
       >
-        <div className="bg-bg-card/80 backdrop-blur-xl rounded-2xl border border-border p-8 shadow-2xl">
+        <div className="bg-white rounded-2xl border border-border p-8 shadow-2xl">
           <div className="flex flex-col items-center mb-8">
-            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center mb-4 shadow-lg shadow-primary/30">
+            <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-5 shadow-lg shadow-primary/30">
               <Shield size={28} className="text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-text-primary">Bad Actor Detection Engine</h1>
-            <p className="text-sm text-text-secondary mt-1">
-              Sign in to your account
-            </p>
+            <h1 className="text-[22px] leading-none font-extrabold tracking-wide text-text-primary">ANABASED</h1>
+            <p className="text-[11px] font-bold tracking-[0.22em] text-primary mt-1.5">BAD ACTORS ENGINE</p>
+            <p className="text-sm text-text-secondary mt-4">登录尽调情报工作台</p>
           </div>
 
           {error && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm"
+              className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm"
             >
               {error}
             </motion.div>
@@ -55,19 +56,19 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1.5">Username</label>
+              <label className="block text-sm font-medium text-text-secondary mb-1.5">用户名</label>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
                 className="w-full px-4 py-3 bg-bg-dark border border-border rounded-lg text-text-primary placeholder-text-secondary/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all"
-                placeholder="Enter your username"
+                placeholder="请输入用户名"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1.5">Password</label>
+              <label className="block text-sm font-medium text-text-secondary mb-1.5">密码</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -75,7 +76,7 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="w-full px-4 py-3 bg-bg-dark border border-border rounded-lg text-text-primary placeholder-text-secondary/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all pr-12"
-                  placeholder="Enter your password"
+                  placeholder="请输入密码"
                 />
                 <button
                   type="button"
@@ -90,20 +91,20 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-primary to-cyan-500 text-white font-semibold rounded-lg hover:from-primary/90 hover:to-cyan-400 transition-all shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="w-full py-3 bg-primary hover:bg-primary-dark text-white font-semibold rounded-lg transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {loading ? (
                 <Loader2 size={20} className="animate-spin" />
               ) : (
-                'Sign In'
+                '登 录'
               )}
             </button>
           </form>
         </div>
 
         <div className="mt-4 text-center">
-          <Link to="/" className="text-sm text-text-secondary hover:text-text-primary transition-colors">
-            ← Back to Landing Page
+          <Link to="/" className="text-sm text-slate-400 hover:text-white transition-colors">
+            ← 返回首页
           </Link>
         </div>
       </motion.div>

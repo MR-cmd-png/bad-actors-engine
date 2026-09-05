@@ -5,7 +5,8 @@ import {
 } from 'lucide-react'
 import Card from '../components/Card'
 import Badge from '../components/Badge'
-import { listProperties, getPropertyProfile } from '../api'
+import { getPropertyProfile } from '../api'
+import { useProperties } from '../api/propertyContext'
 
 // severity / confidence / importance 统一映射到 Badge 配色（极高按最高警示色处理）
 const levelVariant = (v?: string | null) =>
@@ -14,25 +15,12 @@ const levelVariant = (v?: string | null) =>
 const fmtTime = (v: any) => (typeof v === 'string' ? v.slice(0, 19).replace('T', ' ') : '—')
 
 export default function Intelligence() {
-  const [properties, setProperties] = useState<any[]>([])
-  const [propertyId, setPropertyId] = useState<number | null>(null)
+  // 物业列表与选中态来自全局上下文（与顶栏切换器共享）
+  const { properties, selectedId, setSelectedId, loading: propsLoading } = useProperties()
+  const propertyId = selectedId
   const [profile, setProfile] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-
-  useEffect(() => {
-    listProperties({ page: 1, page_size: 100 })
-      .then((res: any) => {
-        const list = res.data || []
-        setProperties(list)
-        if (list.length > 0) setPropertyId(list[0].id)
-        setLoading(false)
-      })
-      .catch((e) => {
-        setError(e.message || '加载物业失败')
-        setLoading(false)
-      })
-  }, [])
 
   useEffect(() => {
     if (propertyId == null) return
@@ -49,13 +37,15 @@ export default function Intelligence() {
       })
   }, [propertyId])
 
-  if (loading) return <div className="text-center py-24 text-text-secondary">情报图景装配中...</div>
-  if (error) return <div className="text-center py-24 text-red-400">{error}</div>
+  if (propsLoading || (propertyId != null && loading && !profile)) {
+    return <div className="text-center py-24 text-text-secondary">情报图景装配中...</div>
+  }
+  if (error) return <div className="text-center py-24 text-red-600">{error}</div>
   if (properties.length === 0) {
     return (
       <div className="text-center py-24 text-text-secondary">
         <Building2 size={48} className="mx-auto mb-3 opacity-30" />
-        <p>尚无试点物业，请先在「物业情报」下拉前新建试点物业</p>
+        <p>尚无试点物业，请先在「物业情报」页新建试点物业</p>
       </div>
     )
   }
@@ -88,8 +78,8 @@ export default function Intelligence() {
         </div>
         <select
           value={propertyId ?? ''}
-          onChange={(e) => setPropertyId(Number(e.target.value))}
-          className="px-3 py-2 bg-bg-card border border-border rounded-lg text-sm text-text-primary focus:outline-none focus:border-primary"
+          onChange={(e) => setSelectedId(Number(e.target.value))}
+          className="px-3 py-2 bg-white border border-border rounded-lg text-sm text-text-primary focus:outline-none focus:border-primary"
         >
           {properties.map((p: any) => (
             <option key={p.id} value={p.id}>{p.id} · {p.name}</option>
@@ -231,7 +221,7 @@ export default function Intelligence() {
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-sm font-medium text-text-primary flex items-center gap-1.5">
-                    {s.importance === '高' && <AlertTriangle size={13} className="text-red-400 shrink-0" />}
+                    {s.importance === '高' && <AlertTriangle size={13} className="text-red-600 shrink-0" />}
                     {s.indicator}
                   </span>
                   <Badge variant={levelVariant(s.importance)}>{s.importance}</Badge>
@@ -267,7 +257,7 @@ export default function Intelligence() {
                 {src && (
                   <p className="text-xs text-text-secondary mt-1">
                     来源：{src.name}（{src.source_type} · 可靠性
-                    <span className={src.reliability === '高' ? 'text-emerald-400' : src.reliability === '中' ? 'text-amber-400' : 'text-red-400'}> {src.reliability}</span>）
+                    <span className={src.reliability === '高' ? 'text-emerald-600' : src.reliability === '中' ? 'text-amber-600' : 'text-red-600'}> {src.reliability}</span>）
                   </p>
                 )}
               </div>

@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './api/auth'
+import { PropertyProvider } from './api/propertyContext'
 import Layout from './components/Layout'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
@@ -26,7 +27,8 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <PropertyProvider>
+        <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
@@ -67,7 +69,8 @@ export default function App() {
             } />
           </Route>
         </Routes>
-      </BrowserRouter>
+        </BrowserRouter>
+      </PropertyProvider>
     </AuthProvider>
   )
 }

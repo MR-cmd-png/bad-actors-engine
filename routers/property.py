@@ -52,7 +52,8 @@ async def create_property(
     return {"code": 0, "data": prop}
 
 
-@router.get("/property", summary="试点物业列表（分页 + 关键词）")
+# 注意挂 /list 后缀：裸 GET /property 会被前端 SPA 深链接（整页刷新）占用，避免 401 JSON 冲突
+@router.get("/property/list", summary="试点物业列表（分页 + 关键词）")
 async def list_properties(
     page: int = 1,
     page_size: int = 10,

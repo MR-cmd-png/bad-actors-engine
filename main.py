@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Depends, HTTPException, status
 from pydantic import BaseModel
 from typing import Dict, Any
+from datetime import datetime, timedelta
 from pathlib import Path
 from database import get_db, Base, engine, Async_Session
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -187,12 +188,70 @@ async def dashboard_overview(db: AsyncSession = Depends(get_db), _: models.User 
             assessments, key=lambda a: SEVERITY_RANK.get(a.severity, 0)
         ).severity
 
-    # 最近时间线动态（带物业名）
+    # 近 30 天事件按日 × 严重度计数（Dashboard 三色趋势图的真实数据源）
+    since = datetime.now() - timedelta(days=30)
+    trend_rows = (await db.execute(
+        select(func.date(models.Event.occurred_at), models.Event.severity, func.count())
+        .where(models.Event.occurred_at >= since)
+        .group_by(func.date(models.Event.occurred_at), models.Event.severity)
+    )).all()
+    trend_map = {(str(r[0]), r[1]): r[2] for r in trend_rows}
+    daily_event_counts = []
+    for i in range(29, -1, -1):
+        key = (datetime.now() - timedelta(days=i)).date().isoformat()
+        daily_event_counts.append({
+            "date": key[5:],  # MM-DD
+            "低": trend_map.get((key, "低"), 0),
+            "中": trend_map.get((key, "中"), 0),
+            "高": trend_map.get((key, "高"), 0),
+        })
+
+    # 最近事件（带物业名，供「最近事件」表格）
+    event_rows = (await db.execute(
+        select(models.Event, models.PilotProperty)
+        .outerjoin(models.PilotProperty, models.PilotProperty.id == models.Event.property_id)
+        .order_by(models.Event.occurred_at.desc())
+        .limit(6)
+    )).all()
+    recent_events = [
+        {
+            "id": e.id,
+            "title": e.title,
+            "event_category": e.event_category,
+            "severity": e.severity,
+            "status": e.status,
+            "occurred_at": e.occurred_at,
+            "property_name": p.name if p else None,
+        }
+        for e, p in event_rows
+    ]
+
+    # 最近预警信号（供右栏 Recent Risk Alerts）
+    signal_rows = (await db.execute(
+        select(models.Signal, models.PilotProperty)
+        .outerjoin(models.PilotProperty, models.PilotProperty.id == models.Signal.property_id)
+        .order_by(models.Signal.observed_at.desc())
+        .limit(5)
+    )).all()
+    recent_signals = [
+        {
+            "id": s.id,
+            "indicator": s.indicator,
+            "signal_type": s.signal_type,
+            "importance": s.importance,
+            "status": s.status,
+            "observed_at": s.observed_at,
+            "property_name": p.name if p else None,
+        }
+        for s, p in signal_rows
+    ]
+
+    # 最近时间线动态（带物业名，供 System Activity）
     recent_rows = (await db.execute(
         select(models.Timeline, models.PilotProperty)
         .outerjoin(models.PilotProperty, models.PilotProperty.id == models.Timeline.property_id)
         .order_by(models.Timeline.occurred_at.desc())
-        .limit(10)
+        .limit(6)
     )).all()
     recent_timeline = [
         {
@@ -214,6 +273,9 @@ async def dashboard_overview(db: AsyncSession = Depends(get_db), _: models.User 
             "pending_signal_count": pending_signal_count,
             "highest_severity": highest_severity,
             "severity_distribution": severity_distribution,
+            "daily_event_counts": daily_event_counts,
+            "recent_events": recent_events,
+            "recent_signals": recent_signals,
             "recent_timeline": recent_timeline,
         },
     }

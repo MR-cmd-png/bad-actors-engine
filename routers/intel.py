@@ -334,7 +334,8 @@ async def create_event(
     return {"code": 0, "data": event}
 
 
-@router.get("/event", summary="事件列表（property_id 过滤 + 分页）")
+# /list 后缀：避免与前端 SPA 深链接 /events 整页刷新冲突
+@router.get("/event/list", summary="事件列表（property_id 过滤 + 分页）")
 async def list_events(
     page: int = 1,
     page_size: int = 20,
@@ -482,7 +483,8 @@ async def create_evidence(
     return {"code": 0, "data": evidence}
 
 
-@router.get("/evidence", summary="证据列表（property_id 过滤 + 分页）")
+# /list 后缀：避免与前端 SPA 深链接 /evidence 整页刷新冲突
+@router.get("/evidence/list", summary="证据列表（property_id 过滤 + 分页）")
 async def list_evidence(
     page: int = 1,
     page_size: int = 20,
