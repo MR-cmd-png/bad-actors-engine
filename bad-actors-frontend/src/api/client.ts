@@ -26,16 +26,25 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
-// Response interceptor - handle 401 and errors
+// Response interceptor — handle 401 and errors.
+// On 401 we only clear the stale token and guard the kick-out with a
+// protected-paths allow-list, so Landing (a public page) is never forced
+// to /login just because localStorage still carries an old token after a DB reset.
+let cleared401 = false
 apiClient.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !cleared401) {
+      cleared401 = true
       localStorage.removeItem('token')
       delete apiClient.defaults.headers.common['Authorization']
-      if (window.location.pathname !== '/login') {
-        window.location.href = '/login'
+      const protectedPaths = ['/dashboard', '/property', '/actors', '/companies',
+        '/relationships', '/events', '/signals', '/sources', '/evidence',
+        '/risk-assessments', '/investigations']
+      if (protectedPaths.some(p => window.location.pathname.startsWith(p))) {
+        window.location.replace('/login')
       }
+      setTimeout(() => { cleared401 = false }, 2000)
     }
     const message = error.response?.data?.detail || error.message || 'Request failed'
     console.error(`[API Error] ${message}`)
