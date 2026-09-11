@@ -184,3 +184,18 @@ class Timeline(Base):
     entry_type: Mapped[Str50] = mapped_column(comment="Event/Signal/Evidence/Assessment/Milestone")
     ref_type: Mapped[Optional[str]] = mapped_column(String(30), comment="引用对象类型：event/signal/evidence/risk_assessment/milestone")
     ref_id: Mapped[Optional[int]] = mapped_column(comment="引用对象行 id")
+
+
+# 12) CMS 页面内容：让非开发同事在浏览器里直接编辑 Landing/Dashboard 等页面的文案，
+#    而不需要去改 Hostinger 上的 JS bundle（与 git 部署互斥的老方案）。
+#    - page_key 唯一（如 landing_hero / landing_features / landing_stats）
+#    - content_json 存放任意结构化内容（features 列表、stats 数值等）
+#    - admin-only 写操作（与其他业务表一致）
+class CmsPage(Base):
+    __tablename__ = "cms_pages"
+    id: Mapped[Big_id] = mapped_column(comment="CMS row id")
+    page_key: Mapped[str] = mapped_column(String(50), unique=True, index=True, comment="唯一 page key (e.g. landing_hero)")
+    title: Mapped[Optional[str]] = mapped_column(String(255), comment="页面/区块标题")
+    subtitle: Mapped[Optional[str]] = mapped_column(String(500), comment="副标题/描述")
+    content_json: Mapped[dict] = mapped_column(JSON, default=dict, comment="结构化内容 (features列表/stats数值 等)")
+    updated_by_id: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id"), comment="编辑人（登录态注入）")

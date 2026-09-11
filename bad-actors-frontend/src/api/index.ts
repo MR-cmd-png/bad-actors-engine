@@ -93,3 +93,15 @@ export const deleteTimeline = timelineApi.remove
 
 // ======================== Dashboard ========================
 export const getDashboardOverview = () => apiClient.get('/dashboard/overview')
+
+// ======================== CMS (Content Management) ========================
+// 让非开发同事通过浏览器管理页（/admin/cms）编辑 Landing 等页面文案，
+// 彻底解决 Hostinger 文件编辑器与 Vite build hash / git 部署互斥的问题。
+// 注意：CMS 用 page_key 做主键（不是 id），故单独写，不复用 crud() 工厂。
+export const cmsApi = {
+  list: () => apiClient.get('/cms'),
+  get: (pageKey: string) => apiClient.get(`/cms/${pageKey}`),
+  create: (data: Record<string, any>) => apiClient.post('/cms', data),
+  update: (pageKey: string, data: Record<string, any>) => apiClient.patch(`/cms/${pageKey}`, data),
+  remove: (pageKey: string) => apiClient.delete(`/cms/${pageKey}`),
+}

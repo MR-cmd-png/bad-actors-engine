@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
@@ -19,6 +19,7 @@ import {
   LogOut,
   Menu,
   X,
+  FileJson,
 } from 'lucide-react'
 import { useAuth } from '../api/auth'
 import { useProperties } from '../api/propertyContext'
@@ -41,6 +42,11 @@ const navItems = [
   { path: '/evidence', label: 'Evidence', icon: FileCheck },
   { path: '/risk-assessments', label: 'Risk Assessments', icon: ShieldAlert },
   { path: '/investigations', label: 'Investigations', icon: FolderSearch },
+]
+
+// Admin-only nav (写接口后端 require_admin 保护，前端 UI 也 guard 一层)
+const adminNavItems = [
+  { path: '/admin/cms', label: 'CMS Content', icon: FileJson },
 ]
 
 export default function Layout() {
@@ -124,6 +130,25 @@ export default function Layout() {
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
           {navItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              onClick={() => setSidebarOpen(false)}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  isActive
+                    ? 'bg-primary text-white shadow-sm'
+                    : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                }`
+              }
+            >
+              <item.icon size={18} />
+              {item.label}
+            </NavLink>
+          ))}
+
+          {/* Admin-only nav items — CMS 管理页 */}
+          {user?.role === 'admin' && adminNavItems.map(item => (
             <NavLink
               key={item.path}
               to={item.path}

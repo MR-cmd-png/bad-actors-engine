@@ -15,11 +15,25 @@ import Sources from './pages/Sources'
 import Evidence from './pages/Evidence'
 import RiskAssessments from './pages/RiskAssessments'
 import Investigations from './pages/Investigations'
+import CmsEditor from './pages/CmsEditor'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { token, user } = useAuth()
   if (!token || !user) {
     return <Navigate to="/login" replace />
+  }
+  return <>{children}</>
+}
+
+// Admin-only 守卫：写接口（PATCH/DELETE）后端 require_admin 保护，
+// 前端 UI 也 guard 一层（配合 Layout 里 admin-only nav link）。
+function AdminRoute({ children }: { children: React.ReactNode }) {
+  const { token, user } = useAuth()
+  if (!token || !user) {
+    return <Navigate to="/login" replace />
+  }
+  if (user.role !== 'admin') {
+    return <Navigate to="/dashboard" replace />
   }
   return <>{children}</>
 }
@@ -66,6 +80,10 @@ export default function App() {
             } />
             <Route path="/investigations" element={
               <ProtectedRoute><Investigations /></ProtectedRoute>
+            } />
+            {/* Admin-only CMS editor — 让非开发同事改 Landing 文案而不碰代码 */}
+            <Route path="/admin/cms" element={
+              <AdminRoute><CmsEditor /></AdminRoute>
             } />
           </Route>
         </Routes>

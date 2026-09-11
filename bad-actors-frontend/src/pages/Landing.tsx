@@ -1,7 +1,8 @@
-﻿import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useAuth } from '../api/auth'
+import { cmsApi } from '../api'
 import {
   Shield,
   Activity,
@@ -19,7 +20,9 @@ import {
   LogIn,
 } from 'lucide-react'
 
-const features = [
+// Fallback content — 当 CMS API 不可用或页面还没 seed 时兜底显示。
+// 所有可编辑文案都应该从 CMS 拉：见组件内 useEffect 对 cmsApi.get() 的调用。
+const FALLBACK_FEATURES = [
   {
     icon: Brain,
     title: 'Intelligence Graph',
@@ -58,14 +61,14 @@ const features = [
   },
 ]
 
-const stats = [
+const FALLBACK_STATS = [
   { value: '99.9%', label: 'Uptime SLA' },
   { value: '<50ms', label: 'Avg Response' },
   { value: '10K+', label: 'Events/sec' },
   { value: '24/7', label: 'Active Monitor' },
 ]
 
-const techStack = [
+const FALLBACK_TECHSTACK = [
   { name: 'FastAPI', desc: 'High-Performance Backend' },
   { name: 'React 19', desc: 'Modern Frontend' },
   { name: 'MySQL', desc: 'Reliable Data Layer' },
@@ -77,6 +80,10 @@ export default function Landing() {
   const { user, token } = useAuth()
   const [showBackToTop, setShowBackToTop] = useState(false)
 
+  // CMS-driven content: 从后端拉 landing_* 区块内容，fallback 到 FALLBACK_* 常量。
+  // 这样同事改 CMS 页面 → 前端 reload 就能看到，完全不需要碰 Hostinger 文件。
+  const [cms, setCms] = useState<Record<string, any>>({})
+
   useEffect(() => {
     const handleScroll = () => {
       setShowBackToTop(window.scrollY > 400)
@@ -84,6 +91,26 @@ export default function Landing() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      const keys = ['landing_hero', 'landing_features', 'landing_stats', 'landing_techstack']
+      const res = await Promise.allSettled(keys.map(k => cmsApi.get(k)))
+      const next: Record<string, any> = {}
+      res.forEach((r, i) => {
+        if (r.status === 'fulfilled' && (r.value as any)?.data) {
+          next[keys[i]] = (r.value as any).data
+        }
+      })
+      setCms(next)
+    })()
+  }, [])
+
+  // 取 CMS 内容的便捷函数：优先 CMS，其次 fallback
+  const hero = cms.landing_hero
+  const features = (cms.landing_features?.content_json as any[]) ?? FALLBACK_FEATURES
+  const stats = (cms.landing_stats?.content_json as any[]) ?? FALLBACK_STATS
+  const techStack = (cms.landing_techstack?.content_json as any[]) ?? FALLBACK_TECHSTACK
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
@@ -234,16 +261,16 @@ export default function Landing() {
             <span className="text-text-primary">Defend.</span>
           </motion.h1>
 
-          {/* Subtitle */}
+          {/* Subtitle — CMS-driven (subtitle), fallback 到文件内联的默认文案 */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
             className="text-xl text-text-secondary max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            A commercial real estate due diligence intelligence engine that maps
-            who is connected to a property, what happened there, which signals
-            fired, and what the evidence-backed risk assessment concludes.
+            {hero?.subtitle || 'A commercial real estate due diligence intelligence engine that maps ' +
+              'who is connected to a property, what happened there, which signals ' +
+              'fired, and what the evidence-backed risk assessment concludes.'}
           </motion.p>
 
           {/* CTA Buttons */}

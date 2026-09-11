@@ -1,4 +1,4 @@
-﻿# bad-actors-engine 商业地产尽职调查情报引擎
+# bad-actors-engine 商业地产尽职调查情报引擎
 # Copyright (C) 2026 MR-cmd-png 保留所有著作权利
 # Open Source License: MIT
 # 未经作者许可，禁止去除版权标识、冒充原创进行商业售卖
@@ -23,6 +23,7 @@ from auth import (
 # 注意：所有业务路由必须在本Document末尾 SPA 兜底路由之前 include
 from routers import property as property_routes
 from routers import intel as intel_routes
+from routers import cms as cms_routes
 
 app = FastAPI(title="Property Due Diligence Intelligence Engine MVP")
 app.add_middleware(
@@ -43,6 +44,7 @@ async def startup():
                 "timelines", "evidence_claims", "risk_assessments", "signals",
                 "events", "investigations", "actors", "companies_organizations",
                 "relationships", "sources", "pilot_properties", "users",
+                "cms_pages",
             ]
             async with engine.begin() as conn:
                 for t in tables:
@@ -64,6 +66,12 @@ async def startup():
         print(f"Error seeding default admin user: {e}")
         import traceback
         traceback.print_exc()
+
+    # 首次部署时灌入 Landing/Dashboard 的默认 CMS 内容（让 /admin/cms 管理页有东西可改）
+    try:
+        await _seed_default_cms()
+    except Exception as e:
+        print(f"Error seeding default CMS content: {e}")
 
 
 async def _seed_default_user():
@@ -299,6 +307,73 @@ async def dashboard_overview(db: AsyncSession = Depends(get_db), _: models.User 
 # ===================== 业务路由（务必在 SPA 兜底路由之前 include） =====================
 app.include_router(property_routes.router)
 app.include_router(intel_routes.router)
+app.include_router(cms_routes.router)
+
+# ===================== 默认 CMS 内容（首次部署时自动 seed，避免 Landing 空白） =====================
+async def _seed_default_cms():
+    """灌入 Landing 等公开页面的初始 CMS 内容。
+    与 _seed_default_user / seed_pilot 独立运行：create_all 后即可调用。"""
+    async with Async_Session() as db:
+        existing = (await db.execute(select(models.CmsPage.page_key))).scalars().all()
+
+        defaults = {
+            "landing_hero": {
+                "title": "Spot problems before they arrive.",
+                "subtitle": "A commercial real estate due diligence intelligence engine that maps who is connected to a property, what happened there, which signals fired, and what the evidence-backed risk assessment concludes.",
+                "content_json": {},
+            },
+            "landing_features": {
+                "title": "Powered by Intelligence",
+                "subtitle": "A comprehensive suite of tools designed to protect your business from emerging threats.",
+                "content_json": [
+                    {"icon": "Brain", "title": "Intelligence Graph",
+                     "desc": "Behavior actors, companies, and relationships woven into one evidence-backed picture per property."},
+                    {"icon": "Activity", "title": "Signals & Early Warnings",
+                     "desc": "Track disputes, regulatory actions and red-flag signals with a full audit timeline."},
+                    {"icon": "Shield", "title": "Evidence-Based Assessment",
+                     "desc": "Analyst-written risk assessments backed by verifiable sources instead of black-box scores."},
+                    {"icon": "Lock", "title": "Secure by Design",
+                     "desc": "Enterprise-grade security with JWT access control and role-based write permissions."},
+                    {"icon": "Network", "title": "Seamless Integration",
+                     "desc": "RESTful API architecture integrates effortlessly with your existing systems."},
+                    {"icon": "Eye", "title": "Deep Insights",
+                     "desc": "Comprehensive dashboards and analytics for informed due diligence decisions."},
+                ],
+            },
+            "landing_stats": {
+                "title": "",
+                "subtitle": "",
+                "content_json": [
+                    {"value": "99.9%", "label": "Uptime SLA"},
+                    {"value": "<50ms", "label": "Avg Response"},
+                    {"value": "10K+", "label": "Events/sec"},
+                    {"value": "24/7", "label": "Active Monitor"},
+                ],
+            },
+            "landing_techstack": {
+                "title": "Built on Modern Infrastructure",
+                "subtitle": "",
+                "content_json": [
+                    {"name": "FastAPI", "desc": "High-Performance Backend"},
+                    {"name": "React 19", "desc": "Modern Frontend"},
+                    {"name": "MySQL", "desc": "Reliable Data Layer"},
+                    {"name": "Railway", "desc": "Cloud Infrastructure"},
+                ],
+            },
+        }
+
+        for key, data in defaults.items():
+            if key not in existing:
+                row = models.CmsPage(
+                    page_key=key,
+                    title=data["title"],
+                    subtitle=data["subtitle"],
+                    content_json=data["content_json"],
+                )
+                db.add(row)
+        await db.commit()
+        if len(existing) < len(defaults):
+            print(f"CMS seed: {len(defaults) - len(existing)} default rows inserted")
 
 
 # ===================== Serve Frontend (React SPA) =====================
