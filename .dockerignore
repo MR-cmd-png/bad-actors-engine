@@ -1,0 +1,25 @@
+# 构建上下文瘦身：以下内容不需要进入镜像
+# （Dockerfile 用于在镜像内重新构建前端，本地残留物一律不带入）
+
+# 版本控制与编辑器
+.git
+.gitignore
+.idea
+.vscode
+
+# Python 虚拟环境与缓存
+.venv
+venv
+__pycache__
+*.pyc
+*.pyo
+
+# 日志与临时文件
+*.log
+View.txt
+skill.txt
+test_main.http
+
+# 前端依赖与本地构建产物：必须在镜像内重新生成，避免用到过期产物
+bad-actors-frontend/node_modules
+bad-actors-frontend/dist
