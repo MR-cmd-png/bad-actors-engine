@@ -119,6 +119,12 @@ export default function Layout() {
           >
             <X size={18} />
           </button>
+          {/* 品牌 logo：深色底与藏蓝侧边栏直接融合 */}
+          <img
+            src="/logo-badge.png"
+            alt="ANABASED logo"
+            className="w-12 h-12 rounded-xl object-cover ring-1 ring-white/15 shadow-lg shadow-black/30 mb-3"
+          />
           <h1 className="text-[26px] leading-none font-extrabold tracking-wide text-white">ANABASED</h1>
           <p className="text-[11px] font-bold tracking-[0.22em] text-primary mt-1.5">BAD ACTORS ENGINE</p>
           <div className="mt-4 pt-4 border-t border-white/10">
@@ -179,6 +185,11 @@ export default function Layout() {
 
         {/* Lockup */}
         <div className="px-6 py-4 border-t border-white/10 text-center shrink-0">
+          <img
+            src="/logo-badge.png"
+            alt="ANABASED logo"
+            className="w-8 h-8 rounded-lg object-cover ring-1 ring-white/15 mx-auto mb-2"
+          />
           <p className="text-sm font-extrabold tracking-[0.15em] text-white">
             ANABASED<span className="align-super text-[8px] text-slate-400">™</span>
           </p>
@@ -328,9 +339,10 @@ export default function Layout() {
 
         {/* Footer strip */}
         <footer className="h-10 bg-white border-t border-border flex items-center justify-between px-4 lg:px-6 text-[11px] text-text-secondary shrink-0">
-          <p className="truncate">
+          <p className="truncate flex items-center gap-1.5">
+            <img src="/logo-badge.png" alt="ANABASED logo" className="w-5 h-5 rounded-full object-cover shrink-0" />
             <span className="font-extrabold tracking-wider text-text-primary">ANABASED</span>
-            <span className="mx-2 text-slate-300">|</span>
+            <span className="mx-1 text-slate-300">|</span>
             BAD ACTORS ENGINE — STAGE 1
           </p>
           <p className="hidden sm:block">Powered by smarter data. Built for real business.</p>

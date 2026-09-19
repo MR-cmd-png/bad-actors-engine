@@ -187,9 +187,12 @@ export default function Landing() {
           animate={{ opacity: 1, x: 0 }}
           className="flex items-center gap-3"
         >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-lg shadow-primary/30">
-            <Shield size={22} className="text-white" />
-          </div>
+          {/* 品牌 logo：新 logo 深色底，圆角裁切保留原红晕阴影 */}
+          <img
+            src="/logo-badge.png"
+            alt="ANABASED logo"
+            className="w-10 h-10 rounded-xl object-cover shadow-lg shadow-primary/30"
+          />
           <div>
             <h1 className="text-lg font-bold text-text-primary">Bad Actor Engine</h1>
             <p className="text-[10px] text-text-secondary">Intelligent Risk Detection</p>
@@ -468,9 +471,11 @@ export default function Landing() {
       <footer className="relative z-10 px-8 py-12 border-t border-border">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center">
-              <Shield size={16} className="text-white" />
-            </div>
+            <img
+              src="/logo-badge.png"
+              alt="ANABASED logo"
+              className="w-8 h-8 rounded-lg object-cover"
+            />
             <span className="text-sm text-text-secondary">
               Bad Actor Engine © 2026 — All Rights Reserved
             </span>

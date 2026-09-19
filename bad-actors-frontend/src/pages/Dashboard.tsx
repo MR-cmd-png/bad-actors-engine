@@ -318,9 +318,12 @@ export default function Dashboard() {
       {/* ===================== CTA 横幅 ===================== */}
       <div className="bg-navy rounded-2xl p-6 lg:p-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <span className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-            <ShieldCheck size={22} className="text-white" />
-          </span>
+          {/* 品牌 logo：深色底与藏蓝 CTA 横幅融合 */}
+          <img
+            src="/logo-badge.png"
+            alt="ANABASED logo"
+            className="w-12 h-12 rounded-full object-cover ring-1 ring-white/20 shrink-0"
+          />
           <div>
             <p className="text-base font-bold text-white">Turn every insight into protection.</p>
             <p className="text-xs text-slate-400 mt-1">

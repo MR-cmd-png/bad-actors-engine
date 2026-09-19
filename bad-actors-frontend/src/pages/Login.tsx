@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useAuth } from '../api/auth'
 import { useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Shield, Eye, EyeOff, Loader2 } from 'lucide-react'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
 
 // 登录页：ANABASED 海军蓝 + 红色主色（对照参考稿品牌体系）
 export default function Login() {
@@ -36,9 +36,12 @@ export default function Login() {
       >
         <div className="bg-white rounded-2xl border border-border p-8 shadow-2xl">
           <div className="flex flex-col items-center mb-8">
-            <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-5 shadow-lg shadow-primary/30">
-              <Shield size={28} className="text-white" />
-            </div>
+            {/* 品牌 logo：新 logo 自带深色底，圆形裁切 + 主色光晕阴影与界面衔接 */}
+            <img
+              src="/logo-badge.png"
+              alt="ANABASED logo"
+              className="w-16 h-16 rounded-full object-cover mb-5 ring-2 ring-primary/40 shadow-lg shadow-primary/30"
+            />
             <h1 className="text-[22px] leading-none font-extrabold tracking-wide text-text-primary">ANABASED</h1>
             <p className="text-[11px] font-bold tracking-[0.22em] text-primary mt-1.5">BAD ACTORS ENGINE</p>
             <p className="text-sm text-text-secondary mt-4">Sign in to the Due-Diligence Intelligence Workbench</p>
