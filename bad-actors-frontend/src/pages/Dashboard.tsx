@@ -186,7 +186,7 @@ export default function Dashboard() {
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                  <p className="text-3xl font-extrabold text-text-primary">{totalAssessments}</p>
+                  <p className="text-3xl font-extrabold text-text-primary">{Number(totalAssessments)}</p>
                   <p className="text-xs text-text-secondary">Risk assessments</p>
                 </div>
               </div>
@@ -197,7 +197,7 @@ export default function Dashboard() {
                     <span className="text-text-secondary">{p.name}</span>
                     <span className="ml-auto font-semibold text-text-primary">{p.value as number}</span>
                     <span className="text-xs text-text-secondary w-12 text-right">
-                      ({totalAssessments ? Math.round(((p.value as number) / totalAssessments) * 100) : 0}%)
+                      ({totalAssessments ? Math.round(((p.value as number) / Number(totalAssessments)) * 100) : 0}%)
                     </span>
                   </div>
                 ))}
