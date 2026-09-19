@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './api/auth'
 import { PropertyProvider } from './api/propertyContext'
 import Layout from './components/Layout'
-import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Intelligence from './pages/Intelligence'
@@ -44,7 +43,8 @@ export default function App() {
       <PropertyProvider>
         <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Landing />} />
+          {/* Landing 营销页已删除：进入项目根路径直接落到登录页 */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
 
           <Route element={<Layout />}>

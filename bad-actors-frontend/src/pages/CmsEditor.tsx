@@ -4,11 +4,12 @@ import { cmsApi } from '../api'
 
 /**
  * CMS 管理页（/admin/cms）：
- * 让非开发同事通过浏览器直接编辑 Landing / Dashboard 等页面的文案，
+ * 让非开发同事通过浏览器直接编辑页面文案配置，
  * 彻底解决 Hostinger 文件编辑器与 Vite build hash / git 部署互斥的老问题。
  *
  * 表格行 = DB cms_pages 表的一页内容；Modal = 表单编辑器（带 JSON 校验）。
  * 写操作（PATCH/DELETE）后端已用 require_admin 保护，前端再加一层 UI guard。
+ * 注：landing_* 系列 key 原供 Landing 营销页读取，该页已下线，数据保留但暂无消费方。
  */
 interface CmsRow {
   id: number
@@ -130,7 +131,7 @@ export default function CmsEditor() {
         <div>
           <h1 className="text-xl font-bold text-text-primary">CMS Content Manager</h1>
           <p className="text-sm text-text-secondary mt-0.5">
-            Edit Landing / Dashboard copy without touching code. Changes take effect after page reload.
+            Edit page copy without touching code. Changes take effect after page reload.
           </p>
         </div>
         <div className="flex gap-2">

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../api/auth'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
 
@@ -103,12 +103,6 @@ export default function Login() {
               )}
             </button>
           </form>
-        </div>
-
-        <div className="mt-4 text-center">
-          <Link to="/" className="text-sm text-slate-400 hover:text-white transition-colors">
-            ← Back to landing
-          </Link>
         </div>
       </motion.div>
     </div>

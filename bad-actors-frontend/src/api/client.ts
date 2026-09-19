@@ -27,9 +27,9 @@ apiClient.interceptors.request.use(
 )
 
 // Response interceptor — handle 401 and errors.
-// On 401 we only clear the stale token and guard the kick-out with a
-// protected-paths allow-list, so Landing (a public page) is never forced
-// to /login just because localStorage still carries an old token after a DB reset.
+// On 401 we only clear the stale token, and kick out to /login only when the
+// user is on a protected path — so the login page itself never reload-loops
+// when a stale token from an earlier DB reset is still in localStorage.
 let cleared401 = false
 apiClient.interceptors.response.use(
   (response) => response.data,
