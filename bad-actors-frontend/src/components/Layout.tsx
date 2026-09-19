@@ -270,7 +270,7 @@ export default function Layout() {
             >
               <Bell size={18} className="text-text-primary" />
               {pendingSignals > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center">
+                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-risk-high text-white text-[10px] font-bold flex items-center justify-center">
                   {pendingSignals > 99 ? '99+' : pendingSignals}
                 </span>
               )}
@@ -301,7 +301,7 @@ export default function Layout() {
                   <div className="absolute right-0 top-full mt-2 w-44 bg-white border border-border rounded-xl shadow-lg overflow-hidden z-20">
                     <button
                       onClick={handleLogout}
-                      className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                      className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-risk-high hover:bg-risk-high/10 transition-colors"
                     >
                       <LogOut size={15} />
                       Sign out

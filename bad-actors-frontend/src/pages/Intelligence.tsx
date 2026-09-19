@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Building2, Users, Network, Zap, AlertTriangle, FileCheck,
   ShieldAlert, Clock, Search,
@@ -40,7 +40,7 @@ export default function Intelligence() {
   if (propsLoading || (propertyId != null && loading && !profile)) {
     return <div className="text-center py-24 text-text-secondary">Assembling intelligence picture...</div>
   }
-  if (error) return <div className="text-center py-24 text-red-600">{error}</div>
+  if (error) return <div className="text-center py-24 text-risk-high">{error}</div>
   if (properties.length === 0) {
     return (
       <div className="text-center py-24 text-text-secondary">
@@ -87,11 +87,11 @@ export default function Intelligence() {
         </select>
       </div>
 
-      {/* 总体风险摘要横幅 */}
-      <Card hover={false} className="border-l-4 !border-l-red-500">
+      {/* 总体风险摘要横幅：左侧风险红竖条为规范固定警示样式 */}
+      <Card hover={false} className="border-l-4 !border-l-risk-high">
         <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
           <div className="flex items-center gap-3">
-            <ShieldAlert size={28} className="text-red-400" />
+            <ShieldAlert size={28} className="text-risk-high" />
             <div>
               <p className="text-xs text-text-secondary">Overall risk</p>
               <p className="text-lg font-bold text-text-primary">
@@ -206,7 +206,7 @@ export default function Intelligence() {
 
         <Card delay={0.3}>
           <h3 className="text-sm font-semibold text-text-primary mb-4 flex items-center gap-2">
-            <AlertTriangle size={16} className="text-amber-400" /> Signals（{signals.length}）
+            <AlertTriangle size={16} className="text-risk-medium" /> Signals（{signals.length}）
           </h3>
           <div className="space-y-3">
             {signals.length === 0 && <p className="text-xs text-text-secondary">No data</p>}
@@ -215,13 +215,13 @@ export default function Intelligence() {
                 key={s.id}
                 className={`p-3 rounded-lg border ${
                   s.importance === 'High'
-                    ? 'bg-red-500/5 border-red-500/30'
+                    ? 'bg-risk-high/5 border-risk-high/30'
                     : 'bg-bg-dark border-border/60'
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-sm font-medium text-text-primary flex items-center gap-1.5">
-                    {s.importance === 'High' && <AlertTriangle size={13} className="text-red-600 shrink-0" />}
+                    {s.importance === 'High' && <AlertTriangle size={13} className="text-risk-high shrink-0" />}
                     {s.indicator}
                   </span>
                   <Badge variant={levelVariant(s.importance)}>{s.importance}</Badge>
@@ -257,7 +257,7 @@ export default function Intelligence() {
                 {src && (
                   <p className="text-xs text-text-secondary mt-1">
                     Source: {src.name}（{src.source_type} · Reliability
-                    <span className={src.reliability === 'High' ? 'text-emerald-600' : src.reliability === 'Medium' ? 'text-amber-600' : 'text-red-600'}> {src.reliability}</span>）
+                    <span className={src.reliability === 'High' ? 'text-risk-low' : src.reliability === 'Medium' ? 'text-[#b57708]' : 'text-risk-high'}> {src.reliability}</span>）
                   </p>
                 )}
               </div>

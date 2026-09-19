@@ -15,7 +15,7 @@ export default function Input({ label, error, className = '', ...props }: InputP
         {...props}
         className={`w-full px-4 py-2.5 bg-bg-dark border border-border rounded-lg text-sm text-text-primary placeholder-text-secondary/50 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all duration-200 ${className}`}
       />
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {error && <p className="text-xs text-risk-high">{error}</p>}
     </div>
   )
 }

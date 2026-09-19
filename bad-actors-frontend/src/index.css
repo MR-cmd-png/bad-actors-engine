@@ -1,25 +1,37 @@
 @import "tailwindcss";
 
 /*
- * ANABASED 浅色主题令牌（对照参考稿）：
- * 红色主色 + 深海军蓝品牌色 + 白卡片浅灰底；bg-dark 在浅色语境下是「卡内凹面/输入框」的浅灰
+ * ANABASED 设计系统令牌（对照官网参考稿：B2B 金融风控 / AI 合规科技）：
+ * 主色 = 科技蓝 #1E7CF5（按钮/链接/图标/统计数字），深色底 = 深邃藏蓝 #0B1B3A，
+ * 浅色区 = 白卡 + #F4F7FB 底，风险四色 = 红/橙/黄/绿（High/Medium/Watch/Low）。
+ * 注意：Landing 营销页保留旧红色主题，通过 .landing-scope 局部覆盖（见文件底部）。
  */
 @theme {
-  --color-primary: #d92632;
-  --color-primary-light: #b91c1c;
-  --color-primary-dark: #9f1239;
-  --color-danger: #dc2626;
-  --color-warning: #f59e0b;
-  --color-success: #16a34a;
-  --color-navy: #0e1b2e;
-  --color-navy-light: #16273f;
-  --color-bg-page: #eef1f5;
+  /* 品牌蓝体系 */
+  --color-primary: #1e7cf5;
+  --color-primary-light: #1668d1;
+  --color-primary-dark: #1258b4;
+  --color-danger: #e23b3b;
+  --color-warning: #f5a623;
+  --color-success: #22a06b;
+  /* 深邃藏蓝（Hero/侧边栏/页脚等深色区） */
+  --color-navy: #0b1b3a;
+  --color-navy-light: #12233f;
+  /* 浅色页面底与卡片 */
+  --color-bg-page: #f4f7fb;
   --color-bg-dark: #f1f5f9;
   --color-bg-card: #ffffff;
   --color-bg-card-hover: #f8fafc;
-  --color-text-primary: #10233c;
-  --color-text-secondary: #64748b;
+  /* 文字：深灰蓝标题 + 灰蓝正文 */
+  --color-text-primary: #0b1b3a;
+  --color-text-secondary: #4a5568;
   --color-border: #e2e8f0;
+  /* 风险等级四色（规范固定，不得另造） */
+  --color-risk-high: #e23b3b;
+  --color-risk-medium: #f5a623;
+  --color-risk-watch: #f0c24b;
+  --color-risk-low: #22a06b;
+  --color-risk-critical: #9f1239;
 }
 
 body {
@@ -40,3 +52,15 @@ html {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/*
+ * Landing 营销页豁免：该页尚未纳入本次重构范围，保留旧红色主色。
+ * CSS 自定义属性沿 DOM 级联，Tailwind v4 的 bg-primary 等工具类编译为
+ * var(--color-primary)，因此在根节点局部重定义即可让整页恢复旧色，
+ * 不影响其他页面使用全局蓝色令牌。
+ */
+.landing-scope {
+  --color-primary: #d92632;
+  --color-primary-light: #b91c1c;
+  --color-primary-dark: #9f1239;
+}

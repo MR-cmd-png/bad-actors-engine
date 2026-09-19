@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { useAuth } from '../api/auth'
 import { useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
@@ -26,7 +26,7 @@ export default function Login() {
       {/* 氛围光斑 */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary/15 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-primary/15 rounded-full blur-3xl" />
       </div>
 
       <motion.div
@@ -48,7 +48,7 @@ export default function Login() {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm"
+              className="mb-4 p-3 rounded-lg bg-risk-high/5 border border-risk-high/25 text-risk-high text-sm"
             >
               {error}
             </motion.div>

@@ -126,7 +126,8 @@ export default function Landing() {
   }
 
   return (
-    <div className="relative min-h-screen bg-bg-dark">
+    // landing-scope：本页暂未纳入蓝色设计系统重构，根节点局部保留旧红色令牌（见 index.css）
+    <div className="landing-scope relative min-h-screen bg-bg-dark">
       {/* Animated Grid Background */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(99,102,241,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(99,102,241,0.08)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)]" />
 

@@ -241,7 +241,7 @@ export default function CrudPage({
         {loading ? (
           <div className="text-center py-12 text-text-secondary">Loading...</div>
         ) : error ? (
-          <div className="text-center py-12 text-red-600">{error}</div>
+          <div className="text-center py-12 text-risk-high">{error}</div>
         ) : rows.length === 0 ? (
           <div className="text-center py-12 text-text-secondary">
             <Inbox size={48} className="mx-auto mb-3 opacity-30" />
@@ -287,7 +287,7 @@ export default function CrudPage({
                           {deleteItem && (
                             <button
                               onClick={() => setDeleteId(row.id)}
-                              className="p-1.5 rounded hover:bg-red-50 text-text-secondary hover:text-red-600 transition-colors"
+                              className="p-1.5 rounded hover:bg-risk-high/10 text-text-secondary hover:text-risk-high transition-colors"
                               title="Delete"
                             >
                               <Trash2 size={14} />
@@ -373,7 +373,7 @@ export default function CrudPage({
               />
             )
           })}
-          {formError && <p className="text-xs text-red-600">{formError}</p>}
+          {formError && <p className="text-xs text-risk-high">{formError}</p>}
           <div className="flex justify-end gap-3 pt-2">
             <Button variant="ghost" onClick={() => setModalOpen(false)}>Cancel</Button>
             <Button onClick={handleSubmit} loading={submitting}>

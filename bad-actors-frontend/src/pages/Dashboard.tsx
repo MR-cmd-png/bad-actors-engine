@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getDashboardOverview } from '../api'
 import Card from '../components/Card'
@@ -22,8 +22,8 @@ const levelVariant = (v?: string | null) =>
 const fmtTime = (v: any) => (typeof v === 'string' ? v.slice(0, 19).replace('T', ' ') : '—')
 const fmtDay = (v: any) => (typeof v === 'string' ? v.slice(5, 10).replace('T', ' ') : '—')
 
-// 严重度配色（与参考稿 Clean/Medium/High 三色一致）
-const SEV_COLORS: Record<string, string> = { Low: '#16a34a', Medium: '#f59e0b', High: '#dc2626', Critical: '#9f1239' }
+// 严重度配色：设计规范固定四色（Low绿/Medium橙/High红/Critical深红）
+const SEV_COLORS: Record<string, string> = { Low: '#22a06b', Medium: '#f5a623', High: '#e23b3b', Critical: '#9f1239' }
 // 时间线条目图标
 const ENTRY_ICONS: Record<string, any> = { Event: Zap, Signal: AlertTriangle, Evidence: FileCheck, Assessment: ShieldAlert, Milestone: Flag }
 
@@ -46,7 +46,7 @@ export default function Dashboard() {
   }, [])
 
   if (loading) return <div className="text-center py-24 text-text-secondary">Loading overview...</div>
-  if (error) return <div className="text-center py-24 text-red-600">{error}</div>
+  if (error) return <div className="text-center py-24 text-risk-high">{error}</div>
 
   const dist = data.severity_distribution || {}
   const totalAssessments = Object.values(dist).reduce((s: number, v: any) => s + (v as number), 0)
@@ -56,12 +56,12 @@ export default function Dashboard() {
     .filter(([, v]) => (v as number) > 0)
     .map(([name, value]) => ({ name, value }))
 
-  // 统计卡（View all真实数值）
+  // 统计卡（View all真实数值），图标底色遵循风险四色 + 品牌蓝
   const stats = [
     { label: 'Properties', value: data.property_count, icon: Building2, tint: 'bg-primary/10 text-primary' },
-    { label: 'Open investigations', value: data.ongoing_investigation_count, icon: FolderSearch, tint: 'bg-emerald-50 text-emerald-600' },
-    { label: 'Pending signals', value: data.pending_signal_count, icon: AlertTriangle, tint: 'bg-amber-50 text-amber-600' },
-    { label: 'High/Critical assessments', value: highCount, icon: ShieldAlert, tint: 'bg-red-50 text-red-600' },
+    { label: 'Open investigations', value: data.ongoing_investigation_count, icon: FolderSearch, tint: 'bg-risk-low/10 text-risk-low' },
+    { label: 'Pending signals', value: data.pending_signal_count, icon: AlertTriangle, tint: 'bg-risk-medium/10 text-[#b57708]' },
+    { label: 'High/Critical assessments', value: highCount, icon: ShieldAlert, tint: 'bg-risk-high/10 text-risk-high' },
   ]
 
   return (
@@ -119,9 +119,9 @@ export default function Dashboard() {
           <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
             <h3 className="text-base font-bold text-text-primary">Event risk trend (last 30 days)</h3>
             <div className="flex items-center gap-4 text-xs text-text-secondary">
-              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-600" />Low</span>
-              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-500" />Medium</span>
-              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-red-600" />High</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-risk-low" />Low</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-risk-medium" />Medium</span>
+              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-risk-high" />High</span>
             </div>
           </div>
           {trendData.length === 0 ? (
@@ -272,9 +272,9 @@ export default function Dashboard() {
                   onClick={() => navigate('/signals')}
                   className="w-full flex items-center gap-3 p-2.5 rounded-lg hover:bg-bg-card-hover transition-colors text-left"
                 >
-                  <span className={`w-1 h-10 rounded-full shrink-0 ${s.importance === 'High' ? 'bg-red-600' : s.importance === 'Medium' ? 'bg-amber-500' : 'bg-emerald-500'}`} />
+                  <span className={`w-1 h-10 rounded-full shrink-0 ${s.importance === 'High' ? 'bg-risk-high' : s.importance === 'Medium' ? 'bg-risk-medium' : 'bg-risk-low'}`} />
                   <span className="min-w-0 flex-1">
-                    <span className={`block text-[11px] font-bold tracking-wider ${s.importance === 'High' ? 'text-red-600' : 'text-amber-600'}`}>
+                    <span className={`block text-[11px] font-bold tracking-wider ${s.importance === 'High' ? 'text-risk-high' : 'text-[#b57708]'}`}>
                       {s.importance === 'High' ? 'HIGH RISK' : s.importance === 'Medium' ? 'MEDIUM RISK' : 'LOW RISK'} · {s.status}
                     </span>
                     <span className="block text-sm font-medium text-text-primary truncate">{s.indicator}</span>

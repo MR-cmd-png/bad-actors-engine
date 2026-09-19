@@ -153,7 +153,7 @@ export default function CmsEditor() {
 
       {/* Error banner */}
       {error && (
-        <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">{error}</div>
+        <div className="p-3 rounded-lg bg-risk-high/5 border border-risk-high/25 text-risk-high text-sm">{error}</div>
       )}
 
       {/* Table */}
@@ -208,10 +208,10 @@ export default function CmsEditor() {
                       </button>
                       <button
                         onClick={() => setDeleteKey(row.page_key)}
-                        className="p-1.5 rounded hover:bg-red-50 transition-colors"
+                        className="p-1.5 rounded hover:bg-risk-high/10 transition-colors"
                         title="Delete"
                       >
-                        <Trash2 size={15} className="text-red-500" />
+                        <Trash2 size={15} className="text-risk-high" />
                       </button>
                     </div>
                   </td>
@@ -240,7 +240,7 @@ export default function CmsEditor() {
 
             <div className="p-6 space-y-4">
               {formError && (
-                <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+                <div className="p-3 rounded-lg bg-risk-high/5 border border-risk-high/25 text-risk-high text-sm">
                   {formError}
                 </div>
               )}
@@ -248,7 +248,7 @@ export default function CmsEditor() {
               {/* page_key — 编辑态不可改 */}
               <div>
                 <label className="block text-sm font-medium text-text-secondary mb-1.5">
-                  Page Key <span className="text-red-500">*</span>
+                  Page Key <span className="text-risk-high">*</span>
                 </label>
                 <input
                   type="text"
@@ -342,7 +342,7 @@ export default function CmsEditor() {
               <button
                 onClick={confirmDelete}
                 disabled={deleting}
-                className="px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
+                className="px-4 py-2 rounded-lg bg-risk-high text-white text-sm font-medium hover:bg-risk-critical transition-colors disabled:opacity-50"
               >
                 {deleting ? 'Deleting...' : 'Delete'}
               </button>
